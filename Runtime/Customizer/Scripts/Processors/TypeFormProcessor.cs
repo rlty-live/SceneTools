@@ -7,15 +7,20 @@ namespace RLTY.Customisation
     [RequireComponent(typeof(TriggerZone))]
     public class TypeFormProcessor : Processor
     {
-        public override void Customize(Component target, RLTY.SessionInfo.KeyValueBase keyValue)
+        public override void Customize(Component target, KeyValueBase keyValue)
         {
+            if (string.IsNullOrEmpty(keyValue.value))
+            {
+                gameObject.SetActive(false);
+                return;
+            }
             _typeformId = keyValue.value;
         }
 
         [SerializeField] private string _typeformId = "1";
         private TriggerZone _zone;
 
-        private bool _donationStarted = false;
+        private bool _actionProcessed = false;
 
         protected override void Awake()
         {
@@ -28,16 +33,16 @@ namespace RLTY.Customisation
 
         private void OnEnable()
         {
-            _donationStarted = false;
+            _actionProcessed = false;
         }
 
         private void Update()
         {
             //check if we trigger a donation
-            if (!_donationStarted && Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.7f)
+            if (!_actionProcessed && Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.5f)
             {
-                _donationStarted = true;
-                SessionInfoManagerHandlerData.UserDonation(_typeformId);
+                _actionProcessed = true;
+                SessionInfoManagerHandlerData.OpenTypeForm(_typeformId);
             }
         }
     }

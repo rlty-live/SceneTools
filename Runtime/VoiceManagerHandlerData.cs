@@ -6,6 +6,7 @@ public static class VoiceManagerHandlerData
     public static event Action OnStart, OnQuit, OnJoinGlobalAudioChat, OnLeaveGlobalAudioChat;
     public static event Action<string> OnJoinVisio, OnLeaveVisio;
     public static event Action<bool> OnTalk;
+    public static event Action<bool> OnMute;
 
     #region Methods for manager implementing voice
     public static void NotifyOnTalk(bool state) => OnTalk?.Invoke(state);
@@ -17,6 +18,7 @@ public static class VoiceManagerHandlerData
     public static void NotifyOnLeaveGlobalAudioChat() => OnLeaveGlobalAudioChat?.Invoke();
     public static void NotifyOnJoinVisio(string id) => OnJoinVisio?.Invoke(id);
     public static void NotifyOnLeaveVisio(string id) => OnLeaveVisio?.Invoke(id);
+    public static void NotifyMute(bool state) => OnMute?.Invoke(state);
 
     #endregion
 }

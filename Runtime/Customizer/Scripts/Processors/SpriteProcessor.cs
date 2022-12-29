@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 using JetBrains.Annotations;
-using UnityEditor;
+using RLTY.SessionInfo;
 
 namespace RLTY.Customisation
 {
@@ -88,9 +88,11 @@ namespace RLTY.Customisation
             return target;
         }
 
-        public override void Customize(Component target, RLTY.SessionInfo.KeyValueBase data)
+        public override void Customize(Component target, KeyValueBase keyValue)
         {
-            Texture t = (Texture)(data as RLTY.SessionInfo.KeyValueObject).downloadedAsset;
+            Texture t = keyValue.data as Texture;
+            if (t == null)
+                return;
             if (target.GetType() == typeof(SpriteRenderer))
                 SpriteRendererSpriteSwap(t);
             else

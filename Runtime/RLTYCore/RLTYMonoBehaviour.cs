@@ -10,15 +10,8 @@ public abstract class RLTYMonoBehaviour : RLTYMonoBehaviourBase
     public abstract void EventHandlerRegister();
     public abstract void EventHandlerUnRegister();
 
-    public virtual void Start()
-    {
-       EventHandlerRegister();
-    }
-
-    public virtual void OnDestroy()
-    {
-        EventHandlerUnRegister();
-    }
+    public virtual void Start() => EventHandlerRegister();
+    public virtual void OnDestroy() => EventHandlerUnRegister();
 }
 
 public abstract class RLTYMonoBehaviourBase : JMonoBehaviour
@@ -41,6 +34,7 @@ public abstract class RLTYMonoBehaviourBase : JMonoBehaviour
 
     protected bool slowTrigger;
 
+    #region ToolBox
     [ExecuteAlways]
     public virtual IEnumerator TemporaryBoolSwitch(int duration)
     {
@@ -50,4 +44,29 @@ public abstract class RLTYMonoBehaviourBase : JMonoBehaviour
         slowTrigger = false;
         yield return null;
     }
+    [ExecuteAlways]
+    public static void DestroyEditorSafe(Component component)
+    {
+#if UNITY_EDITOR
+        if (Application.isPlaying)
+            Destroy(component);
+        else
+            DestroyImmediate(component);
+#else
+                Destroy(component);
+#endif
+    }
+    [ExecuteAlways]
+    public static void DestroyEditorSafe(GameObject gameObject)
+    {
+#if UNITY_EDITOR
+        if (Application.isPlaying)
+            Destroy(gameObject);
+        else
+            DestroyImmediate(gameObject);
+#else
+                Destroy(gameObject);
+#endif
+    }
+    #endregion
 }

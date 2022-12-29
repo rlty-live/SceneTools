@@ -8,6 +8,9 @@ using ICSharpCode.SharpZipLib.Zip;
 using Unity.EditorCoroutines.Editor;
 using System.Collections.Generic;
 using System.Diagnostics;
+using RLTY.Customisation;
+using UnityEditor.SceneManagement;
+using Newtonsoft.Json;
 
 public class AssetbundleBuildEditor : EditorWindow
 {
@@ -58,9 +61,19 @@ public class AssetbundleBuildEditor : EditorWindow
         return _setup.StreamingAssetsLocalPath + "/" + target + "/"+ (subTarget == StandaloneBuildSubtarget.Server ? "Server":"Client");
     }
 
+    private static string GetManifestPath()
+    {
+        return _setup.StreamingAssetsLocalPath + "/Manifest";
+    }
+
     private static string GetWebGLAssetBundlePath()
     {
         return _setup.StreamingAssetsLocalPath + "/" + BuildTarget.WebGL;
+    }
+
+    private static string GetLinuxAssetBundlePath()
+    {
+        return _setup.StreamingAssetsLocalPath + "/" + BuildTarget.StandaloneLinux64 + "/" + "Server";
     }
 
     private static void FindSetup()
@@ -123,6 +136,12 @@ public class AssetbundleBuildEditor : EditorWindow
                     list.Add(_assetbundleTargets[i]);
             EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
         }
+
+        GUILayout.Space(40);
+
+        PlayerSettings.bundleVersion = EditorGUILayout.TextField("Version", Application.version);
+        if (GUILayout.Button("Prepare Publishing"))
+            PreparePublishToS3();
     }
 
     #region Assetbundles
@@ -167,6 +186,26 @@ public class AssetbundleBuildEditor : EditorWindow
             EditorUserBuildSettings.SwitchActiveBuildTargetAsync(GetTargetGroupForTarget(originalTarget), originalTarget);
         }
 
+        //build manifests
+        foreach (var e in _setup.environmentList)
+            if (e.rebuild)
+            {
+                List<Customisable> list = new List<Customisable>();
+                foreach (SceneAsset s in e.scenes)
+                {
+                    string path = AssetDatabase.GetAssetPath(s);
+                    EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+                    list.AddRange(FindObjectsOfType<Customisable>());
+                }
+                SceneManifest manifest = new SceneManifest();
+                foreach (Customisable c in list)
+                    manifest.Populate(c.type, c.key, c.commentary);
+                string data=JsonConvert.SerializeObject(manifest, Formatting.Indented);
+                if (!Directory.Exists(GetManifestPath()))
+                    Directory.CreateDirectory(GetManifestPath());
+                File.WriteAllText(GetManifestPath() + "/"+e.id + "_manifest.json", data);
+            }
+
         yield return null;
     }
 
@@ -205,6 +244,48 @@ public class AssetbundleBuildEditor : EditorWindow
     }
 
     #endregion
+
+    private static void PreparePublishToS3()
+    {
+        string path = _setup.PublishS3Path;
+        if (Directory.Exists(path))
+            Directory.Delete(path, true);
+        Directory.CreateDirectory(path);
+
+        string clientAssetPath = path + "/rlty-unity-assets/v" + Application.version + "/client";
+        string serverAssetPath = path + "/rlty-unity-assets/v" + Application.version + "/server";
+
+        Directory.CreateDirectory(clientAssetPath);
+        Directory.CreateDirectory(serverAssetPath);
+
+        //copy client assetbundles
+        UnityEngine.Debug.Log("Copying client assetbundles");
+        foreach (string file in Directory.GetFiles(GetWebGLAssetBundlePath()))
+        {
+            if (!file.Contains("manifest"))
+                File.Copy(file, clientAssetPath + "/" + Path.GetFileName(file));
+        }
+
+        //copy server assetbundles
+        UnityEngine.Debug.Log("Copying linux server assetbundles");
+        foreach (string file in Directory.GetFiles(GetLinuxAssetBundlePath()))
+        {
+            if (!file.Contains("manifest"))
+                File.Copy(file, serverAssetPath + "/" + Path.GetFileName(file));
+        }
+
+        path = Path.GetFullPath(path);
+        UnityEngine.Debug.Log("open folder " + path);
+        if (Directory.Exists(path))
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                Arguments = path,
+                FileName = "explorer.exe"
+            };
+            Process.Start(startInfo);
+        }
+    }
 }
 
 

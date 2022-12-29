@@ -44,7 +44,7 @@ namespace RLTY.UX
                 mainCamera = Camera.main;
 
             else
-                if (debug) Debug.Log("No mainCamera present in the scene, facing won't work", this);
+                if (debug) Debug.Log("No mainCamera present in the scene, facing won't work until there's one", this);
 
             rectTransform = transform.GetComponent<RectTransform>();
             pointer = new GameObject(this.name + " pointer").transform;
@@ -57,11 +57,13 @@ namespace RLTY.UX
         void Update()
         {
             timer += Time.deltaTime;
-            currentDistance = Vector3.Distance(mainCamera.transform.position, rectTransform.position);
 
-            if (currentDistance < activationDistance && timer > updateFrequency)
+            if(mainCamera)
             {
-                StartCoroutine(LerpToPointAtMainCamera());
+                currentDistance = Vector3.Distance(mainCamera.transform.position, rectTransform.position);
+
+                if (currentDistance < activationDistance && timer > updateFrequency)
+                    StartCoroutine(LerpToPointAtMainCamera());
             }
         }
 

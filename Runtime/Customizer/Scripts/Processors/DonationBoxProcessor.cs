@@ -7,8 +7,13 @@ namespace RLTY.Customisation
     [RequireComponent(typeof(TriggerZone))]
     public class DonationBoxProcessor : Processor
     {
-        public override void Customize(Component target, RLTY.SessionInfo.KeyValueBase keyValue)
+        public override void Customize(Component target, KeyValueBase keyValue)
         {
+            if (string.IsNullOrEmpty(keyValue.value))
+            {
+                gameObject.SetActive(false);
+                return;
+            }
             _walletId = keyValue.value;
         }
 
@@ -34,7 +39,7 @@ namespace RLTY.Customisation
         private void Update()
         {
             //check if we trigger a donation
-            if (!_donationStarted && Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.7f)
+            if (!_donationStarted && Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.5f)
             {
                 _donationStarted = true;
                 SessionInfoManagerHandlerData.UserDonation(_walletId);

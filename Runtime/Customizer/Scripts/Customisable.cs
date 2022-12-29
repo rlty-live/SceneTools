@@ -31,7 +31,7 @@ namespace RLTY.Customisation
         public CustomisableType type;
         [HorizontalGroup("IDs"), LabelText("Key"), LabelWidth(40)]
         [SerializeField]
-        private string displayKey;
+        public string displayKey;
         [ReadOnly, ShowIf("showUtilities", true), LabelText("realKey")]
         public string key;
         [SerializeField]
@@ -41,25 +41,11 @@ namespace RLTY.Customisation
         [TextArea]
         public string commentary;
 
-        /*
-        //Add masking of the keyValue++ types that don't match the customisable type ?
-        //Add a new KeyValueBase class, children of keyValue Base and use this one instead of a variant of each
-        [Title("Customisation data")]
-        [ShowIf("showUtilities", true), Space(10), ReadOnly]
-        public KeyValueObject keyValueObject;
-        [ShowIf("showUtilities", true), ShowIf("type", CustomisableType.Text), ReadOnly]
-        public ColorKeyValue colorKeyValue;
-        [ShowIf("showUtilities", true), ShowIf("type", CustomisableType.Color), ReadOnly]
-        public KeyValueBase textKeyValue;
-        [ReadOnly, ShowIf("showUtilities", true)]
-        public UrlKeyValue urlKeyValue;
-        */
-
         private KeyValueBase _keyValue;
 
         [Title("Setup")]
         [ShowIf("showUtilities", true), ReadOnly]
-        [InfoBox("For a live stream to work, the configuration file key has to contain 'LiveStream'", InfoMessageType.None, "@this.type == CustomisableType.Video")]
+        [InfoBox(infoBoxProcessor, InfoMessageType.None, "@this.type == CustomisableType.Video")]
         public Processor processor;
         public Component target;
 
@@ -70,17 +56,17 @@ namespace RLTY.Customisation
         [ShowIf("showUtilities", true)]
         public Vector3 gizmoOffset = new Vector3(1, 0, 0);
 
-        
-        private static CustomisationManager customisationManager;
-        private static bool customisationManagerPresent;
+        [HideInInspector] [SerializeField] 
+        private int _instanceId;
+
+        const string infoBoxProcessor = 
+            "For a live stream to work, the configuration file key has to contain 'LiveStream'";
 
         #endregion
 
-
-        
-
         #region EditorOnly Logic
 #if UNITY_EDITOR
+
         public void OnDrawGizmos()
         {
             if (showGizmo)
@@ -94,19 +80,9 @@ namespace RLTY.Customisation
         }
         public void UpdateKey()
         {
-            if (displayKey == string.Empty)
-                displayKey = gameObject.GetHashCode().ToString();
-
             if (useGameobjectName)
-            {
                 displayKey = transform.name;
-                key = transform.name + gameObject.GetHashCode().ToString();
-            }
-
-            else
-                key = displayKey + gameObject.GetHashCode().ToString();
-
-
+            key = displayKey;
             key = key.Replace(" ", "_");
         }
 
@@ -127,40 +103,11 @@ namespace RLTY.Customisation
         public override void CheckSetup()
         {
             base.CheckSetup();
-
             
             CheckForProcessor();
             target = processor.FindComponent(target);
             //CheckForCustomisationManager();
         }
-
-        ////Saved for later, for now it tends to try and find CustomisationManagers even in prefabs, wich will always lead to an error
-        ////PrefabUtility.IsPartOfPrefabAsset(this) and EditorUtility.isPersistent does not seem to work in the current Implementation
-        //public void CheckForCustomisationManager()
-        //{
-        //    if (!PrefabUtility.IsPartOfPrefabAsset(this))  
-        //        if (!FindObjectOfType(typeof(CustomisationManager)))
-        //        {
-        //            if (debug) Debug.Log("No Customisation manager present in the scene please add one");
-        //            customisationManagerPresent = false;
-        //        }
-
-        //        else
-        //        {
-        //            customisationManagerPresent = true;
-        //            customisationManager = (CustomisationManager)FindObjectOfType(typeof(CustomisationManager));
-        //        }
-        //}
-
-        //[InfoBox("No Customisation Manager present in the scene, do you want to add one ?", "!customisationManagerPresent", InfoMessageType = InfoMessageType.Warning)]
-        //[Button, HideIf("customisationManagerPresent")]
-        //public void StaticInstantiateCustomisationManager()
-        //{
-        //    GameObject customisationManagerHolder = new GameObject("CustomisationManager");
-        //    customisationManager = customisationManagerHolder.AddComponent<CustomisationManager>();
-        //    customisationManagerPresent = true;
-        //}
-
 
         /// <summary>
         /// Check this gameobject and his children for a processor and add a compatible one if possible
@@ -174,7 +121,7 @@ namespace RLTY.Customisation
 
             if (processor)
             {
-                if (Processor.AllTypes.ContainsKey(type) && Processor.AllTypes[type]==processor.GetType())
+                if (CustomisableUtility.Processors.ContainsKey(type) && CustomisableUtility.Processors[type].type==processor.GetType())
                     ValidProcessorDebugLog(true);
                 else
                 {
@@ -183,9 +130,9 @@ namespace RLTY.Customisation
                 }
                     
             }
-            if (processor==null && Processor.AllTypes.ContainsKey(type))
+            if (processor==null && CustomisableUtility.Processors.ContainsKey(type))
             {
-                processor = (Processor)gameObject.AddComponent(Processor.AllTypes[type]);
+                processor = (Processor)gameObject.AddComponent(CustomisableUtility.Processors[type].type);
                 ValidProcessorDebugLog(false);
             }
         }
@@ -235,7 +182,6 @@ namespace RLTY.Customisation
         #endregion
 
         #region Runtime Logic
-
         //Replace all Customize Method with a KeyValueBaseType Parameter and Make KeyValueObject Inherit from KeyValueBase
         public void Customize(KeyValueBase _KeyValueBase)
         {
