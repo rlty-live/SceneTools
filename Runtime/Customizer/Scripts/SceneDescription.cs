@@ -16,13 +16,15 @@ namespace RLTY.Customisation
         /// <summary>
         /// URL of the assetbundle to load on the server side
         /// </summary>
-        public string assetbundleServer;
+        public string assetbundleServer="";
         /// <summary>
         /// URL of the assetbundle to load on the client side
         /// </summary>
-        public string assetbundleClient;
+        public string assetbundleClient="";
 
         public List<CustomisableTypeEntry> entries = new List<CustomisableTypeEntry>();
+
+        public AgoraToken agoraToken;
 
         [JsonIgnore]
         public int totalSize;
@@ -105,7 +107,17 @@ namespace RLTY.Customisation
             File.WriteAllText(dir, JsonConvert.SerializeObject(this, Formatting.Indented));
             Debug.Log("SceneDescription saved to " + dir);
         }
+
+        [System.Serializable]
+        public class AgoraToken
+        {
+            public string token;
+            public uint id;
+            public string channelName;
+        }
     }
+
+    
 
     #region Processor declaration
 
@@ -122,7 +134,8 @@ namespace RLTY.Customisation
         ExternalPage,
         DonationBox,
         Web3Transaction,
-        TypeForm
+        TypeForm,
+        Invalid
     }
 
     public class ProcessorDefinition
@@ -141,7 +154,9 @@ namespace RLTY.Customisation
     {
         public static CustomisableType GetType(string type)
         {
-            return Enum.Parse<CustomisableType>(type);
+            if (!Enum.TryParse<CustomisableType>(type, out CustomisableType result))
+                result = CustomisableType.Invalid;
+            return result;
         }
 
         public static Dictionary<CustomisableType, ProcessorDefinition> Processors

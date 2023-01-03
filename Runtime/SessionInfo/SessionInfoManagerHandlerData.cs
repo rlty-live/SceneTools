@@ -88,8 +88,5 @@ namespace RLTY.SessionInfo
         public string DnsName = "localhost";
         public string Voice = "none"; //agora or chime
         public int Port = 7777;
-        public string AgoraChatChannel;
-        public uint AgoraUserId;
-        public string AgoraToken;
     }
 }

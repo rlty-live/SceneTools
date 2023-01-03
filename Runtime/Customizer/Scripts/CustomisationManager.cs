@@ -62,7 +62,7 @@ namespace RLTY.Customisation
 
             Customisable[] fullList = FindObjectsOfType<Customisable>();
 
-            Debug.Log("to do: reintegrate deactivator");
+            //Debug.Log("to do: reintegrate deactivator");
 
             CustomisationManagerHandlerData.CustomizationStarted();
             foreach (CustomisableTypeEntry entry in sceneDescription.entries)
@@ -70,7 +70,10 @@ namespace RLTY.Customisation
                 CustomisableType type = entry.Type;
                 foreach (KeyValueBase k in entry.keyPairs)
                 {
-                    SearchAndCustomize(type, fullList, k);
+                    if (type == CustomisableType.Invalid)
+                        Debug.LogError("Invalid key type in scene description: key=" + k.key+" value="+ k.value+" type="+entry.type);
+                    else
+                        SearchAndCustomize(type, fullList, k);
                 }
             }
 
