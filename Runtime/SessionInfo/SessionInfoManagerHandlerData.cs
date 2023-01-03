@@ -71,9 +71,9 @@ namespace RLTY.SessionInfo
 
         public static void DisconnectPlayer(string playerSessionId, Action<bool> callback) => OnPlayerDisconnect?.Invoke(playerSessionId, callback);
 
-        public static event Action<Action> OnServerClose;
+        public static event Action<Action<bool>> OnServerClose;
 
-        public static void ServerClose(Action callback) => OnServerClose?.Invoke(callback);
+        public static void ServerClose(Action<bool> callback) => OnServerClose?.Invoke(callback);
 
     }
 
@@ -88,5 +88,8 @@ namespace RLTY.SessionInfo
         public string DnsName = "localhost";
         public string Voice = "none"; //agora or chime
         public int Port = 7777;
+        public string AgoraChatChannel;
+        public uint AgoraUserId;
+        public string AgoraToken;
     }
 }
