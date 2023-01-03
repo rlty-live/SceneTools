@@ -1,13 +1,7 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using TMPro;
 //using VLB;
 using Sirenix.OdinInspector;
-using RLTY.SessionInfo;
-using Button = UnityEngine.UI.Button;
-using Image = UnityEngine.UI.Image;
-using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -38,8 +32,15 @@ namespace RLTY.Customisation
         [HorizontalGroup("IDs", 10, 0)]
         [ShowIf("showUtilities", true)]
         private bool useGameobjectName;
+
+        //Wip grouping of customisables
+        public string group;
+        static List<string> groupsList;
+
         [TextArea]
         public string commentary;
+        [SerializeField, ReadOnly]
+        string technicalInfo;
 
         private KeyValueBase _keyValue;
 
@@ -56,10 +57,11 @@ namespace RLTY.Customisation
         [ShowIf("showUtilities", true)]
         public Vector3 gizmoOffset = new Vector3(1, 0, 0);
 
-        [HideInInspector] [SerializeField] 
+        [HideInInspector]
+        [SerializeField]
         private int _instanceId;
 
-        const string infoBoxProcessor = 
+        const string infoBoxProcessor =
             "For a live stream to work, the configuration file key has to contain 'LiveStream'";
 
         #endregion
@@ -86,15 +88,42 @@ namespace RLTY.Customisation
             key = key.Replace(" ", "_");
         }
 
+        public void GetTechnicalInfo()
+        {
+            switch (processor)
+            {
+                case (SpriteProcessor):
+                    SpriteRenderer _target = GetComponent<SpriteRenderer>();
+                    SpriteProcessor _processor = processor as SpriteProcessor;
+
+                    if (_target.drawMode == SpriteDrawMode.Simple)
+                    {
+                        _processor.GetSpriteDimensions();
+                        technicalInfo = _processor.placeHolderWorldRatio.ToString();
+                    }
+                    break;
+            }
+        }
+
         public void OnValidate()
         {
             UpdateKey();
             CheckForProcessor();
+            GetTechnicalInfo();
         }
 
         public void Reset()
         {
             useGameobjectName = true;
+        }
+
+        //WIP automatic listing of existing groups and addition to an enum
+        //Should allow to remove a group (and update corresponding Customisables)
+        //Should warn if group already exists
+        //Should allow to sort Customisable in a editor window according to group / Type or both
+        public void UpdateEnum()
+        {
+
         }
 #endif
         #endregion
@@ -103,7 +132,7 @@ namespace RLTY.Customisation
         public override void CheckSetup()
         {
             base.CheckSetup();
-            
+
             CheckForProcessor();
             target = processor.FindComponent(target);
             //CheckForCustomisationManager();
@@ -121,16 +150,16 @@ namespace RLTY.Customisation
 
             if (processor)
             {
-                if (CustomisableUtility.Processors.ContainsKey(type) && CustomisableUtility.Processors[type].type==processor.GetType())
+                if (CustomisableUtility.Processors.ContainsKey(type) && CustomisableUtility.Processors[type].type == processor.GetType())
                     ValidProcessorDebugLog(true);
                 else
                 {
                     DestroyProcessor(processor);
                     processor = null;
                 }
-                    
+
             }
-            if (processor==null && CustomisableUtility.Processors.ContainsKey(type))
+            if (processor == null && CustomisableUtility.Processors.ContainsKey(type))
             {
                 processor = (Processor)gameObject.AddComponent(CustomisableUtility.Processors[type].type);
                 ValidProcessorDebugLog(false);
@@ -211,5 +240,32 @@ namespace RLTY.Customisation
         #endregion
 
         #endregion
+    }
+}
+
+[System.Serializable]
+public class GroupEntry
+{
+    [ReadOnly]
+    public string groupName;
+    [ShowIf("renaming"), SerializeField]
+    private string newName;
+
+    public bool renaming;
+
+    [Button, HorizontalGroup("Edit")]
+    public void Remove()
+    {
+
+    }
+
+    [Button, HorizontalGroup("Edit")]
+    public void Rename() => renaming = true;
+
+    [Button, HorizontalGroup("Edit")]
+    public void Validate()
+    {
+        groupName = newName;
+        renaming = false;
     }
 }

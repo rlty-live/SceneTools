@@ -37,9 +37,9 @@ public class AssetbundleBuildEditor : EditorWindow
                     case BuildTarget.WebGL:
                         return "WebGL";
                     case BuildTarget.StandaloneWindows64:
-                        return "Win " +(headless ? "Headless ":"") + Label;
+                        return "Win " + (headless ? "Headless " : "") + Label;
                     case BuildTarget.StandaloneLinux64:
-                        return "Linux "+(headless ? "Headless ":"") + Label;
+                        return "Linux " + (headless ? "Headless " : "") + Label;
                 }
                 return "unnamed";
             }
@@ -58,7 +58,7 @@ public class AssetbundleBuildEditor : EditorWindow
     {
         if (target == BuildTarget.WebGL)
             return GetWebGLAssetBundlePath();
-        return _setup.StreamingAssetsLocalPath + "/" + target + "/"+ (subTarget == StandaloneBuildSubtarget.Server ? "Server":"Client");
+        return _setup.StreamingAssetsLocalPath + "/" + target + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
     }
 
     private static string GetManifestPath()
@@ -111,15 +111,15 @@ public class AssetbundleBuildEditor : EditorWindow
         window.Show();
     }
 
-    
+
     // Start is called before the first frame update
     void OnGUI()
     {
-        if (_assetbundleTargets.Count==0)
+        if (_assetbundleTargets.Count == 0)
         {
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = true, headless = true });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneLinux64, server = true, headless = true });
-            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = false, headless = false }); 
+            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = false, headless = false });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.WebGL, server = false, headless = false });
         }
 
@@ -172,7 +172,7 @@ public class AssetbundleBuildEditor : EditorWindow
             yield return new EditorWaitForSeconds(0.5f);
 
             // perform the build
-            BuildAssetBundlesForTarget(tmpDirectory, buildTarget.target, buildTarget.headless ? StandaloneBuildSubtarget.Server:StandaloneBuildSubtarget.Player);
+            BuildAssetBundlesForTarget(tmpDirectory, buildTarget.target, buildTarget.headless ? StandaloneBuildSubtarget.Server : StandaloneBuildSubtarget.Player);
 
             Progress.Finish(buildTaskProgressID, Progress.Status.Succeeded);
             yield return new EditorWaitForSeconds(0.5f);
@@ -199,11 +199,15 @@ public class AssetbundleBuildEditor : EditorWindow
                 }
                 SceneManifest manifest = new SceneManifest();
                 foreach (Customisable c in list)
-                    manifest.Populate(c.type, c.key, c.commentary);
-                string data=JsonConvert.SerializeObject(manifest, Formatting.Indented);
+                {
+                    if (c.gameObject.activeInHierarchy)
+                        manifest.Populate(c.type, c.key, c.commentary);
+                }
+
+                string data = JsonConvert.SerializeObject(manifest, Formatting.Indented);
                 if (!Directory.Exists(GetManifestPath()))
                     Directory.CreateDirectory(GetManifestPath());
-                File.WriteAllText(GetManifestPath() + "/"+e.id + "_manifest.json", data);
+                File.WriteAllText(GetManifestPath() + "/" + e.id + "_manifest.json", data);
             }
 
         yield return null;
@@ -296,7 +300,7 @@ namespace FolderZipper
     {
         public static void ZipFiles(string inputFolderPath, string outputPathAndFile, string password)
         {
-            inputFolderPath=Path.GetFullPath(inputFolderPath);
+            inputFolderPath = Path.GetFullPath(inputFolderPath);
             ArrayList fileList = GenerateFileList(inputFolderPath); // generate file list
             int TrimLength = (inputFolderPath).ToString().Length;
 

@@ -21,7 +21,7 @@ namespace RLTY.Customisation
         [SerializeField, Range(10, 400)]
         private float minPixelPerUnit = 100;
         [SerializeField, Tooltip("If new Sprite is narrower than placeholder it will be aligned according to selection.")]
-        private HorizontalAlignment horizontalAligmbent;
+        private HorizontalAlignment horizontalAlignment;
         [SerializeField, Tooltip("If new Sprite is smaller than placeholder it will be aligned according to selection.")]
         private VerticalAlignment verticalAlignment;
 
@@ -33,7 +33,7 @@ namespace RLTY.Customisation
         private Vector2 placeholderSpriteWorldDimensions;
         [SerializeField, ReadOnly, ShowIf("showUtilities")]
         [LabelText("world Sprite ratio")]
-        private float placeHolderWorldRatio;
+        public float placeHolderWorldRatio;
         [SerializeField, ReadOnly, ShowIf("showUtilities")]
         [LabelText("Proportions")]
         private TextureProportions placeholderProportions;
@@ -56,7 +56,7 @@ namespace RLTY.Customisation
         private TextureProportions newSpriteProportions;
         [SerializeField, ReadOnly, ShowIf("showUtilities")]
         [LabelText("World dimensions")]
-        private Vector2 newSpriteWorldDimensions;
+        public Vector2 newSpriteWorldDimensions;
         [SerializeField, ReadOnly, ShowIf("showUtilities")]
         float newRatio;
         [SerializeField, ReadOnly, ShowIf("showUtilities")]
@@ -233,7 +233,7 @@ namespace RLTY.Customisation
 
         public void SetPositionToAnchor()
         {
-            switch (horizontalAligmbent)
+            switch (horizontalAlignment)
             {
                 case HorizontalAlignment.Center:
                     isOffset = false;
@@ -354,10 +354,7 @@ namespace RLTY.Customisation
             }
         }
 
-        public void Reset()
-        {
-            isOffset = false;
-        }
+        public void Reset() => isOffset = false;
         #endregion
     }
 }

@@ -10,7 +10,8 @@
   "licensesUrl": "https://rlty.live/licensing.html",
   "dependencies": {
     "com.unity.render-pipelines.universal": "12.1.7",
-    "com.unity.textmeshpro": "3.0.6"
+    "com.unity.textmeshpro": "3.0.6",
+    "com.unity.editorcoroutines": "1.0.0"
   },
   "keywords": [
     "rlty",
