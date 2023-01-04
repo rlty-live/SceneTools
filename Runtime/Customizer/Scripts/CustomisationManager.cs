@@ -1,12 +1,6 @@
-using System;
-using System.Linq;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using RLTY.SessionInfo;
-using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -20,7 +14,8 @@ namespace RLTY.Customisation
     {
         #region Global variables
 
-        [PropertyOrder(40)] [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
+        [PropertyOrder(40)]
+        [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
         private const string howTo =
             "To easily navigate through the list add a second inspector side-by-side and lock this one. " +

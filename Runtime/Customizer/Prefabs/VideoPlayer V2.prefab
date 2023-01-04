@@ -191,21 +191,16 @@ MonoBehaviour:
   debug: 1
   videoURL: https://32dbdd75b1ef.eu-west-1.playback.live-video.net/api/video/v1/eu-west-1.508378642605.channel.WWYVCzRXu2q0.m3u8
   isLiveStream: 0
-  defaultTexture: {fileID: 2800000, guid: 8bef6179fcd26aa4c89b766c6b95490a, type: 3}
-  keepLoaded: 0
-  _iVideoPlayerMonoBehaviour: {fileID: 0}
-  applyToMaterial: 1
-  mat: {fileID: 0}
-  targetRenderers: []
-  materialIndex: 0
+  applyToMeshes: 1
+  targetRenderers:
+  - {fileID: 3082609004288272851}
+  - {fileID: 592707719591882006}
   applyToUI: 1
-  targets:
-  - {fileID: 4365926138561607367}
+  targetsUIs:
   - {fileID: 8259562366571927177}
-  soundFadeDuration: 2
-  volume: 0.75
-  volumeInVisio: 0.1
+  - {fileID: 4365926138561607367}
   useTriggerZone: 1
+  triggerZone: {fileID: 0}
 --- !u!114 &7671133016384051457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +222,9 @@ MonoBehaviour:
   displayKey: VideoPlayer V2
   key: VideoPlayer_V2
   useGameobjectName: 1
+  group: 
   commentary: 
+  technicalInfo: 
   processor: {fileID: 2206407946427434477}
   target: {fileID: 0}
   showGizmo: 0
