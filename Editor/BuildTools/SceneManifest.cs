@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System;
+using UnityEditor;
+using UnityEngine;
+using Newtonsoft.Json;
 
 namespace RLTY.Customisation
 {
@@ -26,13 +29,14 @@ namespace RLTY.Customisation
             ct.list.Add(new KeyInfo() { key = key, type = typeString, description = description });
         }
 
-        string Format(CustomisableType type)
+        [MenuItem("RLTY/DebugSceneManifest")]
+        public static void DebugSceneManifest()
         {
-            switch (type)
-            {
-                // case CustomisableType.
-            }
-            return null;
+            Customisable[] fullList = GameObject.FindObjectsOfType<Customisable>();
+            SceneManifest manifest = new SceneManifest();
+            foreach (Customisable c in fullList)
+                manifest.Populate(c.type, c.key, c.commentary);
+            Debug.Log("SceneManifest=" + JsonConvert.SerializeObject(manifest, Formatting.Indented));
         }
     }
 
