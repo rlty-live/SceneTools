@@ -13,7 +13,11 @@ namespace RLTY.Customisation
             public string smartContractAddress;
             public string activeChainId;
         }
-
+        public override Component FindComponent(Component target)
+        {
+            //we don't need a component
+            return this;
+        }
         public override void Customize(Component target, KeyValueBase keyValue)
         {
             if (string.IsNullOrEmpty(keyValue.value))
@@ -27,8 +31,10 @@ namespace RLTY.Customisation
                 tmp = new string[2] { "nodata", "nodata" };
             _data = JsonConvert.SerializeObject(new Data() { smartContractAddress = tmp[0].Trim(), activeChainId = tmp[1].Trim() });
         }
-
+        
+        [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
         [SerializeField] private string _data = "";
+
         private TriggerZone _zone;
 
         private bool _actionProcessed = false;
@@ -50,7 +56,7 @@ namespace RLTY.Customisation
         private void Update()
         {
             //check if we trigger a donation
-            if (!_actionProcessed && Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.5f)
+            if (!_actionProcessed && (!_checkUserOrientationAlignedWithForward || Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.3f))
             {
                 _actionProcessed = true;
                 SessionInfoManagerHandlerData.Web3Transaction(_data);

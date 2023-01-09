@@ -10,8 +10,8 @@ namespace RLTY.Customisation
     public class SpriteProcessor : Processor
     {
         #region Global Variables
-        private SpriteRenderer spriteRenderer;
-        private Image image;
+        private SpriteRenderer SpriteRenderer;
+        private Image Image;
 
         [Title("Parameters")]
         [SerializeField, ShowIf("equiBordersWidth", true)]
@@ -68,22 +68,20 @@ namespace RLTY.Customisation
 
         public override Component FindComponent(Component existingTarget)
         {
-            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            Image image = GetComponentInChildren<Image>();
             Component target = null;
 
-            if (!spriteRenderer && !image)
+            if (SpriteRenderer==null && Image==null)
             {
                 if (debug)
                     Debug.LogWarning("No SpriteRenderer found in children" + commonWarning, this);
             }
             else
             {
-                if (spriteRenderer)
-                    target = spriteRenderer;
+                if (SpriteRenderer!=null)
+                    target = SpriteRenderer;
 
-                if (image)
-                    target = image;
+                if (Image)
+                    target = Image;
             }
             return target;
         }
@@ -93,10 +91,10 @@ namespace RLTY.Customisation
             Texture t = keyValue.data as Texture;
             if (t == null)
                 return;
-            if (target.GetType() == typeof(SpriteRenderer))
+            if (target== SpriteRenderer)
                 SpriteRendererSpriteSwap(t);
             else
-            if (target.GetType() == typeof(Image))
+            if (target== Image)
                 ImageSpriteSwap(t);
         }
 
@@ -104,14 +102,15 @@ namespace RLTY.Customisation
         //[Button("Measure")]
         public void GetSpriteDimensions()
         {
-            if (spriteRenderer.sprite != null)
-            {
-                placeholderPPU = spriteRenderer.sprite.pixelsPerUnit;
-                placeHolderRatio = spriteRenderer.sprite.texture.width / spriteRenderer.sprite.texture.height;
-                placeHolderSpriteDimensions = new Vector2(spriteRenderer.sprite.texture.width / placeholderPPU, spriteRenderer.sprite.texture.height / placeholderPPU);
-                placeholderSpriteWorldDimensions = placeHolderSpriteDimensions * transform.localScale;
-                placeHolderWorldRatio = placeholderSpriteWorldDimensions.x / placeholderSpriteWorldDimensions.y;
-            }
+            if (SpriteRenderer == null || SpriteRenderer.sprite == null)
+                return;
+
+            placeholderPPU = SpriteRenderer.sprite.pixelsPerUnit;
+            placeHolderRatio = SpriteRenderer.sprite.texture.width / SpriteRenderer.sprite.texture.height;
+            placeHolderSpriteDimensions = new Vector2(SpriteRenderer.sprite.texture.width / placeholderPPU, SpriteRenderer.sprite.texture.height / placeholderPPU);
+            placeholderSpriteWorldDimensions = placeHolderSpriteDimensions * transform.localScale;
+            placeHolderWorldRatio = placeholderSpriteWorldDimensions.x / placeholderSpriteWorldDimensions.y;
+
             //Local bounds seems to only use the original sprite size, at least in editor (check the Gizmos in editor)
             //spriteWorldDimensions = new Vector2(spriteRenderer.localBounds.size.x, spriteRenderer.localBounds.size.y);
 
@@ -129,7 +128,7 @@ namespace RLTY.Customisation
                     placeholderProportions = TextureProportions.Square;
                     break;
                 default:
-                    Debug.Log("Invalid dimensions for " + spriteRenderer + " verify scale and Sprite asset.", this);
+                    Debug.Log("Invalid dimensions for " + SpriteRenderer + " verify scale and Sprite asset.", this);
                     break;
             }
         }
@@ -147,8 +146,8 @@ namespace RLTY.Customisation
             Vector2 pivotPosition = new Vector2(0.5f, 0.5f);
 
             newSpriteDimensions = new Vector2(
-                tex.width / spriteRenderer.sprite.pixelsPerUnit,
-                tex.height / spriteRenderer.sprite.pixelsPerUnit);
+                tex.width / SpriteRenderer.sprite.pixelsPerUnit,
+                tex.height / SpriteRenderer.sprite.pixelsPerUnit);
             newTextureRatio = newSpriteDimensions.x / newSpriteDimensions.y;
 
             switch (newTextureRatio)
@@ -174,21 +173,23 @@ namespace RLTY.Customisation
 
         public void ImageSpriteSwap(Texture tex)
         {
-            Image image = GetComponent<Image>();
-            image.sprite = SetUpSprite((Texture2D)tex);
+            if (Image)
+                Image.sprite = SetUpSprite((Texture2D)tex);
         }
 
         public void SwapSprite(Texture tex)
         {
+            if (SpriteRenderer == null)
+                return;
             GetSpriteDimensions();
 
             Sprite newSprite = SetUpSprite((Texture2D)tex);
-            spriteRenderer.sprite = newSprite;
+            SpriteRenderer.sprite = newSprite;
 
             float spriteScaleFactor = 1;
             newRatio = 1;
 
-            if (spriteRenderer.drawMode == SpriteDrawMode.Simple)
+            if (SpriteRenderer.drawMode == SpriteDrawMode.Simple)
             {
                 switch (placeHolderWorldRatio - newTextureRatio)
                 {
@@ -288,10 +289,10 @@ namespace RLTY.Customisation
             base.CheckSetup();
 
             if (TryGetComponent(out SpriteRenderer _spriteRenderer))
-                spriteRenderer = _spriteRenderer;
+                SpriteRenderer = _spriteRenderer;
 
             if (TryGetComponent(out Image _image))
-                image = _image;
+                Image = _image;
 
             if (!TryGetComponent(out SpriteRenderer spriteRdr2) && !TryGetComponent(out Image _image2))
             {
@@ -319,14 +320,13 @@ namespace RLTY.Customisation
         [Button("Test")]
         public void SpriteRendererSpriteSwap(Texture tex)
         {
-            GetSpriteDimensions();
             SwapSprite(tex);
         }
 
         public void OnValidate()
         {
             CheckSetup();
-            if (spriteRenderer)
+            if (SpriteRenderer)
                 GetSpriteDimensions();
         }
 
@@ -334,9 +334,9 @@ namespace RLTY.Customisation
         {
             Gizmos.matrix = transform.localToWorldMatrix;
 
-            if (displayBounds && spriteRenderer)
+            if (displayBounds && SpriteRenderer)
             {
-                switch (spriteRenderer.drawMode)
+                switch (SpriteRenderer.drawMode)
                 {
                     case SpriteDrawMode.Simple:
                         Gizmos.DrawWireCube(Vector3.zero, new Vector3(
@@ -345,10 +345,10 @@ namespace RLTY.Customisation
                             0.1f));
                         break;
                     case SpriteDrawMode.Sliced:
-                        Gizmos.DrawWireCube(Vector3.zero, new Vector3(spriteRenderer.size.x, spriteRenderer.size.y, 0.1f));
+                        Gizmos.DrawWireCube(Vector3.zero, new Vector3(SpriteRenderer.size.x, SpriteRenderer.size.y, 0.1f));
                         break;
                     case SpriteDrawMode.Tiled:
-                        Gizmos.DrawWireCube(Vector3.zero, new Vector3(spriteRenderer.size.x, spriteRenderer.size.y, 0.1f));
+                        Gizmos.DrawWireCube(Vector3.zero, new Vector3(SpriteRenderer.size.x, SpriteRenderer.size.y, 0.1f));
                         break;
                 }
             }

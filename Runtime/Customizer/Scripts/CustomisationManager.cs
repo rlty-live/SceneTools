@@ -1,6 +1,12 @@
+using System;
+using System.Linq;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using RLTY.SessionInfo;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -14,8 +20,7 @@ namespace RLTY.Customisation
     {
         #region Global variables
 
-        [PropertyOrder(40)]
-        [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
+        [PropertyOrder(40)] [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
         private const string howTo =
             "To easily navigate through the list add a second inspector side-by-side and lock this one. " +
@@ -53,7 +58,7 @@ namespace RLTY.Customisation
         /// <param name="sceneDescription">The configuration file that lists all customisation keys and values for this building and this event</param>
         public void CustomizeScene(SceneDescription sceneDescription)
         {
-            if (debug) Debug.Log("Starting Customization from " + sceneDescription, this);
+            JLog("Starting Customization from " + sceneDescription, this);
 
             Customisable[] fullList = FindObjectsOfType<Customisable>();
 
@@ -72,7 +77,7 @@ namespace RLTY.Customisation
                 }
             }
 
-            if (debug) Debug.Log("Finished Customization from " + sceneDescription, this);
+            JLog("Finished Customization from " + sceneDescription, this);
             CustomisationManagerHandlerData.CustomisationFinished();
         }
 
@@ -93,9 +98,8 @@ namespace RLTY.Customisation
                     }
                 }
             if (!found)
-                Debug.LogError("No customisable found for key=" + k.key);
-            else if (debug)
-                Debug.Log(k.key + " was found in: " + foundKeys);
+                Debug.LogError("No customisable found for key=" + k.key+" type="+type);
+            else JLog(k.key + " was found in: " + foundKeys);
         }
 
         #endregion

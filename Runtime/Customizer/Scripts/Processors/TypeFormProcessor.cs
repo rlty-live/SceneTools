@@ -7,6 +7,12 @@ namespace RLTY.Customisation
     [RequireComponent(typeof(TriggerZone))]
     public class TypeFormProcessor : Processor
     {
+        public override Component FindComponent(Component target)
+        {
+            //we don't need a component
+            return this;
+        }
+
         public override void Customize(Component target, KeyValueBase keyValue)
         {
             if (string.IsNullOrEmpty(keyValue.value))
@@ -17,6 +23,7 @@ namespace RLTY.Customisation
             _typeformId = keyValue.value;
         }
 
+        [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
         [SerializeField] private string _typeformId = "1";
         private TriggerZone _zone;
 
@@ -39,7 +46,7 @@ namespace RLTY.Customisation
         private void Update()
         {
             //check if we trigger a donation
-            if (!_actionProcessed && Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.5f)
+            if (!_actionProcessed && (!_checkUserOrientationAlignedWithForward || Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.3f))
             {
                 _actionProcessed = true;
                 SessionInfoManagerHandlerData.OpenTypeForm(_typeformId);

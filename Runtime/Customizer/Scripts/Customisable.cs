@@ -90,19 +90,7 @@ namespace RLTY.Customisation
 
         public void GetTechnicalInfo()
         {
-            switch (processor)
-            {
-                case (SpriteProcessor):
-                    SpriteRenderer _target = GetComponent<SpriteRenderer>();
-                    SpriteProcessor _processor = processor as SpriteProcessor;
-
-                    if (_target.drawMode == SpriteDrawMode.Simple)
-                    {
-                        _processor.GetSpriteDimensions();
-                        technicalInfo = _processor.placeHolderWorldRatio.ToString();
-                    }
-                    break;
-            }
+            //no processor-specific code here, please call a method on the processor instead
         }
 
         public void OnValidate()
@@ -223,6 +211,13 @@ namespace RLTY.Customisation
 
             else
             {
+                if (target == null)
+                    target=processor.FindComponent(null);
+                if (target == null)
+                {
+                    Debug.LogError("Target is null on customisable " + processor.name);
+                    return;
+                }  
                 processor.Customize(target, _keyValue);
             }
         }

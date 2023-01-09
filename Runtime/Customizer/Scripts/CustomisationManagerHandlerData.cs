@@ -13,7 +13,6 @@ namespace RLTY.Customisation
         public static void CustomizationStarted()
         {
             OnCustomizeScene?.Invoke();
-            Debug.Log("Customisation started");
         }
 
 
