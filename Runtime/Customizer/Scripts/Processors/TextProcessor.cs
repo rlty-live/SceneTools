@@ -67,7 +67,7 @@ namespace RLTY.Customisation
 
         #endregion
 
-        public override Component FindComponent(Component existingTarget)
+        public override Component FindComponent()
         {
             TextMeshPro textMeshPro = GetComponentInChildren<TextMeshPro>();
             TextMeshProUGUI textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();

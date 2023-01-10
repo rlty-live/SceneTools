@@ -6,12 +6,6 @@ namespace RLTY.Customisation
 {
     public class DonationBoxProcessor : Processor
     {
-        public override Component FindComponent(Component target)
-        {
-            //we don't need a component
-            return this;
-        }
-
         public override void Customize(KeyValueBase keyValue)
         {
             if (string.IsNullOrEmpty(keyValue.value))

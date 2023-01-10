@@ -13,11 +13,7 @@ namespace RLTY.Customisation
             public string smartContractAddress;
             public string activeChainId;
         }
-        public override Component FindComponent(Component target)
-        {
-            //we don't need a component
-            return this;
-        }
+
         public override void Customize(KeyValueBase keyValue)
         {
             if (string.IsNullOrEmpty(keyValue.value))

@@ -66,7 +66,7 @@ namespace RLTY.Customisation
 
         #endregion
 
-        public override Component FindComponent(Component existingTarget)
+        public override Component FindComponent()
         {
             Component target = null;
 
@@ -285,22 +285,13 @@ namespace RLTY.Customisation
 
         public override void CheckSetup()
         {
-            base.CheckSetup();
-            if (SpriteRenderer==null && Image==null)
-            {
-                correctSetup = false;
-                if (debug) Debug.Log("Customisable doesn't have neither a Sprite Renderer nor Image component, please add one or remove this customisable", this);
+            if (gameObject.scene == null)
                 return;
-            }
+            base.CheckSetup();
+            correctSetup = SpriteRenderer!=null || Image!=null;
 
             if (!correctSetup)
-            {
-                correctSetup = false;
-                if (debug) Debug.Log("Setup of this customisable Processor is wrong, check debug in Utilies and then check console");
-                return;
-            }
-
-            correctSetup = true;
+                Debug.LogError("Customisable doesn't have neither a Sprite Renderer nor Image component, please add one or remove this customisable", this);
         }
 
 

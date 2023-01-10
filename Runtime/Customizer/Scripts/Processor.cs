@@ -7,9 +7,9 @@ namespace RLTY.Customisation
     public class Processor : RLTYMonoBehaviour
     {
         protected static string commonWarning = "Please add one or remove this Customisable";
-        public virtual Component FindComponent(Component target)
+        public virtual Component FindComponent()
         {
-            return null;
+            return this;
         }
 
         public virtual void Customize(KeyValueBase keyValue)

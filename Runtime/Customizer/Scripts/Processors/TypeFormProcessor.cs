@@ -7,12 +7,6 @@ namespace RLTY.Customisation
     [RequireComponent(typeof(TriggerZone))]
     public class TypeFormProcessor : Processor
     {
-        public override Component FindComponent(Component target)
-        {
-            //we don't need a component
-            return this;
-        }
-
         public override void Customize(KeyValueBase keyValue)
         {
             if (string.IsNullOrEmpty(keyValue.value))

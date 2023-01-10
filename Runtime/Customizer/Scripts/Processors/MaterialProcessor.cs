@@ -41,11 +41,10 @@ namespace RLTY.Customisation
 #endif
         #endregion
 
-        public override Component FindComponent(Component existingTarget)
+        public override Component FindComponent()
         {
-            Renderer renderer = GetComponentInChildren<Renderer>();
-            Component target = null;
-            if (!renderer)
+            Component target = GetComponent<Renderer>();
+            if (target==null)
             {
                 if (!TryGetComponent<DecalProjector>(out DecalProjector proj))
                 {
@@ -56,8 +55,6 @@ namespace RLTY.Customisation
                         target = proj;
                 }
             }
-            else
-                target = renderer;
             return target;
         }
         public override void Customize(KeyValueBase keyValue)

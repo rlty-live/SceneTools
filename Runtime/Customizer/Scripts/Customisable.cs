@@ -48,7 +48,8 @@ namespace RLTY.Customisation
         [ShowIf("showUtilities", true), ReadOnly]
         [InfoBox(infoBoxProcessor, InfoMessageType.None, "@this.type == CustomisableType.Video")]
         public Processor processor;
-        public Component target;
+        
+        [SerializeField] private Component target;
 
         [Title("Handles")]
         [SerializeField]
@@ -151,6 +152,9 @@ namespace RLTY.Customisation
                 processor = (Processor)gameObject.AddComponent(CustomisableUtility.Processors[type].type);
                 ValidProcessorDebugLog(false);
             }
+            target = processor.FindComponent();
+            if (target == null)
+                Debug.LogError("Processor target not found on " + name+" type="+processor.GetType());
         }
 
         public void DestroyProcessor(Processor _processor)
@@ -201,6 +205,7 @@ namespace RLTY.Customisation
         //Replace all Customize Method with a KeyValueBaseType Parameter and Make KeyValueObject Inherit from KeyValueBase
         public void Customize(KeyValueBase _KeyValueBase)
         {
+            CheckSetup();
             _keyValue = _KeyValueBase;
             if (!processor)
             {

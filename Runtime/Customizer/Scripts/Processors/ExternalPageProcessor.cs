@@ -32,7 +32,7 @@ namespace RLTY.Customisation
 
         #endregion
 
-        public override Component FindComponent(Component existingTarget)
+        public override Component FindComponent()
         {
             Component target = null;
             Button button = GetComponentInChildren<Button>();
