@@ -60,7 +60,7 @@ namespace RLTY.Customisation
                 target = renderer;
             return target;
         }
-        public override void Customize(Component target, KeyValueBase keyValue)
+        public override void Customize(KeyValueBase keyValue)
         {
             switch (keyValue.Type)
             {

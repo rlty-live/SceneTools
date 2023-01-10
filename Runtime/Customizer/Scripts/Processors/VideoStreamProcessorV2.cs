@@ -43,7 +43,11 @@ namespace RLTY.Customisation
         public TriggerZone triggerZone;
         #endregion
 
-        public void Customize(string url) => videoURL = url;
+        public override void Customize(KeyValueBase kvo)
+        {
+            videoURL = kvo.value;
+            Debug.Log("Got " + kvo.value + " from sceneDescription", this);
+        }
     }
 
     //#if UNITY_EDITOR

@@ -89,7 +89,7 @@ namespace RLTY.Customisation
             return target;
         }
 
-        public override void Customize(Component target, KeyValueBase keyValue)
+        public override void Customize(KeyValueBase keyValue)
         {
             SwapText(keyValue.value);
         }

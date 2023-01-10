@@ -122,7 +122,6 @@ namespace RLTY.Customisation
             base.CheckSetup();
 
             CheckForProcessor();
-            target = processor.FindComponent(target);
             //CheckForCustomisationManager();
         }
 
@@ -212,13 +211,11 @@ namespace RLTY.Customisation
             else
             {
                 if (target == null)
-                    target=processor.FindComponent(null);
-                if (target == null)
                 {
                     Debug.LogError("Target is null on customisable " + processor.name);
                     return;
-                }  
-                processor.Customize(target, _keyValue);
+                }
+                processor.Customize(_keyValue);
             }
         }
 

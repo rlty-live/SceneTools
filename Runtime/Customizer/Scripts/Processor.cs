@@ -12,7 +12,7 @@ namespace RLTY.Customisation
             return null;
         }
 
-        public virtual void Customize(Component target, KeyValueBase keyValue)
+        public virtual void Customize(KeyValueBase keyValue)
         {
 
         }

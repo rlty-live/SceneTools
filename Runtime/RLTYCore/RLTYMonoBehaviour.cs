@@ -20,9 +20,9 @@ public abstract class RLTYMonoBehaviourBase : JMonoBehaviour
     [SerializeField, PropertyOrder(30), LabelWidth(90)]
     protected bool showUtilities;
 
-    [Button, PropertyOrder(31)] 
+    [Button, PropertyOrder(31)]
     [HorizontalGroup("debug", MinWidth = 100, MaxWidth = 100)]
-    public virtual void CheckSetup() {}
+    public virtual void CheckSetup() { }
 
     [SerializeField, ShowIf("showUtilities", true), ReadOnly]
     [PropertyOrder(32), HorizontalGroup("debug", LabelWidth = 90)]
@@ -44,14 +44,15 @@ public abstract class RLTYMonoBehaviourBase : JMonoBehaviour
         slowTrigger = false;
         yield return null;
     }
+
     [ExecuteAlways]
     public static void DestroyEditorSafe(Component component)
     {
 #if UNITY_EDITOR
-        if (Application.isPlaying)
-            Destroy(component);
-        else
-            DestroyImmediate(component);
+            if (Application.isPlaying)
+                Destroy(component);
+            else
+                DestroyImmediate(component, true);
 #else
                 Destroy(component);
 #endif

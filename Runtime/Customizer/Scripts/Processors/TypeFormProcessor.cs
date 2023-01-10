@@ -13,7 +13,7 @@ namespace RLTY.Customisation
             return this;
         }
 
-        public override void Customize(Component target, KeyValueBase keyValue)
+        public override void Customize(KeyValueBase keyValue)
         {
             if (string.IsNullOrEmpty(keyValue.value))
             {
@@ -25,32 +25,10 @@ namespace RLTY.Customisation
 
         [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
         [SerializeField] private string _typeformId = "1";
-        private TriggerZone _zone;
 
-        private bool _actionProcessed = false;
-
-        protected override void Awake()
+        public void OpenTypeForm()
         {
-            base.Awake();
-            _zone = GetComponent<TriggerZone>();
-            _zone.onPlayerEnter += (x) => enabled = true;
-            _zone.onPlayerExit += (x) => enabled = false;
-            enabled = false;
-        }
-
-        private void OnEnable()
-        {
-            _actionProcessed = false;
-        }
-
-        private void Update()
-        {
-            //check if we trigger a donation
-            if (!_actionProcessed && (!_checkUserOrientationAlignedWithForward || Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.3f))
-            {
-                _actionProcessed = true;
-                SessionInfoManagerHandlerData.OpenTypeForm(_typeformId);
-            }
+            SessionInfoManagerHandlerData.OpenTypeForm(_typeformId);
         }
     }
 }

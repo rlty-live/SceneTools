@@ -18,7 +18,7 @@ namespace RLTY.Customisation
             //we don't need a component
             return this;
         }
-        public override void Customize(Component target, KeyValueBase keyValue)
+        public override void Customize(KeyValueBase keyValue)
         {
             if (string.IsNullOrEmpty(keyValue.value))
             {

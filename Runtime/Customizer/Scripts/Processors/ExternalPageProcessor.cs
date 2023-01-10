@@ -47,7 +47,7 @@ namespace RLTY.Customisation
             return target;
         }
 
-        public override void Customize(Component target, KeyValueBase keyValue) => SetURL(keyValue.value);
+        public override void Customize(KeyValueBase keyValue) => SetURL(keyValue.value);
         /// <summary>
         /// Set the url target to open when button clicked
         /// </summary>

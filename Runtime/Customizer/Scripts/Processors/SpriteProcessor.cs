@@ -10,8 +10,8 @@ namespace RLTY.Customisation
     public class SpriteProcessor : Processor
     {
         #region Global Variables
-        private SpriteRenderer SpriteRenderer;
-        private Image Image;
+        private SpriteRenderer SpriteRenderer { get { return GetComponent<SpriteRenderer>(); } }
+        private Image Image { get { return GetComponent<Image>(); } }
 
         [Title("Parameters")]
         [SerializeField, ShowIf("equiBordersWidth", true)]
@@ -86,15 +86,15 @@ namespace RLTY.Customisation
             return target;
         }
 
-        public override void Customize(Component target, KeyValueBase keyValue)
+        public override void Customize(KeyValueBase keyValue)
         {
             Texture t = keyValue.data as Texture;
             if (t == null)
                 return;
-            if (target== SpriteRenderer)
+            if (SpriteRenderer!=null)
                 SpriteRendererSpriteSwap(t);
             else
-            if (target== Image)
+            if (Image!=null)
                 ImageSpriteSwap(t);
         }
 
@@ -182,10 +182,9 @@ namespace RLTY.Customisation
             if (SpriteRenderer == null)
                 return;
             GetSpriteDimensions();
-
             Sprite newSprite = SetUpSprite((Texture2D)tex);
             SpriteRenderer.sprite = newSprite;
-
+            
             float spriteScaleFactor = 1;
             newRatio = 1;
 
@@ -287,14 +286,7 @@ namespace RLTY.Customisation
         public override void CheckSetup()
         {
             base.CheckSetup();
-
-            if (TryGetComponent(out SpriteRenderer _spriteRenderer))
-                SpriteRenderer = _spriteRenderer;
-
-            if (TryGetComponent(out Image _image))
-                Image = _image;
-
-            if (!TryGetComponent(out SpriteRenderer spriteRdr2) && !TryGetComponent(out Image _image2))
+            if (SpriteRenderer==null && Image==null)
             {
                 correctSetup = false;
                 if (debug) Debug.Log("Customisable doesn't have neither a Sprite Renderer nor Image component, please add one or remove this customisable", this);

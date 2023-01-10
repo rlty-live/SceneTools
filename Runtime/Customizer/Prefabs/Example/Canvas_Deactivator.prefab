@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 815643536227491672}
   - component: {fileID: 815643536227491673}
   - component: {fileID: 815643536227491670}
-  - component: {fileID: 815643536227491671}
+  - component: {fileID: 8056527953493500905}
   m_Layer: 0
   m_Name: Deactivate
   m_TagString: Untagged
@@ -97,30 +97,17 @@ MonoBehaviour:
   IsDeactivable: 1
   type: 1
   displayKey: DisableImage
-  key: DisableImage-251718
+  key: DisableImage
   useGameobjectName: 0
+  group: 
   commentary: 
-  keyValueObject:
-    key: 
-    value: 
-    downloadedAsset: {fileID: 0}
-  colorKeyValue:
-    key: 
-    value: 
-  textKeyValue:
-    key: 
-    value: 
-  urlKeyValue:
-    key: 
-    value: 
-  test:
-    key: 
-    value: 
-  processor: {fileID: 815643536227491671}
+  technicalInfo: 
+  processor: {fileID: 8056527953493500905}
   target: {fileID: 0}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
---- !u!114 &815643536227491671
+  _instanceId: 0
+--- !u!114 &8056527953493500905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,17 +116,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 815643536227491669}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d6091b1edf097b48ba11bce5b8a0d31, type: 3}
+  m_Script: {fileID: 11500000, guid: da5a5ba5f03e221479a6d54d1c12253f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  spriteDimensions: {x: 0, y: 0, z: 0}
-  texture2D: {fileID: 0}
-  addEquiBordersToSprite: 0
   equiBordersWidth: 1
+  addBorders: 1
+  minPixelPerUnit: 100
+  horizontalAlignment: 0
+  verticalAlignment: 0
+  placeholderSpriteWorldDimensions: {x: 0, y: 0}
+  placeHolderWorldRatio: 0
+  placeholderProportions: 0
+  displayBounds: 1
+  newSpriteDimensions: {x: 0, y: 0}
+  newTextureRatio: 0
+  newSpriteProportions: 0
+  newSpriteWorldDimensions: {x: 0, y: 0}
+  newRatio: 0
+  isOffset: 0
 --- !u!1 &815643537530497547
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +175,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -15.64, y: 4.78}
+  m_AnchoredPosition: {x: -15.640015, y: 4.779999}
   m_SizeDelta: {x: 5, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &815643537530497551

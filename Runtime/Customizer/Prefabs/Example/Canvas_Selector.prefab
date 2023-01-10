@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 9162430023050446013}
   - component: {fileID: 9162430023050446012}
   - component: {fileID: 9162430023050446003}
-  - component: {fileID: 9162430023050446002}
   m_Layer: 0
   m_Name: Canvas_Selector
   m_TagString: Untagged
@@ -40,7 +39,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -5.54, y: 4.48}
+  m_AnchoredPosition: {x: -5.539978, y: 4.480011}
   m_SizeDelta: {x: 7, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &9162430023050446013
@@ -104,31 +103,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 2147484151
---- !u!114 &9162430023050446002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9162430023050446000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f685bfc8143164848aebca03e0b75bfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 0
-  showUtilities: 0
-  correctSetup: 0
-  debug: 1
-  customisables:
-  - {fileID: 9162430023088244991}
-  - {fileID: 9162430024076580692}
-  - {fileID: 9162430023523539075}
-  actifCustomisable: {fileID: 0}
-  actifCustomisables: []
-  customisableKey: Selector_
-  useGameobjectName: 0
-  showContainsChange: 0
 --- !u!1 &9162430023088244988
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,13 +259,16 @@ MonoBehaviour:
   IsDeactivable: 0
   type: 6
   displayKey: Text
-  key: Text-581686
+  key: Text
   useGameobjectName: 0
+  group: 
   commentary: 
+  technicalInfo: 
   processor: {fileID: 9162430023088244990}
   target: {fileID: 0}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
+  _instanceId: 0
 --- !u!114 &9162430023088244990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,13 +437,16 @@ MonoBehaviour:
   IsDeactivable: 0
   type: 8
   displayKey: ExternalPage
-  key: ExternalPage-581710
+  key: ExternalPage
   useGameobjectName: 0
+  group: 
   commentary: 
+  technicalInfo: 
   processor: {fileID: 9162430023523539074}
   target: {fileID: 0}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
+  _instanceId: 0
 --- !u!114 &9162430023523539074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,7 +477,7 @@ GameObject:
   - component: {fileID: 9162430024076580694}
   - component: {fileID: 9162430024076580693}
   - component: {fileID: 9162430024076580692}
-  - component: {fileID: 9162430024076580523}
+  - component: {fileID: 1740939603178964995}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -582,14 +562,17 @@ MonoBehaviour:
   IsDeactivable: 0
   type: 1
   displayKey: Image
-  key: Image-581698
+  key: Image
   useGameobjectName: 0
+  group: 
   commentary: 
-  processor: {fileID: 0}
+  technicalInfo: 
+  processor: {fileID: 1740939603178964995}
   target: {fileID: 0}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
---- !u!114 &9162430024076580523
+  _instanceId: 0
+--- !u!114 &1740939603178964995
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -598,14 +581,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 9162430024076580521}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d6091b1edf097b48ba11bce5b8a0d31, type: 3}
+  m_Script: {fileID: 11500000, guid: da5a5ba5f03e221479a6d54d1c12253f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  spriteDimensions: {x: 0, y: 0, z: 0}
-  texture2D: {fileID: 0}
-  addEquiBordersToSprite: 0
   equiBordersWidth: 1
+  addBorders: 1
+  minPixelPerUnit: 100
+  horizontalAlignment: 0
+  verticalAlignment: 0
+  placeholderSpriteWorldDimensions: {x: 0, y: 0}
+  placeHolderWorldRatio: 0
+  placeholderProportions: 0
+  displayBounds: 1
+  newSpriteDimensions: {x: 0, y: 0}
+  newTextureRatio: 0
+  newSpriteProportions: 0
+  newSpriteWorldDimensions: {x: 0, y: 0}
+  newRatio: 0
+  isOffset: 0
