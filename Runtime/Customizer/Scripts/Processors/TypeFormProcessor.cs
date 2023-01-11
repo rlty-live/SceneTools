@@ -4,7 +4,6 @@ using RLTY.SessionInfo;
 
 namespace RLTY.Customisation
 {
-    [RequireComponent(typeof(TriggerZone))]
     public class TypeFormProcessor : Processor
     {
         public override void Customize(KeyValueBase keyValue)
