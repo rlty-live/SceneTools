@@ -32,6 +32,9 @@ public interface IPlayer
     Transform Transform { get; }
 
     int ClientId { get; }
+
+    uint AgoraUserId { get; set; }
+
     string Username { get; set; }
     string SkinDesc { get; set; }
 
