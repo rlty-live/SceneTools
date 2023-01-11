@@ -10,28 +10,13 @@ using UnityEditor;
 namespace RLTY.Testing
 {
     [RequireComponent(typeof(Camera)), AddComponentMenu("RLTY/Testing/EditorOnlyMainCamera")]
-    public class MainCameraOnlyEditor : RLTYMonoBehaviour
+    public class MainCameraOnlyEditor : RLTYMonoBehaviourBase
     {
         [InfoBox("Use this script to makes tests on a MainCamera, it will be destroyed at runtime")]
-        public override void Start()
+        public void Start()
         {
-            base.Start();
-
-#if !UNITY_EDITOR
-                Destroy(this.gameObject);
-                if (debug) Debug.Log("Destroying this camera", this.gameObject);
-#else
-            DestroyImmediate(this.gameObject);
-            if (debug)
-                Debug.Log("Destroying this camera", this.gameObject);
-#endif
+            if(isActiveAndEnabled)
+                DestroyEditorSafe(this);
         }
-
-        #region Observer Pattern
-        public override void EventHandlerRegister()
-        { }
-        public override void EventHandlerUnRegister()
-        { }
-        #endregion
     }
 }
