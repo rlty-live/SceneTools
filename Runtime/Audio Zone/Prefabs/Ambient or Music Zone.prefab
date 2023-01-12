@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 880523413301408908}
   - component: {fileID: 2946923290923576795}
-  - component: {fileID: 6681666325900940094}
   m_Layer: 0
   m_Name: Ambient or Music Zone
   m_TagString: Untagged
@@ -47,19 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AudioClip: {fileID: 0}
   Volume: 1
-  Priority: 1
-  IsGlobal: 0
-  Collider: {fileID: 6681666325900940094}
---- !u!135 &6681666325900940094
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3763075511855029189}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 16.7
-  m_Center: {x: 0, y: 0, z: 0}
+  ColliderType: 1
+  SphereColliderDiameter: 5
+  BoxColliderSize: {x: 3, y: 2, z: 5}
+  ColliderMesh: {fileID: 0}
