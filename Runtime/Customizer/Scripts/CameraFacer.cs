@@ -10,7 +10,6 @@ namespace RLTY.UX
     public class CameraFacer : RLTYMonoBehaviourBase
     {
         #region Variables
-        public bool automatic = true;
 
         [ShowIf("showUtilities")]
         [SerializeField, ReadOnly]
@@ -57,7 +56,7 @@ namespace RLTY.UX
         {
             timer += Time.deltaTime;
 
-            if(mainCamera && automatic)
+            if(mainCamera)
             {
                 currentDistance = Vector3.Distance(mainCamera.transform.position, rectTransform.position);
 
