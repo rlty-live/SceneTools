@@ -48,7 +48,7 @@ namespace RLTY.Customisation
         [ShowIf("showUtilities", true), ReadOnly]
         [InfoBox(infoBoxProcessor, InfoMessageType.None, "@this.type == CustomisableType.Video")]
         public Processor processor;
-        
+
         [SerializeField] private Component target;
 
         [Title("Handles")]
@@ -97,7 +97,8 @@ namespace RLTY.Customisation
         public void OnValidate()
         {
             UpdateKey();
-            CheckForProcessor();
+            if (processor)
+                CheckForProcessor();
             GetTechnicalInfo();
         }
 
@@ -152,9 +153,10 @@ namespace RLTY.Customisation
                 processor = (Processor)gameObject.AddComponent(CustomisableUtility.Processors[type].type);
                 ValidProcessorDebugLog(false);
             }
+
             target = processor.FindComponent();
             if (target == null)
-                Debug.LogError("Processor target not found on " + name+" type="+processor.GetType());
+                Debug.LogError("Processor target not found on " + name + " type=" + processor.GetType());
         }
 
         public void DestroyProcessor(Processor _processor)

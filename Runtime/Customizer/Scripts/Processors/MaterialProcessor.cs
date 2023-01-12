@@ -4,8 +4,6 @@ using UnityEngine.Rendering.Universal;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
-using RLTY;
-using RLTY.SessionInfo;
 
 namespace RLTY.Customisation
 {
@@ -27,34 +25,23 @@ namespace RLTY.Customisation
 
         #endregion
 
-        #region Callbacks
+        #region EditorOnly Logic
 #if UNITY_EDITOR
-        //public void Awake()
-        //{
-        //    GetMaterialsProperties();
-        //}
-
-        public void Reset()
-        {
-            GetMaterialsProperties();
-        }
-#endif
-        #endregion
-
         public override Component FindComponent()
         {
             Component target = GetComponent<Renderer>();
+
             if (target==null)
             {
-                if (!TryGetComponent<DecalProjector>(out DecalProjector proj))
+                if (!TryGetComponent(out DecalProjector proj))
                 {
                     if (debug)
                         Debug.LogWarning("No Renderer or DecalProjector found in children" + commonWarning, this);
-
-                    else
-                        target = proj;
                 }
+                else
+                    target = proj;
             }
+
             return target;
         }
         public override void Customize(KeyValueBase keyValue)
@@ -73,7 +60,6 @@ namespace RLTY.Customisation
             }
         }
 
-        #region EditorOnly Logic
         [Button("Get Materials")]
         public void GetMaterialsProperties()
         {
@@ -114,6 +100,21 @@ namespace RLTY.Customisation
         }
 
         [Button]
+
+
+        //public void Awake()
+        //{
+        //    GetMaterialsProperties();
+        //}
+
+        public void Reset()
+        {
+            GetMaterialsProperties();
+        }
+#endif
+        #endregion
+
+        #region Common Logic
         public void GetPropertiesToModify()
         {
             if (materialsSpecs.Any())
