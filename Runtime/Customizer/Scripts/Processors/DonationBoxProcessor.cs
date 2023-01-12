@@ -16,7 +16,7 @@ namespace RLTY.Customisation
             _walletId = keyValue.value;
         }
         [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
-        [SerializeField] private string _walletId = "1";
+        [SerializeField] private string _walletId = string.Empty;
 
         public void UserDonation()
         {

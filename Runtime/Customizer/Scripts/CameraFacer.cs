@@ -7,18 +7,14 @@ namespace RLTY.UX
 {
     [HideMonoScript]
     [AddComponentMenu("RLTY/Integration/Smooth billboard")]
-    public class CameraFacer : RLTYMonoBehaviour
+    public class CameraFacer : RLTYMonoBehaviourBase
     {
         #region Variables
-        [ShowIf("showUtilities")]
-        [SerializeField, ReadOnly]
-        public float timer;
+        public bool automatic = true;
 
-        // L'objet doit être instancié pour chaque client
         [ShowIf("showUtilities")]
         [SerializeField, ReadOnly]
         public float currentDistance;
-
         [Tooltip("Object will start facing mainCamera when closer than this distance")]
         [SerializeField]
         private float activationDistance = 2;
@@ -26,23 +22,26 @@ namespace RLTY.UX
         [HorizontalGroup("Activation")]
         private bool display;
 
+        [ShowIf("showUtilities")]
+        [SerializeField, ReadOnly]
+        public float timer;
         [Tooltip("in seconds")]
         [ShowIf("showUtilities")]
+        [SerializeField] 
         private float updateFrequency = 1f;
-
+        float lookAtTime = 1f;
 
         RectTransform rectTransform;
         Transform pointer;
         Camera mainCamera;
-        private float lookAtTime = 1f;
+
         #endregion
 
         #region UnityCallbacks
-        public override void Start()
+        public void Start()
         {
             if (Camera.main)
                 mainCamera = Camera.main;
-
             else
                 if (debug) Debug.Log("No mainCamera present in the scene, facing won't work until there's one", this);
 
@@ -58,7 +57,7 @@ namespace RLTY.UX
         {
             timer += Time.deltaTime;
 
-            if(mainCamera)
+            if(mainCamera && automatic)
             {
                 currentDistance = Vector3.Distance(mainCamera.transform.position, rectTransform.position);
 
@@ -67,13 +66,15 @@ namespace RLTY.UX
             }
         }
 
+        public void FaceCamera() => StartCoroutine(LerpToPointAtMainCamera());
+
         public IEnumerator LerpToPointAtMainCamera()
         {
             timer = 0;
             float elapsedTime = 0;
+            if (debug) Debug.Log("Started facing main camera.", this);
 
             Vector3 startPosition = mainCamera.transform.position;
-            Quaternion startRotation = rectTransform.rotation;
             pointer.LookAt(new Vector3(startPosition.x, rectTransform.position.y, startPosition.z));
             pointer.Rotate(new Vector3(0, 180, 0));
 
@@ -86,7 +87,6 @@ namespace RLTY.UX
             }
 
             yield return null;
-
         }
         #endregion
 
@@ -101,9 +101,6 @@ namespace RLTY.UX
             }
         }
 #endif
-        
-        public override void EventHandlerRegister() { }
-        public override void EventHandlerUnRegister() { }
         #endregion
     }
 }
