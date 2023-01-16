@@ -57,8 +57,7 @@ public class ZoomController : MonoBehaviour
 
         if (_zoomVirtualCamera)
         {
-            _zoomVirtualCamera.Priority = 0;
-            _zoomVirtualCamera.enabled = false;
+            _zoomVirtualCamera.gameObject.SetActive(false);
         }
 
         if (_useAutoSetup)

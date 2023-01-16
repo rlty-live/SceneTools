@@ -131,10 +131,10 @@ public class ZoomManager : MonoBehaviour
         transitionStart = true;
         _duration = duration;
         _mainCinemachineBrain.m_DefaultBlend.m_Time = duration;
-
-        virtualCamera.enabled = true;
-        virtualCamera.Priority = 20;
-        virtualCamera.m_Lens.FieldOfView = _mainCamera.fieldOfView;
+        
+        virtualCamera.gameObject.SetActive(true);
+        
+        // virtualCamera.m_Lens.FieldOfView = _mainCamera.fieldOfView;
     }
 
     public void UnZoom(CinemachineVirtualCamera virtualCamera, float duration)
@@ -149,34 +149,8 @@ public class ZoomManager : MonoBehaviour
         _mainCinemachineBrain.m_DefaultBlend.m_Time = duration;
 
         virtualCamera.gameObject.SetActive(false);
-        virtualCamera.enabled = false;
-
         _current = null;
     }
-
-    public void ZoomOnThis2(Transform target, CinemachineVirtualCamera vcam)
-    {
-        Debug.LogWarning($"VCam pos {vcam.transform.position}");
-
-        Setup(target, 60, vcam);
-
-        Debug.LogWarning($"VCam position after Setup {vcam.transform.position}");
-
-        vcam.gameObject.SetActive(true);
-    }
-
-    public void ZoomOnThis3(Transform target)
-    {
-        Setup(target, 60, _mainVirtualCamera);
-
-        _mainVirtualCamera.gameObject.SetActive(true);
-    }
-
-    public void UnZoom2()
-    {
-        _mainVirtualCamera.gameObject.SetActive(false);
-    }
-
     // Adjust the camera's distance to the object so that the object occupies at most a specified percentage of the screen
     public static void Setup(Transform target, float fov, CinemachineVirtualCamera vcam,
         float screenHeightPercentage = 1)
