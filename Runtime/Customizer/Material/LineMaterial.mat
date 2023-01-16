@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: LineMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 43913fee1e32c3045b365eff0fe0c59a, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 836e1e84a2827a84e877398e8f10d391, type: 3}
   m_ValidKeywords:
   - _RECEIVE_SHADOWS_OFF
   - _SURFACE_TYPE_TRANSPARENT
