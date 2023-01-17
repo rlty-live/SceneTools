@@ -1530,7 +1530,6 @@ GameObject:
   m_Component:
   - component: {fileID: 435123445804636291}
   - component: {fileID: 435123444933846743}
-  - component: {fileID: 751722614628428256}
   m_Layer: 0
   m_Name: VideoStreamV1
   m_TagString: Untagged
@@ -1567,70 +1566,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
   IsDeactivable: 0
   type: 2
-  displayKey: VideoStream
-  key: VideoStream-205718
+  displayKey: VideoStreamV1
+  key: VideoStreamV1
   useGameobjectName: 1
+  group: 
   commentary: 
-  keyValueObject:
-    key: 
-    value: 
-    downloadedAsset: {fileID: 0}
-  colorKeyValue:
-    key: 
-    value: 
-  textKeyValue:
-    key: 
-    value: 
-  urlKeyValue:
-    key: 
-    value: 
-  test:
-    key: 
-    value: 
-  processor: {fileID: 751722614628428256}
+  technicalInfo: 
+  processor: {fileID: 0}
   target: {fileID: 0}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 1, z: 1}
---- !u!114 &751722614628428256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435123445804636290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fff067e5f8287645b10595be26fe709, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showUtilities: 0
-  correctSetup: 0
-  debug: 1
-  useWatchArea: 1
-  triggerZone: {fileID: 2714999369388968371}
-  useTestUrl: 0
-  testStreamUrl: 
-  testLiveStream: 0
-  customizedUrl: 
-  customizedLiveStream: 0
-  streamWidth: 1
-  streamHeight: 1
-  chooseRenderTexture: 0
-  renderTexture: {fileID: 0}
-  defaultShader: {fileID: 0}
-  shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  screenMaterial: {fileID: 0}
-  screenRenderer: {fileID: 3639892203693218668}
-  screen: {fileID: 435123445617188399}
-  animateScreen: 0
-  transitionTime: 10
-  soundFadeDuration: 2
-  targetVolume: 0.75
+  _instanceId: 0
 --- !u!1001 &1094439986458946517
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1696,11 +1648,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3070793953839719014, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
       propertyPath: OnPlayerExit.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3070793953839719014, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3070793953839719014, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
       propertyPath: OnPlayerExit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -1713,11 +1665,11 @@ PrefabInstance:
     - target: {fileID: 3070793953839719014, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
       propertyPath: OnPlayerExit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 751722614628428256}
+      objectReference: {fileID: 0}
     - target: {fileID: 3070793953839719014, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 751722614628428256}
+      objectReference: {fileID: 0}
     - target: {fileID: 3070793953839719014, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
       propertyPath: OnPlayerExit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1783,14 +1735,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1545226906191552231, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
   m_PrefabInstance: {fileID: 1094439986458946517}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2714999369388968371 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3070793953839719014, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
-  m_PrefabInstance: {fileID: 1094439986458946517}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d63ec6ce8dd71cf4184ec726ac17c873, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

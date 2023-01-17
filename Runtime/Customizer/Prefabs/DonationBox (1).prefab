@@ -72,9 +72,11 @@ MonoBehaviour:
   displayKey: DonationBox (1)
   key: DonationBox_(1)
   useGameobjectName: 1
+  group: 
   commentary: 
+  technicalInfo: 
   processor: {fileID: 8544511677359112601}
-  target: {fileID: 0}
+  target: {fileID: 8544511677359112601}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
   _instanceId: 245806
@@ -131,6 +133,7 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
+  _checkUserOrientationAlignedWithForward: 0
   _walletId: 1
 --- !u!111 &4822183167231249564
 Animation:
