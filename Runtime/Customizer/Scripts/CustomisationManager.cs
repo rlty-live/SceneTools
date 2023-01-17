@@ -98,8 +98,9 @@ namespace RLTY.Customisation
                     }
                 }
             if (!found)
-                Debug.LogError("No customisable found for key=" + k.key+" type="+type);
-            else JLog(k.key + " was found in: " + foundKeys);
+                if(debug)Debug.LogError("No customisable found for key=" + k.key+" type="+type);
+            else 
+                JLog(k.key + " was found in: " + foundKeys);
         }
 
         #endregion
