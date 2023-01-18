@@ -11,19 +11,35 @@ Use Unity 2021.3.4f1.
 <details>
   <summary>Screenshot</summary>
   
-  ![screenshot](Docs~/Token.png)
+  ![Screenshot of the GitHub token creation page](Docs~/Token.png)
 </details>
-
 
  - Find or create the `.upmconfig.toml` file (see https://docs.unity3d.com/Manual/upm-config-scoped.html#upmconfigUser for details). On Windows, it is in `%USERPROFILE%\.upmconfig.toml`.
  - Add the token in the file like this:
+
  ```
-[npmAuth."https://npm.pkg.github.com/@pitougames"]
+[npmAuth."https://npm.pkg.github.com/@rlty-live"]
 token = "<the new token>"
 ```
- - Close all Unity instance.
- - Configure the scope registry in your Unity project manifest (`Packages/package.json`) and add package name:
 
+ - Close all Unity Editor instance.
+ - Configure the scope registry. You can do it from the Unity Editor (`Edit -> Project Settings`):
+
+<details>
+  <summary>Add RLTY Registries screenshot</summary>
+  
+  ![Add RLTY Registries screenshot](Docs~/ScopedRegistries.png)
+</details>
+
+ - In the package manager, add the package by name (`live.rlty.scenetools`) in your Unity project.
+
+<details>
+  <summary>Add SceneTools package screenshot</summary>
+  
+  ![Add SceneTools package screenshot](Docs~/AddPackage.png)
+</details>
+
+You can also directly edit manually the manifest (`Packages/package.json`), just add:
 ```json
 {
   "dependencies": {
@@ -42,19 +58,19 @@ token = "<the new token>"
 }
 ```
 
-**Note 📝:** Check [github package version page](https://github.com/rlty-live/SceneTools/pkgs/npm/live.rlty.scenetools/versions) to use the last version. Development versions are marked with `-dev.XXX` and integration with `-int.XXX` where `XXX` is an number. Chose a version without suffix to ensure stability.
+**Note 📝:** Check [github package version page](https://github.com/rlty-live/SceneTools/pkgs/npm/live.rlty.scenetools/versions) to use the last version. Development versions are marked with `-dev.XXX` and integration with `-int.XXX` where `XXX` is an number used internally. Chose a version without suffix to ensure stability.
 
  - You can know open your Unity project, and you should see the package.
 
 <details>
   <summary>Screenshot</summary>
   
-  ![screenshot](Docs~/PackageInUnity.png)
+  ![Screenshot of the package assets in Unity Editor](Docs~/PackageInUnity.png)
 </details>
 
 **Note 📝:** when browsing unity package manager, you will always get an error:
 ```
 [Package Manager Window] Cannot perform upm operation: Unable to perform online search:
-  Request [GET https://npm.pkg.github.com/@pitougames/-/v1/search?text=com.pitou&from=0&size=250] failed with status code [405] [NotFound].
+  Request [GET https://npm.pkg.github.com/@rlty-live/-/v1/search?text=live.rlty&from=0&size=250] failed with status code [405] [NotFound].
 ```
 This is because GitHub doesn't have an API to get package list. You should ignore this error.
