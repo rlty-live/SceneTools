@@ -44,3 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e1450ed5f723548baea9c77371d3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScreenSize: {x: 1920, y: 1080}
+  Scale: 1
+  MediaUrl: 
