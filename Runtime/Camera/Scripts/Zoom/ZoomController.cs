@@ -43,7 +43,7 @@ public class ZoomController : MonoBehaviour
         {
             _zoomVirtualCamera.transform.position = transform.position;
             // ZoomManager.Setup(transform, 60, _zoomVirtualCamera, 0.8f);
-            ZoomUtility.CalculateCameraPosition(_zoomVirtualCamera, transform, _screenPercentObjectSetup);
+            ZoomUtility.CalculateCameraPosition(_zoomVirtualCamera, transform, _zoomVirtualCamera.m_Lens.FieldOfView, _screenPercentObjectSetup);
 
         }
     }

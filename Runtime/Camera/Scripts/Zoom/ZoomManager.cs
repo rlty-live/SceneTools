@@ -47,12 +47,6 @@ public class ZoomManager : MonoBehaviour
                 _controllers.Add(controller);
         }
 
-        if (GetMainCamera())
-        {
-            TryGetOrCreateMainBrain(_mainCamera);
-            CreateMainVirtualCamera();
-        }
-
         ZoomHandlerData.OnZoomStart += () => { UIManagerHandlerData.EnablePlayerInput(false); };
         ZoomHandlerData.OnZoomEnd += () => { IsZoomed = true; };
 
@@ -79,49 +73,7 @@ public class ZoomManager : MonoBehaviour
     }
 
     #endregion
-
-    #region Initialize Methods
-
-    /// <summary>
-    /// Get the main camera of the Game and stock in _mainCamera
-    /// </summary>
-    /// <returns>Return true if successful</returns>
-    bool GetMainCamera()
-    {
-        UnityEngine.Camera main = UnityEngine.Camera.main;
-        if (!main) return false;
-        _mainCamera = main;
-        return true;
-    }
-
-    /// <summary>
-    /// Get Brain of the Cinemachine main camera or Create if no Brain found
-    /// </summary>
-    /// <param name="mainCamera"></param>
-    void TryGetOrCreateMainBrain(UnityEngine.Camera mainCamera)
-    {
-        if (!mainCamera.TryGetComponent(out CinemachineBrain brain))
-        {
-            brain = mainCamera.gameObject.AddComponent<CinemachineBrain>();
-        }
-
-        _mainCinemachineBrain = brain;
-        // _mainCinemachineBrain.enabled = false;
-    }
-
-    void CreateMainVirtualCamera()
-    {
-        GameObject virtualCamera =
-            Instantiate(new GameObject());
-        virtualCamera.name = "ZoomVirtualCamera";
-        _mainVirtualCamera = virtualCamera.AddComponent<CinemachineVirtualCamera>();
-        _mainVirtualCamera.Priority = 11;
-        _mainVirtualCamera.gameObject.SetActive(false);
-    }
-
-    #endregion
-
-
+    
     public void ZoomOnThis(CinemachineVirtualCamera virtualCamera, float duration)
     {
         if (_current) return;
@@ -133,8 +85,6 @@ public class ZoomManager : MonoBehaviour
         _mainCinemachineBrain.m_DefaultBlend.m_Time = duration;
         
         virtualCamera.gameObject.SetActive(true);
-        
-        // virtualCamera.m_Lens.FieldOfView = _mainCamera.fieldOfView;
     }
 
     public void UnZoom(CinemachineVirtualCamera virtualCamera, float duration)
@@ -150,44 +100,5 @@ public class ZoomManager : MonoBehaviour
 
         virtualCamera.gameObject.SetActive(false);
         _current = null;
-    }
-    // Adjust the camera's distance to the object so that the object occupies at most a specified percentage of the screen
-    public static void Setup(Transform target, float fov, CinemachineVirtualCamera vcam,
-        float screenHeightPercentage = 1)
-    {
-        // Check if the target, virtual camera, and screen height percentage are defined
-        if (target != null && vcam != null && screenHeightPercentage > 0 && screenHeightPercentage <= 1)
-        {
-            // Get the height of the object
-            float objectHeight = 0;
-            Renderer renderer = target.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                objectHeight = renderer.bounds.size.y;
-                objectHeight *= target.lossyScale.y;
-            }
-            else
-            {
-                // Get the height of the object from its RectTransform
-                RectTransform rectTransform = target.GetComponent<RectTransform>();
-                if (rectTransform != null)
-                {
-                    objectHeight = rectTransform.rect.height;
-                    objectHeight *= rectTransform.lossyScale.y;
-                }
-            }
-
-            // Check if the object's height is valid
-            if (objectHeight > 0)
-            {
-                // Calculate the height of the camera frustum at the distance where the object occupies the specified percentage of the screen
-                float cameraHeight = objectHeight / screenHeightPercentage;
-                float distance = cameraHeight / (2 * Mathf.Tan(fov * Mathf.Deg2Rad / 2));
-
-                // Set the camera's distance to the object to the calculated distance
-                vcam.LookAt = target;
-                vcam.transform.position = target.position - vcam.transform.forward * distance;
-            }
-        }
     }
 }
