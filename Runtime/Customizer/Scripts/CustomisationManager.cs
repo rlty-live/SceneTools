@@ -22,9 +22,9 @@ namespace RLTY.Customisation
 
         [PropertyOrder(40)] [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
-        private const string howTo =
-            "To easily navigate through the list add a second inspector side-by-side and lock this one. " +
-            "Then navigate in the list by double clicking any Customisable List";
+
+        public List<string> sections;
+        public List<string> groups;
         #endregion
 
         #region EditorOnly logic

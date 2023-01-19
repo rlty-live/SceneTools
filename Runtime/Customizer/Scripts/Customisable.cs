@@ -21,8 +21,10 @@ namespace RLTY.Customisation
         #region Global variables
         [Title("Configuration")]
         public bool IsDeactivable = false;
-        [LabelWidth(40)]
+
+        [LabelWidth(40), Space(5)]
         public CustomisableType type;
+
         [HorizontalGroup("IDs"), LabelText("Key"), LabelWidth(40)]
         [SerializeField]
         public string displayKey;
@@ -33,12 +35,27 @@ namespace RLTY.Customisation
         [ShowIf("showUtilities", true)]
         private bool useGameobjectName;
 
-        //Wip grouping of customisables
+        [Title("Organization")]
+        [ValueDropdown("GetSections")]
+        [Tooltip("Customisables in the same section appear in a panel named 'Section'")]
+        public string section;
+        [SerializeField, HorizontalGroup("NewSection"), ShowIf("showUtilities", true)]
+        private string newSection;
+        [ValueDropdown("GetGroups")]
+        [Tooltip("Grouped customisable appear in the same bloc, without labels")]
         public string group;
-        static List<string> groupsList;
+        [SerializeField, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true)]
+        private string newGroup;
 
-        [TextArea]
+        [Title("Description")]
+        [SerializeField, ShowIf("showUtilities")]
+        [Tooltip("Set this to true if you haven't already added your groupind and sectionning")]
+        private bool manualDescription = true;
+        [TextArea, LabelText("Commentary")]
+        public string displayCommentary;
+        [TextArea, ReadOnly, ShowIf("showUtilities", true), LabelText("Real Commentary")]
         public string commentary;
+
         [SerializeField, ReadOnly]
         string technicalInfo;
 
@@ -46,10 +63,11 @@ namespace RLTY.Customisation
 
         [Title("Setup")]
         [ShowIf("showUtilities", true), ReadOnly]
-        [InfoBox(infoBoxProcessor, InfoMessageType.None, "@this.type == CustomisableType.Video")]
         public Processor processor;
 
         [SerializeField] private Component target;
+
+        private static CustomisationManager customizer;
 
         [Title("Handles")]
         [SerializeField]
@@ -57,18 +75,103 @@ namespace RLTY.Customisation
         private bool showGizmo = false;
         [ShowIf("showUtilities", true)]
         public Vector3 gizmoOffset = new Vector3(1, 0, 0);
-
-        [HideInInspector]
-        [SerializeField]
-        private int _instanceId;
-
-        const string infoBoxProcessor =
-            "For a live stream to work, the configuration file key has to contain 'LiveStream'";
-
         #endregion
 
         #region EditorOnly Logic
 #if UNITY_EDITOR
+        public IEnumerable<string> GetGroups()
+        {
+            if (!customizer)
+            {
+                if (Debug.isDebugBuild)
+                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to get sections from");
+                return null;
+            }
+
+            else
+                return customizer.groups;
+        }
+
+        public IEnumerable<string> GetSections()
+        {
+            if (!customizer)
+            {
+                if (Debug.isDebugBuild)
+                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to get sections from");
+                return null;
+            }
+
+            else
+                return customizer.sections;
+        }
+
+        [Button, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true)]
+        public void AddGroup()
+        {
+            if (!customizer)
+            {
+                if (Debug.isDebugBuild)
+                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to add sections to");
+            }
+
+            else
+            {
+                if (newGroup != null && newGroup != string.Empty)
+                    customizer.groups.Add(newGroup);
+            }
+        }
+
+        [Button, HorizontalGroup("NewSection"), ShowIf("showUtilities", true)]
+        public void AddSection()
+        {
+            if (!customizer)
+            {
+                if (Debug.isDebugBuild)
+                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to add sections to");
+            }
+
+            else
+            {
+                if (newGroup != null && newGroup != string.Empty)
+                    customizer.sections.Add(newSection);
+            }
+        }
+
+        public void UpdateKey()
+        {
+            if (useGameobjectName)
+                displayKey = transform.name;
+            key = displayKey;
+            key = key.Replace(" ", "_");
+        }
+
+        public void UpdateCommentary()
+        {
+            if (!manualDescription)
+                commentary = section + "$" + group + "_" + displayCommentary;
+            else
+                commentary = displayCommentary;
+        }
+
+        public void GetTechnicalInfo()
+        {
+            //no processor-specific code here, please call a method on the processor instead
+        }
+
+        public void OnValidate()
+        {
+            UpdateKey();
+            UpdateCommentary();
+
+            if (processor)
+                CheckForProcessor();
+
+            GetTechnicalInfo();
+            if (!customizer)
+                customizer = FindObjectOfType<CustomisationManager>();
+        }
+
+        public void Reset() => useGameobjectName = true;
 
         public void OnDrawGizmos()
         {
@@ -80,40 +183,6 @@ namespace RLTY.Customisation
                 if (gizmoOffset.magnitude > 1)
                     Gizmos.DrawLine(transform.position, gizmoPosition);
             }
-        }
-        public void UpdateKey()
-        {
-            if (useGameobjectName)
-                displayKey = transform.name;
-            key = displayKey;
-            key = key.Replace(" ", "_");
-        }
-
-        public void GetTechnicalInfo()
-        {
-            //no processor-specific code here, please call a method on the processor instead
-        }
-
-        public void OnValidate()
-        {
-            UpdateKey();
-            if (processor)
-                CheckForProcessor();
-            GetTechnicalInfo();
-        }
-
-        public void Reset()
-        {
-            useGameobjectName = true;
-        }
-
-        //WIP automatic listing of existing groups and addition to an enum
-        //Should allow to remove a group (and update corresponding Customisables)
-        //Should warn if group already exists
-        //Should allow to sort Customisable in a editor window according to group / Type or both
-        public void UpdateEnum()
-        {
-
         }
 #endif
         #endregion
@@ -268,3 +337,42 @@ public class GroupEntry
         renaming = false;
     }
 }
+
+//Keep for after OdinRemoval
+//Source: https://www.youtube.com/watch?v=ThcSHbVh7xc
+//Allows to create dropdown Lists from Lists
+//public class ListToDropDownSelector : PropertyAttribute
+//{
+//    public Type myType;
+//    public string propertyName;
+
+//    public ListToDropDownSelector(Type _myType, string _propertyName)
+//    {
+//        myType = _myType;
+//        propertyName = _propertyName;
+//    }
+//}
+
+//[CustomPropertyDrawer(typeof(ListToDropDownSelector))]
+//public class ListToDropDownSelectorDrawer : PropertyDrawer
+//{
+//    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+//    {
+//        ListToDropDownSelector atb = attribute as ListToDropDownSelector;
+//        List<string> stringList = null;
+
+//        if (atb.myType.GetField(atb.propertyName) != null)
+//            stringList = atb.myType.GetField(atb.propertyName).GetValue(atb.myType) as List<string>;
+
+//        if (stringList != null && stringList.Count != 0)
+//        {
+//            int selectedIndex = Mathf.Max(stringList.IndexOf(property.stringValue), 0);
+
+//            selectedIndex = EditorGUI.Popup(position, property.name, selectedIndex, stringList.ToArray());
+//            property.stringValue = stringList[selectedIndex];
+//            property.stringValue = stringList[selectedIndex];
+//        }
+//        else
+//            EditorGUI.PropertyField(position, property, label);
+//    }
+//}
