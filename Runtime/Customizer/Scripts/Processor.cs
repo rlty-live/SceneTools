@@ -19,8 +19,10 @@ namespace RLTY.Customisation
 
         protected virtual void Awake()
         {
+#if UNITY_EDITOR
             if (!TryGetComponent(out Customisable custo))
                 if (debug) Debug.LogWarning("You're trying to add a Processor to a Gameobject devoid of a Customisable component, it will do nothing", this);
+#endif
         }
 
         #region Observer pattern

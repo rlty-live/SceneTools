@@ -22,13 +22,16 @@ namespace RLTY.Customisation
 
         [PropertyOrder(40)] [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
-
-        public List<string> sections;
-        public List<string> groups;
+        private const string howTo =
+            "To easily navigate through the list add a second inspector side-by-side and lock this one. " +
+            "Then navigate in the list by double clicking any Customisable List";
         #endregion
 
         #region EditorOnly logic
 #if UNITY_EDITOR
+
+
+        public List<string> groups, sections;
 
         /// <summary>
         /// Select all Customisable corresponding to CustomisablesToSelect in Hierarchy
@@ -58,7 +61,7 @@ namespace RLTY.Customisation
         /// <param name="sceneDescription">The configuration file that lists all customisation keys and values for this building and this event</param>
         public void CustomizeScene(SceneDescription sceneDescription)
         {
-            JLog("Starting Customization from " + sceneDescription, this);
+            JLog("Starting Customization from " + sceneDescription);
 
             Customisable[] fullList = FindObjectsOfType<Customisable>();
 
@@ -77,7 +80,7 @@ namespace RLTY.Customisation
                 }
             }
 
-            JLog("Finished Customization from " + sceneDescription, this);
+            JLog("Finished Customization from " + sceneDescription);
             CustomisationManagerHandlerData.CustomisationFinished();
         }
 

@@ -1,0 +1,67 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace RLTY.Customisation.Testing
+{
+    public class PlayerTest : MonoBehaviour, IPlayer
+    {
+        public Transform Transform => transform;
+
+        public int ClientId => 0;
+
+        public uint AgoraUserId { get => 0; set { } }
+        public string Username { get => "TestPlayer"; set { } }
+        public string SkinDesc { get => null; set { } }
+
+        public event Action<bool> OnTalkChanged;
+        public event Action<string> OnNameChanged;
+        public event Action<string> OnSkinRebuild;
+
+        void Start()
+        {
+            AllPlayers.List = new Dictionary<int, IPlayer>();
+            AllPlayers.NotifyPlayerJoined(this, true);
+        }
+
+
+        public bool sim, sim2;
+        void Update()
+        {
+            sim = Physics.autoSimulation;
+            sim2 = Physics.autoSyncTransforms;
+        }
+
+        void OnDestroy()
+        {
+            AllPlayers.NotifyPlayerLeft(this);
+        }
+
+        protected PlayerController PlayerController
+        {
+            get
+            {
+                if (_playerController == null)
+                    _playerController = GetComponent<PlayerController>();
+                return _playerController;
+            }
+        }
+        private PlayerController _playerController;
+
+        public void Teleport(Vector3 position, Quaternion rotation)
+        {
+            PlayerController.Teleport(position, rotation);
+        }
+
+        public void SetAdditionalSpeed(Vector3 worldSpaceSpeedVector)
+        {
+            PlayerController.SetAdditionalSpeed(worldSpaceSpeedVector);
+        }
+
+        public void SetVerticalVelocity(float verticalVelocity)
+        {
+            PlayerController.SetVerticalVelocity(verticalVelocity);
+        }
+    }
+}

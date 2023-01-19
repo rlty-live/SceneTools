@@ -18,17 +18,8 @@ public class JMonoBehaviour : MonoBehaviour
         if (log)
             Debug.Log("<Color=Green>[" + this.GetType().ToString() + ":" + this.name + "]</Color> " + message);
 #else
-        if (log)
+        if (Debug.isDebugBuild)
             Debug.Log("[" + this.GetType().ToString() + ":" + this.name + "] " + message);
-#endif
-    }
-
-    protected void JLog(string message, bool forceLog)
-    {
-#if UNITY_EDITOR
-        Debug.Log("<Color=Green>[" + this.GetType().ToString() + ":" + this.name + "]</Color> " + message);
-#else
-        Debug.Log("[" + this.GetType().ToString() + ":" + this.name + "] " + message);
 #endif
     }
 
@@ -38,7 +29,7 @@ public class JMonoBehaviour : MonoBehaviour
         if (log)
             Debug.LogWarning("<Color=Green>[" + this.GetType().ToString() + ":" + this.name + "]</Color> " + message);
 #else
-        if (log)
+        if (Debug.isDebugBuild)
             Debug.LogWarning("[" + this.GetType().ToString() + ":" + this.name + "] " + message);
 #endif
     }
