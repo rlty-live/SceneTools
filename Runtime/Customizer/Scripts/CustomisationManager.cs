@@ -47,7 +47,7 @@ namespace RLTY.Customisation
         {
             foreach(PackageInfo packageInfo in PackageInfo.GetAllRegisteredPackages())
             {
-                if (packageInfo.name == "RLTY SceneTools")
+                if (packageInfo.name == "live.rlty.scenetools")
                     sceneToolsVersion = packageInfo.version;
             }
         }
