@@ -59,6 +59,7 @@ namespace RLTY.Customisation
         [SerializeField, ReadOnly]
         string technicalInfo;
 
+        [SerializeField,ReadOnly, ShowIf("showUtilities")]
         private KeyValueBase _keyValue;
 
         [Title("Setup")]
