@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //using VLB;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -297,14 +298,28 @@ namespace RLTY.Customisation
             }
         }
 
+        public void DeactivateGameobjectIfIntact()
+        {
+            if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
+            {
+                if (gameObject.activeInHierarchy)
+                    gameObject.SetActive(false);
+
+                if (Debug.isDebugBuild)
+                    Debug.Log("No customisation asked for this customisable, deactivating Gameobject", this);
+            }
+        }
+
         #region Observer Pattern
 
         public override void EventHandlerRegister()
         {
+            CustomisationManagerHandlerData.OnSceneCustomized += DeactivateGameobjectIfIntact;
         }
 
         public override void EventHandlerUnRegister()
         {
+            CustomisationManagerHandlerData.OnSceneCustomized -= DeactivateGameobjectIfIntact;
         }
 
         #endregion
