@@ -10,7 +10,7 @@ public static class AllPlayers
 
     public static void NotifyPlayerJoined(IPlayer player, bool me=false)
     {
-        Debug.Log("Creating player: " + player.ClientId);
+        JLogBase.Log("Creating player: " + player.ClientId, typeof(AllPlayers));
         if (me)
             Me = player;
         List[player.ClientId] = player;
@@ -19,7 +19,7 @@ public static class AllPlayers
 
     public static void NotifyPlayerLeft(IPlayer player)
     {
-        Debug.Log("Destroying player: " + player.ClientId);
+        JLogBase.Log("Destroying player: " + player.ClientId, typeof(AllPlayers));
         List.Remove(player.ClientId);
         if (Me == player)
             Me = null;

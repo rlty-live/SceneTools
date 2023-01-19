@@ -61,7 +61,7 @@ namespace RLTY.Customisation
         public void LogPackageVersion()
         {
             if (sceneToolsVersion != null)
-                Debug.Log("RLTY SceneTools package version: " + sceneToolsVersion);
+                JLog("RLTY SceneTools package version: " + sceneToolsVersion);
         }
 
         /// <summary>
