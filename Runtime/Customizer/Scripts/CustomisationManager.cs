@@ -22,17 +22,12 @@ namespace RLTY.Customisation
 
         [PropertyOrder(40)] [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
-        private const string howTo =
-            "To easily navigate through the list add a second inspector side-by-side and lock this one. " +
-            "Then navigate in the list by double clicking any Customisable List";
+        public List<string> groups, sections;
+
         #endregion
 
         #region EditorOnly logic
 #if UNITY_EDITOR
-
-
-        public List<string> groups, sections;
-
         /// <summary>
         /// Select all Customisable corresponding to CustomisablesToSelect in Hierarchy
         /// </summary>
@@ -124,23 +119,4 @@ namespace RLTY.Customisation
 
         #endregion
     }
-
-    #region Data
-
-    /// <summary>
-    /// Editor and runtime oriented list of customisable
-    /// </summary>
-    public class CustomisableList : SerializedScriptableObject
-    {
-        [HideInInspector]
-        //public string name;
-        public CustomisableType type;
-
-        public int dictionnaryLength;
-
-        [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-        public Dictionary<string, Customisable> customisablesDictionnary = new Dictionary<string, Customisable>();
-    }
-
-    #endregion
 }

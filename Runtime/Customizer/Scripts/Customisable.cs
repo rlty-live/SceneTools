@@ -59,7 +59,7 @@ namespace RLTY.Customisation
         [SerializeField, ReadOnly]
         string technicalInfo;
 
-        [SerializeField,ReadOnly, ShowIf("showUtilities")]
+        [SerializeField, ReadOnly, ShowIf("showUtilities")]
         private KeyValueBase _keyValue;
 
         [Title("Setup")]
@@ -146,13 +146,7 @@ namespace RLTY.Customisation
             key = key.Replace(" ", "_");
         }
 
-        public void UpdateCommentary()
-        {
-            if (!manualDescription)
-                commentary = section + "$" + group + "_" + displayCommentary;
-            else
-                commentary = displayCommentary;
-        }
+        public void UpdateCommentary() => commentary = section + "$" + group + "_" + displayCommentary;
 
         public void GetTechnicalInfo()
         {
@@ -162,14 +156,19 @@ namespace RLTY.Customisation
         public void OnValidate()
         {
             UpdateKey();
-            UpdateCommentary();
+
+            if (!customizer)
+                customizer = FindObjectOfType<CustomisationManager>();
+
+            if (!manualDescription)
+                UpdateCommentary();
 
             if (processor)
                 CheckForProcessor();
 
             GetTechnicalInfo();
-            if (!customizer)
-                customizer = FindObjectOfType<CustomisationManager>();
+
+
         }
 
         public void Reset() => useGameobjectName = true;
