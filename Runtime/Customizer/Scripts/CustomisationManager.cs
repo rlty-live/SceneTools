@@ -1,15 +1,11 @@
-using System;
-using System.Linq;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using RLTY.SessionInfo;
-using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.PackageManager;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 #endif
 
 namespace RLTY.Customisation
@@ -20,10 +16,13 @@ namespace RLTY.Customisation
     {
         #region Global variables
 
-        [PropertyOrder(40)] [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
+        [PropertyOrder(40)]
+        [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
         public List<string> groups, sections;
 
+        [SerializeField]
+        private string sceneToolsVersion;
         #endregion
 
         #region EditorOnly logic
@@ -43,12 +42,27 @@ namespace RLTY.Customisation
             }
             Selection.objects = gos.ToArray();
         }
-        
-        #endif
 
+        public void OnValidate()
+        {
+            foreach(PackageInfo packageInfo in PackageInfo.GetAllRegisteredPackages())
+            {
+                if (packageInfo.name == "RLTY SceneTools")
+                    sceneToolsVersion = packageInfo.version;
+            }
+        }
+#endif
         #endregion
 
         #region Runtime logic
+
+        public void Awake() => LogPackageVersion();
+
+        public void LogPackageVersion()
+        {
+            if (sceneToolsVersion != null)
+                Debug.Log("RLTY SceneTools package version: " + sceneToolsVersion);
+        }
 
         /// <summary>
         /// Asks every loaded and activated customisable to modify its correponding Components
@@ -69,7 +83,7 @@ namespace RLTY.Customisation
                 foreach (KeyValueBase k in entry.keyPairs)
                 {
                     if (type == CustomisableType.Invalid)
-                        Debug.LogError("Invalid key type in scene description: key=" + k.key+" value="+ k.value+" type="+entry.type);
+                        Debug.LogError("Invalid key type in scene description: key=" + k.key + " value=" + k.value + " type=" + entry.type);
                     else
                         SearchAndCustomize(type, fullList, k);
                 }
@@ -96,9 +110,9 @@ namespace RLTY.Customisation
                     }
                 }
             if (!found)
-                if(debug)Debug.LogError("No customisable found for key=" + k.key+" type="+type);
-            else 
-                JLog(k.key + " was found in: " + foundKeys);
+                if (debug) Debug.LogError("No customisable found for key=" + k.key + " type=" + type);
+                else
+                    JLog(k.key + " was found in: " + foundKeys);
         }
 
         #endregion
