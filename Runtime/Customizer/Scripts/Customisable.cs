@@ -146,7 +146,11 @@ namespace RLTY.Customisation
             key = key.Replace(" ", "_");
         }
 
-        public void UpdateCommentary() => commentary = section + "$" + group + "_" + displayCommentary;
+        public void UpdateCommentary()
+        {
+            if (!manualDescription)
+                commentary = section + "$" + group + "_" + displayCommentary;
+        }
 
         public void GetTechnicalInfo()
         {
@@ -167,8 +171,6 @@ namespace RLTY.Customisation
                 CheckForProcessor();
 
             GetTechnicalInfo();
-
-
         }
 
         public void Reset() => useGameobjectName = true;
