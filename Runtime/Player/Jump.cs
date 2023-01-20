@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,8 @@ using UnityEngine;
 namespace Judiva.Metaverse.Interactions
 {
 
-    [RequireComponent(typeof(TriggerZone))]
-    public class TriggerJump : MonoBehaviour
+    
+    public class Jump : SceneTool
     {
         public float verticalVelocity = 5;
         [Range(-180, 180)]
@@ -15,13 +16,20 @@ namespace Judiva.Metaverse.Interactions
 
         Quaternion Orientation { get { return Quaternion.Euler(new Vector3(0, orientationOffset, 0)) * transform.rotation; } }
 
-        private void Start()
+
+        
+        #if UNITY_EDITOR
+        private float _GizmoRadius = 0.5f;
+        private void OnDrawGizmos()
         {
-            GetComponent<TriggerZone>().onPlayerEnter += (x) =>
-            {
-                AllPlayers.Me.SetAdditionalSpeed(additionalSpeed * (Orientation * Vector3.forward));
-                AllPlayers.Me.SetVerticalVelocity(verticalVelocity);  
-            };
+            
+            Gizmos.color = new Color(1.0f, 0.64f, 0.0f);
+            Matrix4x4 DefaultMatrix = Gizmos.matrix;
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(1, 0.1f, 1));
+            Gizmos.DrawSphere(Vector3.zero, _GizmoRadius);
+            Gizmos.DrawWireSphere(new Vector3(0,0.1f,0),_GizmoRadius * 1.0f);
+            Gizmos.DrawWireSphere(new Vector3(0,0.1f,0),_GizmoRadius * 1.2f);
+            Gizmos.matrix = DefaultMatrix;
         }
 
         private void OnDrawGizmosSelected()
@@ -54,6 +62,7 @@ namespace Judiva.Metaverse.Interactions
                     break;
             }
         }
+        #endif
     }
 }
 
