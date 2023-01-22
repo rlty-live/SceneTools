@@ -46,6 +46,7 @@ public static class JLogBase
 #elif !UNITY_SERVER
     if (!Debug.isDebugBuild)
         return;
+    Debug.Log(GetLogHeader(c) + message);
 #else
         Debug.Log(GetLogHeader(c) + message);
 #endif
@@ -58,8 +59,8 @@ public static class JLogBase
         if (!string.IsNullOrEmpty(header))
             Debug.Log(header + message);
 #elif !UNITY_SERVER
-    if (!Debug.isDebugBuild)
-        return;
+    if (Debug.isDebugBuild)
+        Debug.Log(GetLogHeader(t) + message);
 #else
         Debug.Log(GetLogHeader(t) + message);
 #endif
@@ -72,8 +73,8 @@ public static class JLogBase
         if (!string.IsNullOrEmpty(header))
             Debug.LogWarning(header + message);
 #elif !UNITY_SERVER
-    if (!Debug.isDebugBuild)
-        return;
+    if (Debug.isDebugBuild)
+        Debug.LogWarning(GetLogHeader(c) + message);
 #else
         Debug.LogWarning(GetLogHeader(c) + message);
 #endif
