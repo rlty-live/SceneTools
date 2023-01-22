@@ -42,10 +42,12 @@ public static class JLogBase
 #if UNITY_EDITOR
         string header = GetLogHeader(c);
         if (!string.IsNullOrEmpty(header))
-            Debug.Log(header + message);
+            Debug.Log(header + message, c);
+#elif !UNITY_SERVER
+    if (!Debug.isDebugBuild)
+        return;
 #else
-        if (Debug.isDebugBuild)
-            Debug.Log(GetLogHeader(c) + message);
+        Debug.Log(GetLogHeader(c) + message);
 #endif
     }
 
@@ -55,9 +57,11 @@ public static class JLogBase
         string header = GetLogHeader(t);
         if (!string.IsNullOrEmpty(header))
             Debug.Log(header + message);
+#elif !UNITY_SERVER
+    if (!Debug.isDebugBuild)
+        return;
 #else
-        if (Debug.isDebugBuild)
-            Debug.Log(GetLogHeader(t) + message);
+        Debug.Log(GetLogHeader(t) + message);
 #endif
     }
 
@@ -67,9 +71,11 @@ public static class JLogBase
         string header = GetLogHeader(c);
         if (!string.IsNullOrEmpty(header))
             Debug.LogWarning(header + message);
+#elif !UNITY_SERVER
+    if (!Debug.isDebugBuild)
+        return;
 #else
-        if (Debug.isDebugBuild)
-            Debug.LogWarning(GetLogHeader(c) + message);
+        Debug.LogWarning(GetLogHeader(c) + message);
 #endif
     }
     public static void LogWarning(string message, Type t)
@@ -78,9 +84,11 @@ public static class JLogBase
         string header = GetLogHeader(t);
         if (!string.IsNullOrEmpty(header))
             Debug.LogWarning(header + message);
+#elif !UNITY_SERVER
+    if (!Debug.isDebugBuild)
+        return;
 #else
-        if (Debug.isDebugBuild)
-            Debug.LogWarning(GetLogHeader(t) + message);
+        Debug.LogWarning(GetLogHeader(t) + message);
 #endif
     }
 

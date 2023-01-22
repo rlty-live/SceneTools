@@ -128,17 +128,22 @@ public class AssetbundleBuildEditor : EditorWindow
         for (int i = 0; i < _assetbundleTargets.Count; i++)
             _assetbundleTargets[i].build = GUILayout.Toggle(_assetbundleTargets[i].build, _assetbundleTargets[i].Name);
 
-        if (GUILayout.Button("Build AssetBundles"))
+        if (float.TryParse(Application.version, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float value))
         {
-            List<PlayerTarget> list = new List<PlayerTarget>();
-            for (int i = 0; i < _assetbundleTargets.Count; i++)
-                if (_assetbundleTargets[i].build)
-                    list.Add(_assetbundleTargets[i]);
-            EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
+            if (GUILayout.Button("Build AssetBundles"))
+            {
+                List<PlayerTarget> list = new List<PlayerTarget>();
+                for (int i = 0; i < _assetbundleTargets.Count; i++)
+                    if (_assetbundleTargets[i].build)
+                        list.Add(_assetbundleTargets[i]);
+                EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
+            }
+
+
+            GUILayout.Space(40);
         }
-
-        GUILayout.Space(40);
-
+        else
+            GUILayout.Label("Incorrect version syntax, must be 'X.Y'");
         PlayerSettings.bundleVersion = EditorGUILayout.TextField("Version", Application.version);
         if (GUILayout.Button("Prepare Publishing"))
             PreparePublishToS3();
