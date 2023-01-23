@@ -55,6 +55,8 @@ public class ZoomManager : MonoBehaviour
             IsZoomed = false;
             UIManagerHandlerData.EnablePlayerInput(true);
         };
+
+        _mainCinemachineBrain = FindObjectOfType<CinemachineBrain>();
     }
 
     private void Update()

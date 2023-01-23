@@ -37,6 +37,9 @@ namespace RLTY.Customisation
         private bool useGameobjectName;
 
         [Title("Organization")]
+        public static List<string> sections;
+        public static List<string> groups;
+
         [ValueDropdown("GetSections")]
         [Tooltip("Customisables in the same section appear in a panel named 'Section'")]
         public string section;
@@ -81,31 +84,8 @@ namespace RLTY.Customisation
 
         #region EditorOnly Logic
 #if UNITY_EDITOR
-        public IEnumerable<string> GetGroups()
-        {
-            if (!customizer)
-            {
-                if (Debug.isDebugBuild)
-                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to get sections from");
-                return null;
-            }
-
-            else
-                return customizer.groups;
-        }
-
-        public IEnumerable<string> GetSections()
-        {
-            if (!customizer)
-            {
-                if (Debug.isDebugBuild)
-                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to get sections from");
-                return null;
-            }
-
-            else
-                return customizer.sections;
-        }
+        public IEnumerable<string> GetGroups() { return groups; }
+        public IEnumerable<string> GetSections() { return sections; }
 
         [Button, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true)]
         public void AddGroup()
