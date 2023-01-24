@@ -92,8 +92,7 @@ namespace RLTY.Customisation
         {
             if (!customizer)
             {
-                if (Debug.isDebugBuild)
-                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to add sections to");
+                JLog("No CustomisationManager (Customizer) Component in the scene to add sections to");
             }
 
             else
@@ -108,8 +107,7 @@ namespace RLTY.Customisation
         {
             if (!customizer)
             {
-                if (Debug.isDebugBuild)
-                    Debug.Log("No CustomisationManager (Customizer) Component in the scene to add sections to");
+                JLog("No CustomisationManager (Customizer) Component in the scene to add sections to");
             }
 
             else
@@ -208,7 +206,7 @@ namespace RLTY.Customisation
 
             target = processor.FindComponent();
             if (target == null)
-                Debug.LogError("Processor target not found on " + name + " type=" + processor.GetType());
+                JLogError("Processor target not found on " + name + " type=" + processor.GetType());
         }
 
         public void DestroyProcessor(Processor _processor)
@@ -235,7 +233,7 @@ namespace RLTY.Customisation
 
                 else
                 {
-                    Debug.LogWarning("No Processor found in children, added " + processor + " automatically, please set it up.", this);
+                    JLogWarning("No Processor found in children, added " + processor + " automatically, please set it up.");
 #if UNITY_EDITOR
                     if (!PrefabUtility.IsPartOfPrefabAsset(this) && this.gameObject.activeInHierarchy)
                         StartCoroutine(TemporaryBoolSwitch(3));
@@ -263,15 +261,14 @@ namespace RLTY.Customisation
             _keyValue = _KeyValueBase;
             if (!processor)
             {
-                if (debug)
-                    Debug.Log("Missing processor on Customisable please check setup", this);
+                JLog("Missing processor on Customisable please check setup");
             }
 
             else
             {
                 if (target == null)
                 {
-                    Debug.LogError("Target is null on customisable " + processor.name);
+                    JLogError("Target is null on customisable " + processor.name);
                     return;
                 }
                 processor.Customize(_keyValue);
@@ -285,8 +282,7 @@ namespace RLTY.Customisation
                 if (gameObject.activeInHierarchy)
                     gameObject.SetActive(false);
 
-                if (Debug.isDebugBuild)
-                    Debug.Log("No customisation asked for this customisable, deactivating Gameobject", this);
+                JLog("No customisation asked for this customisable, deactivating Gameobject");
             }
         }
 

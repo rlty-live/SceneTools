@@ -56,7 +56,18 @@ namespace RLTY.Customisation
 
         #region Runtime logic
 
-        public void Awake() => LogPackageVersion();
+        private static CustomisationManager _instance;
+
+        public void Awake()
+        {
+            if (_instance!=null)
+            {
+                enabled = false;
+                return;
+            }
+            _instance = this;
+            LogPackageVersion();
+        }
 
         public void LogPackageVersion()
         {
@@ -70,7 +81,7 @@ namespace RLTY.Customisation
         /// <param name="sceneDescription">The configuration file that lists all customisation keys and values for this building and this event</param>
         public void CustomizeScene(SceneDescription sceneDescription)
         {
-            JLog("Starting Customization from " + sceneDescription);
+            JLog("Starting Customization");
 
             Customisable[] fullList = FindObjectsOfType<Customisable>();
 
@@ -83,13 +94,13 @@ namespace RLTY.Customisation
                 foreach (KeyValueBase k in entry.keyPairs)
                 {
                     if (type == CustomisableType.Invalid)
-                        Debug.LogError("Invalid key type in scene description: key=" + k.key + " value=" + k.value + " type=" + entry.type);
+                        JLogError("Invalid key type in scene description: key=" + k.key + " value=" + k.value + " type=" + entry.type);
                     else
                         SearchAndCustomize(type, fullList, k);
                 }
             }
 
-            JLog("Finished Customization from " + sceneDescription);
+            JLog("Finished Customization");
             CustomisationManagerHandlerData.CustomisationFinished();
         }
 

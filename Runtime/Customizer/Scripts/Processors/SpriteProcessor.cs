@@ -145,26 +145,30 @@ namespace RLTY.Customisation
 
             Vector2 pivotPosition = new Vector2(0.5f, 0.5f);
 
-            newSpriteDimensions = new Vector2(
+            if (SpriteRenderer.sprite!=null)
+            {
+                newSpriteDimensions = new Vector2(
                 tex.width / SpriteRenderer.sprite.pixelsPerUnit,
                 tex.height / SpriteRenderer.sprite.pixelsPerUnit);
-            newTextureRatio = newSpriteDimensions.x / newSpriteDimensions.y;
+                newTextureRatio = newSpriteDimensions.x / newSpriteDimensions.y;
 
-            switch (newTextureRatio)
-            {
-                case (> 1):
-                    newSpriteProportions = TextureProportions.Landscape;
-                    break;
-                case (< 1):
-                    newSpriteProportions = TextureProportions.Portrait;
-                    break;
-                case (1):
-                    newSpriteProportions = TextureProportions.Square;
-                    break;
-                default:
-                    Debug.Log("Invalid texture dimensions for " + tex + " verify source asset.", this);
-                    break;
+                switch (newTextureRatio)
+                {
+                    case (> 1):
+                        newSpriteProportions = TextureProportions.Landscape;
+                        break;
+                    case (< 1):
+                        newSpriteProportions = TextureProportions.Portrait;
+                        break;
+                    case (1):
+                        newSpriteProportions = TextureProportions.Square;
+                        break;
+                    default:
+                        Debug.Log("Invalid texture dimensions for " + tex + " verify source asset.", this);
+                        break;
+                }
             }
+            
 
             return Sprite.Create(tex, texturePart, pivotPosition, minPixelPerUnit, 0, SpriteMeshType.FullRect, borders);
             // Borders could be used to add padding, but it might be better if it's done on the web API
@@ -181,6 +185,10 @@ namespace RLTY.Customisation
         {
             if (SpriteRenderer == null)
                 return;
+            if (tex==null)
+            {
+                Debug.Break();
+            }
             GetSpriteDimensions();
             Sprite newSprite = SetUpSprite((Texture2D)tex);
             SpriteRenderer.sprite = newSprite;
