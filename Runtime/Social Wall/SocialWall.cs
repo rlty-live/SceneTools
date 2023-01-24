@@ -8,8 +8,11 @@ public class SocialWall : SceneTool
     [PropertyRange(1,10)]
     public float Scale = 1;
 
-    [HideInInspector]
-    public Vector2 _ScreenSize = new Vector2(1920, 1080);
+
+    private Vector2 _ScreenSize = new Vector2(2280, 1080);
+    [HideInInspector] public Vector2 ScreenSize => _ScreenSize;
+    
+    
     
     #if UNITY_EDITOR
     void OnDrawGizmos()
