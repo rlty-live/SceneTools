@@ -5,6 +5,7 @@ using UnityEngine;
 [ExecuteInEditMode, AddComponentMenu("RLTY/Zoom/Zoom Controller")]
 public class ZoomController : MonoBehaviour
 {
+    [InfoBox("If using this on a mesh, it has to have a box Collider")]
     [SerializeField] public CinemachineVirtualCamera _zoomVirtualCamera = null;
     [SerializeField] private float _range = 20;
     [SerializeField] private float _durationTransition = 0.75f;
