@@ -22,6 +22,11 @@ namespace RLTY.Customisation
         /// </summary>
         public string assetbundleClient="";
 
+        public string eventSlug;
+        public string eventSession;
+        public string clientVersion;
+
+
         public List<CustomisableTypeEntry> entries = new List<CustomisableTypeEntry>();
 
         public AgoraToken agoraToken;
