@@ -19,7 +19,7 @@ public class SocialWall : SceneTool
     {
         Vector2 screenSize = _ScreenSize / 1080 * Scale;
         
-        Color32 color = Color.blue;
+        Color32 color = new Color(0.1f, 0, 0.5f);
         color.a = 255;
         Gizmos.color = color;
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.3f * Scale);
