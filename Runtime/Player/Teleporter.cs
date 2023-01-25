@@ -1,15 +1,19 @@
 using UnityEngine;
 using System;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Judiva.Metaverse.Interactions
 {
-    public class TeleportTrigger : MonoBehaviour
+    public class Teleporter : SceneTool
     {
         public float fadeOutTime = 0.01f;
         public float fadeInTime = 0.3f;
         
         [Header("Connected teleport")]
-        public TeleportTrigger connected;
+        public Teleporter connected;
         [Tooltip("if true, the player will align with the connected teleport Z axis")]
         public bool useConnectedOrientation=false;
         [Tooltip("additional Y orientation offset when using connected orientation")]
@@ -64,6 +68,26 @@ namespace Judiva.Metaverse.Interactions
         {
             _arrivedTime = DateTime.Now;
         }
+        
+        
+        
+        #if UNITY_EDITOR
+        private float _GizmoRadius = 0.8f;
+        private void OnDrawGizmos()
+        {
+            
+            Gizmos.color = Color.cyan;
+            Matrix4x4 DefaultMatrix = Gizmos.matrix;
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(1, 0.1f, 1));
+            Gizmos.DrawSphere(Vector3.zero, _GizmoRadius);
+            Gizmos.color = new Color (1,0.2f,0.8f);
+            Gizmos.DrawWireSphere(new Vector3(0,0.1f,0),_GizmoRadius * 1.0f);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(new Vector3(0,0.1f,0),_GizmoRadius * 1.2f);
+            Gizmos.matrix = DefaultMatrix;
+            
+            if(connected) Handles.Label(transform.position + new Vector3(0,2,0), "To "+ connected.name);
+        }
 
         private void OnDrawGizmosSelected()
         {
@@ -80,6 +104,8 @@ namespace Judiva.Metaverse.Interactions
                 }
             }
         }
+        
+        #endif
     }
 
 }
