@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -26,11 +24,11 @@ public class ProjectParameters : RLTYMonoBehaviourBase
                 sceneToolsVersion = packageInfo.version;
         }
 
-        colorSpace = UnityEditor.PlayerSettings.colorSpace.ToString();
+        colorSpace = PlayerSettings.colorSpace.ToString();
 
-        if (UnityEditor.PlayerSettings.colorSpace != ColorSpace.Linear)
+        if (PlayerSettings.colorSpace != ColorSpace.Linear)
         {
-            UnityEditor.PlayerSettings.colorSpace = ColorSpace.Linear;
+            PlayerSettings.colorSpace = ColorSpace.Linear;
             Debug.Log("Project colorSpace has been set to Linear");
         }
     }
