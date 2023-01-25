@@ -3,9 +3,10 @@ using UnityEngine.InputSystem;
 //using Player;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace RLTY.Customisation.Testing
 {
-    public class AvatarPlayerInput : MonoBehaviour
+    public class AvatarPlayerInputForTesting : MonoBehaviour
     {
         #region Fields
 
@@ -117,3 +118,4 @@ namespace RLTY.Customisation.Testing
         #endregion
     }
 }
+#endif

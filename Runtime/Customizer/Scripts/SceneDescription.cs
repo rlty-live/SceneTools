@@ -26,6 +26,11 @@ namespace RLTY.Customisation
         public string eventSession;
         public string clientVersion;
 
+        /// <summary>
+        /// A unique identifier pointing to the server we are connected to
+        /// </summary>
+        public string EventUniqueID { get { return eventSlug + "_" + eventSession; } }
+
 
         public List<CustomisableTypeEntry> entries = new List<CustomisableTypeEntry>();
 

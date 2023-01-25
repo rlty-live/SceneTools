@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace RLTY.Customisation.Testing
 {
     public class PlayerTest : MonoBehaviour, IPlayer
@@ -21,33 +22,35 @@ namespace RLTY.Customisation.Testing
 
         void Start()
         {
+            Physics.autoSimulation = true;
+            Physics.autoSyncTransforms = true;
             AllPlayers.List = new Dictionary<int, IPlayer>();
             AllPlayers.NotifyPlayerJoined(this, true);
         }
 
-
+        /*
         public bool sim, sim2;
         void Update()
         {
             sim = Physics.autoSimulation;
             sim2 = Physics.autoSyncTransforms;
-        }
+        }*/
 
         void OnDestroy()
         {
             AllPlayers.NotifyPlayerLeft(this);
         }
 
-        protected PlayerController PlayerController
+        protected PlayerControllerForTesting PlayerController
         {
             get
             {
                 if (_playerController == null)
-                    _playerController = GetComponent<PlayerController>();
+                    _playerController = GetComponent<PlayerControllerForTesting>();
                 return _playerController;
             }
         }
-        private PlayerController _playerController;
+        private PlayerControllerForTesting _playerController;
 
         public void Teleport(Vector3 position, Quaternion rotation)
         {
@@ -65,3 +68,4 @@ namespace RLTY.Customisation.Testing
         }
     }
 }
+#endif

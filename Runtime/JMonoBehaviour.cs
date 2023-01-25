@@ -9,9 +9,6 @@ using UnityEditor;
 /// </summary>
 public class JMonoBehaviour : MonoBehaviour
 {
-    private static JLogFilter _logFilter;
-    private static bool _logFilterLoaded = false;
-
     /// <summary>
     /// Includes component type in logs to make it easier to spot the log source
     /// </summary>
@@ -34,6 +31,7 @@ public class JMonoBehaviour : MonoBehaviour
 
 public static class JLogBase
 {
+    public static bool logInRelease = false;
     private static JLogFilter _logFilter;
     private static bool _logFilterLoaded = false;
 
@@ -44,9 +42,8 @@ public static class JLogBase
         if (!string.IsNullOrEmpty(header))
             Debug.Log(header + message, c);
 #elif !UNITY_SERVER
-    if (!Debug.isDebugBuild)
-        return;
-    Debug.Log(GetLogHeader(c) + message);
+    if (logInRelease || Debug.isDebugBuild)
+        Debug.Log(GetLogHeader(c) + message);
 #else
         Debug.Log(GetLogHeader(c) + message);
 #endif
@@ -59,7 +56,7 @@ public static class JLogBase
         if (!string.IsNullOrEmpty(header))
             Debug.Log(header + message);
 #elif !UNITY_SERVER
-    if (Debug.isDebugBuild)
+    if (logInRelease || Debug.isDebugBuild)
         Debug.Log(GetLogHeader(t) + message);
 #else
         Debug.Log(GetLogHeader(t) + message);
@@ -73,7 +70,7 @@ public static class JLogBase
         if (!string.IsNullOrEmpty(header))
             Debug.LogWarning(header + message);
 #elif !UNITY_SERVER
-    if (Debug.isDebugBuild)
+    if (logInRelease || Debug.isDebugBuild)
         Debug.LogWarning(GetLogHeader(c) + message);
 #else
         Debug.LogWarning(GetLogHeader(c) + message);
@@ -86,8 +83,8 @@ public static class JLogBase
         if (!string.IsNullOrEmpty(header))
             Debug.LogWarning(header + message);
 #elif !UNITY_SERVER
-    if (!Debug.isDebugBuild)
-        return;
+    if (logInRelease || Debug.isDebugBuild)
+        Debug.LogWarning(GetLogHeader(t) + message);
 #else
         Debug.LogWarning(GetLogHeader(t) + message);
 #endif

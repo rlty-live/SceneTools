@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using RLTY.UI;
 
+#if UNITY_EDITOR
 namespace RLTY.Customisation.Testing
 {
-    public class ViewController : MonoBehaviour
+
+    public class ViewControllerForTesting : MonoBehaviour
     {
         #region Fields
 
@@ -36,8 +38,8 @@ namespace RLTY.Customisation.Testing
         public float collisionRadius=0.5f;
         public LayerMask collisionLayerMask;
 
-        private AvatarPlayerInput _input;
-        private PlayerController _player;
+        private AvatarPlayerInputForTesting _input;
+        private PlayerControllerForTesting _player;
 
         [Header("OrientationConstraint")]
         public float adjustRotationSpeed = 1;
@@ -104,8 +106,8 @@ namespace RLTY.Customisation.Testing
         private void Start()
         {
             overrideDistanceLimit = distanceLimit;
-            _player = GetComponent<PlayerController>();
-            _input = GetComponent<AvatarPlayerInput>();
+            _player = GetComponent<PlayerControllerForTesting>();
+            _input = GetComponent<AvatarPlayerInputForTesting>();
             _cam = Camera.main;
             _view = _cam.transform;
                 
@@ -240,3 +242,4 @@ namespace RLTY.Customisation.Testing
         #endregion
     }
 }
+#endif

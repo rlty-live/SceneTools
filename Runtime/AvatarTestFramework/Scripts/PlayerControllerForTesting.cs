@@ -7,6 +7,7 @@ using FishNet.Component.Animating;
 using Judiva.Metaverse.Interactions;
 using RLTY.UI;
 
+#if UNITY_EDITOR
 namespace RLTY.Customisation.Testing
 {
     /// <summary>
@@ -17,7 +18,7 @@ namespace RLTY.Customisation.Testing
     /// - on mobile, virtual sticks to move and rotate view
     /// </summary>
     /// 
-    public class PlayerController : MonoBehaviour
+    public class PlayerControllerForTesting : MonoBehaviour
     {
         #region Fields
 
@@ -92,7 +93,7 @@ namespace RLTY.Customisation.Testing
         private NetworkAnimator _networkAnimator;
 #endif
         private CharacterController _characterController;
-        private AvatarPlayerInput _playerInput;
+        private AvatarPlayerInputForTesting _playerInput;
 
         private bool _hasAnimator;
 
@@ -200,7 +201,7 @@ namespace RLTY.Customisation.Testing
             _networkAnimator = GetComponent<NetworkAnimator>();
 #endif
             _characterController = GetComponent<CharacterController>();
-            _playerInput = GetComponent<AvatarPlayerInput>();
+            _playerInput = GetComponent<AvatarPlayerInputForTesting>();
         }
 
         private void Start()
@@ -346,7 +347,7 @@ namespace RLTY.Customisation.Testing
             //move player AND view
             Vector3 move = position - transform.position;
             Transform helper = new GameObject("_helper").transform;
-            Transform tView = GetComponent<ViewController>().View;
+            Transform tView = GetComponent<ViewControllerForTesting>().View;
             Transform playerParent = transform.parent;
             Transform viewParent = tView.parent;
             helper.SetParent(transform);
@@ -553,6 +554,9 @@ namespace RLTY.Customisation.Testing
                         //we can't set that trigger directly on the animator because we need to ensure it is also set remotely
                         //_networkAnimator.SetTrigger("Jump");
                     }
+#else
+                    if (_hasAnimator)
+                        _animator.SetTrigger("Jump2");
 #endif
                 }
 
@@ -595,3 +599,4 @@ namespace RLTY.Customisation.Testing
         #endregion
     }
 }
+#endif
