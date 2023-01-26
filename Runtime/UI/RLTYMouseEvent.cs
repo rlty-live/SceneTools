@@ -1,28 +1,24 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System;
 
 namespace RLTY.UI
 {
-    public class RLTYMouseEvent : JMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class RLTYMouseEvent : JMonoBehaviour
     {
-        public UnityEvent OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp, OnClick;
+        /// <summary>
+        /// events to bind from code
+        /// </summary>
+        public event Action onPointerDown, onPointerUp, onClick;
 
-        /*
-        public void NotifyOnPointerEnter() => OnPointerEnter?.Invoke();
-        public void NotifyOnPointerExit() => OnPointerExit?.Invoke();*/
-        public void NotifyOnPointerDown() => OnPointerDown?.Invoke();
-        public void NotifyOnPointerUp() => OnPointerUp?.Invoke();
-        public void NotifyOnClick() => OnClick?.Invoke();
+        /// <summary>
+        /// UnityEvents for Inspector
+        /// </summary>
+        public UnityEvent OnPointerDown, OnPointerUp, OnClick;
 
-        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
-        {
-            OnPointerEnter?.Invoke();
-        }
-
-        void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
-        {
-            OnPointerExit?.Invoke();
-        }
+        public void NotifyOnPointerDown() { OnPointerDown?.Invoke(); onPointerDown?.Invoke(); }
+        public void NotifyOnPointerUp() { OnPointerUp?.Invoke(); onPointerUp?.Invoke(); }
+        public void NotifyOnClick() { OnClick?.Invoke(); onClick?.Invoke(); }
     }
 }
