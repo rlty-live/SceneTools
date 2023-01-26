@@ -9,16 +9,6 @@ namespace RLTY.SessionInfo
         /// <summary>
         /// Do not listen to this event otherwise you will override SessionInfoManager
         /// </summary>
-        public static event Func<GameLiftGameSession> OnGetGameLiftGameSession;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns>GameLiftGameSession</returns>
-        public static GameLiftGameSession GetGameLiftGameSession() => OnGetGameLiftGameSession?.Invoke();
-
-        /// <summary>
-        /// Do not listen to this event otherwise you will override SessionInfoManager
-        /// </summary>
         public static event Func<SceneDescription> OnGetSceneDescription;
 
         /// <summary>

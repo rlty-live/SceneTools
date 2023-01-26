@@ -25,6 +25,10 @@ namespace RLTY.Customisation
         public string eventSlug;
         public string eventSession;
         public string clientVersion;
+        public string dnsName="localhost";
+        public string playerSessionId="noPlayerSessionId";
+
+        public string DnsName {  get { return string.IsNullOrEmpty(dnsName) ? "localhost" : dnsName; } }
 
         /// <summary>
         /// A unique identifier pointing to the server we are connected to
