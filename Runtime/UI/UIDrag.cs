@@ -7,11 +7,13 @@ namespace RLTY.UI
     /// <summary>
     /// Receive mouse drag events on the screen, and forward them to anyone listening (useful for camera mouse control)
     /// </summary>
-    public class UIDrag : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
+    public class UIDrag : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler
     {
         public event Action<Vector2> OnUserDrag;
         public event Action<Ray> OnUserClick;
+
         public LayerMask raycastMask;
+        public int dragMinPixelMove = 3;
         private bool _drag = false;
         private Camera _view;
         private float _farClip;
@@ -20,6 +22,10 @@ namespace RLTY.UI
         private Transform _canvas;
 
         private RLTYMouseEvent _pointedObject;
+        private RLTYMouseEvent _clickedObject;
+        private Vector2 _mousePosition;
+        private Vector2 _pressPosition;
+        private RaycastHit _hit;
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -29,30 +35,69 @@ namespace RLTY.UI
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            _pressPosition = eventData.position;
+            _mousePosition = eventData.position;
             _drag = false;
             //raycast
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(eventData.pressPosition), out RaycastHit hit, 10000f, raycastMask) && hit.collider.TryGetComponent<RLTYMouseEvent>(out _pointedObject))
+            if (Raycast())
             {
-                _pointedObject.NotifyOnPointerDown();
-            }
+                _clickedObject = _pointedObject;
+                _clickedObject.NotifyOnPointerDown();
+            }    
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (_pointedObject) 
+            if (_clickedObject) 
                 _pointedObject.NotifyOnPointerUp();
             if (!_drag)
             {
-                if (_pointedObject)
-                    _pointedObject.NotifyOnClick();
+                if (_clickedObject)
+                    _clickedObject.NotifyOnClick();
                 OnUserClick?.Invoke(Camera.main.ScreenPointToRay(eventData.pressPosition));
             }
-            _pointedObject = null;
+            _clickedObject = null;
+            _drag = false;
+        }
+
+        public void OnPointerMove(PointerEventData eventData)
+        {
+            _mousePosition = eventData.position;
         }
 
         void Awake()
         {
             _canvas = GetComponentInParent<Canvas>().transform;
+        }
+
+        void Update()
+        {
+            if (_drag)
+                return;
+            RLTYMouseEvent previousPointed = _pointedObject;
+            Collider previous = _hit.collider;
+            Raycast();
+            if (_pointedObject != previousPointed)
+            {
+                if (previousPointed)
+                    previousPointed.NotifyOnPointerExit();
+                if (_pointedObject)
+                    _pointedObject.NotifyOnPointerEnter();
+            }
+        }
+
+        bool Raycast()
+        {
+            bool result = Physics.Raycast(Camera.main.ScreenPointToRay(_mousePosition), out _hit, 10000f, raycastMask);
+            if (result)
+            {
+                _hit.collider.TryGetComponent<RLTYMouseEvent>(out _pointedObject);
+                if (_pointedObject && (_hit.point - Camera.main.transform.position).magnitude > _pointedObject.mouseDetectDistance)
+                    _pointedObject = null;
+            }   
+            else
+                _pointedObject = null;
+            return result;
         }
 
         void LateUpdate()

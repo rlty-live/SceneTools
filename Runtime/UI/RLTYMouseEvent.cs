@@ -8,17 +8,18 @@ namespace RLTY.UI
     public class RLTYMouseEvent : JMonoBehaviour
     {
         /// <summary>
-        /// events to bind from code
+        /// Maximum distance from the viewpoint at which events are triggered
         /// </summary>
-        public event Action onPointerDown, onPointerUp, onClick;
-
+        public float mouseDetectDistance = 1000;
         /// <summary>
         /// UnityEvents for Inspector
         /// </summary>
-        public UnityEvent OnPointerDown, OnPointerUp, OnClick;
+        public UnityEvent OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp, OnClick;
 
-        public void NotifyOnPointerDown() { OnPointerDown?.Invoke(); onPointerDown?.Invoke(); }
-        public void NotifyOnPointerUp() { OnPointerUp?.Invoke(); onPointerUp?.Invoke(); }
-        public void NotifyOnClick() { OnClick?.Invoke(); onClick?.Invoke(); }
+        public void NotifyOnPointerEnter() { OnPointerEnter?.Invoke(); }
+        public void NotifyOnPointerExit() { OnPointerExit?.Invoke(); }
+        public void NotifyOnPointerDown() { OnPointerDown?.Invoke(); }
+        public void NotifyOnPointerUp() { OnPointerUp?.Invoke(); }
+        public void NotifyOnClick() { OnClick?.Invoke(); }
     }
 }
