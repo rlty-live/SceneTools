@@ -42,7 +42,8 @@ namespace RLTY.UI
             if (Raycast())
             {
                 _clickedObject = _pointedObject;
-                _clickedObject.NotifyOnPointerDown();
+                if (_clickedObject)
+                    _clickedObject.NotifyOnPointerDown();
             }    
         }
 

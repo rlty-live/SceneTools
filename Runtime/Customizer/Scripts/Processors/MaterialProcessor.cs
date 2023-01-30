@@ -52,10 +52,14 @@ namespace RLTY.Customisation
                     Texture t = keyValue.data as Texture;
                     if (t != null)
                         SwapTextures(t);
+                    else
+                        JLogError("Couldn't process texture: " + keyValue);
                     break;
                 case CustomisableType.Color:
                     if (CustomisableUtility.TryParseColor(keyValue, out Color color))
                         SwapColors(color);
+                    else
+                        JLogError("Couldn't parse color: " + keyValue);
                     break;
             }
         }
@@ -143,7 +147,7 @@ namespace RLTY.Customisation
                     {
                         property.mat.SetTexture(property.propertyName, tex);
                         modifiedProperties.Add(property);
-                        if (debug) Debug.Log("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex, this);
+                        JLog("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex);
                     }
                 }
             }
@@ -159,7 +163,7 @@ namespace RLTY.Customisation
                         if (mat.name.Contains(property.mat.name))
                         {
                             mat.SetTexture(property.propertyName, tex);
-                            if (debug) Debug.Log("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex, this);
+                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex);
                         }
                     }
                 }
@@ -172,7 +176,10 @@ namespace RLTY.Customisation
         public void SwapColors(Color color)
         {
             GetPropertiesToModify();
-
+            if (propertiesToModify == null || propertiesToModify.Count == 0)
+                JLogError("No properties to modify");
+            else
+                JLog("TrySwapColors");
             if (modifyAllInstances)
             {
                 foreach (ModifiableProperty property in propertiesToModify)
@@ -181,7 +188,7 @@ namespace RLTY.Customisation
                     {
                         property.mat.SetColor(property.propertyName, color);
                         modifiedProperties.Add(property);
-                        if (debug) Debug.Log("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color, this);
+                        JLog("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color);
                     }
                 }
 
@@ -197,7 +204,7 @@ namespace RLTY.Customisation
                         if (mat.name.Contains(property.mat.name))
                         {
                             mat.SetColor(property.propertyName, color);
-                            if (debug) Debug.Log("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color, this);
+                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
                         }
                     }
                 }
