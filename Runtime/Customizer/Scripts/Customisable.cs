@@ -283,7 +283,7 @@ namespace RLTY.Customisation
 
         public void DeactivateGameobjectIfIntact()
         {
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
             if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
             {
                 if (gameObject.activeInHierarchy)
