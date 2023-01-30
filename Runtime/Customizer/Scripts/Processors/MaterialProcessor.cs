@@ -105,12 +105,6 @@ namespace RLTY.Customisation
 
         [Button]
 
-
-        //public void Awake()
-        //{
-        //    GetMaterialsProperties();
-        //}
-
         public void Reset()
         {
             GetMaterialsProperties();

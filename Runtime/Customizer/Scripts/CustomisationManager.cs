@@ -81,12 +81,8 @@ namespace RLTY.Customisation
         /// <param name="sceneDescription">The configuration file that lists all customisation keys and values for this building and this event</param>
         public void CustomizeScene(SceneDescription sceneDescription)
         {
-            JLog("Starting Customization");
-
             Customisable[] fullList = FindObjectsOfType<Customisable>();
-
-            //Debug.Log("to do: reintegrate deactivator");
-
+            JLog("Starting Customization, customisable count="+fullList.Length);
             CustomisationManagerHandlerData.CustomizationStarted();
             foreach (CustomisableTypeEntry entry in sceneDescription.entries)
             {
@@ -100,6 +96,15 @@ namespace RLTY.Customisation
                 }
             }
 
+#if UNITY_EDITOR
+            JLog("\n <b>All gameobject that does not receive a value for customisation will be deactivated," +
+                "that can happen for two reasons: </b> \n" +
+                "1) It's SceneDescription key is not up to date and need to be regenerated <i>(Toolbar/RLTY/CreateSceneDescription)</i>\n" +
+                "2) No value as being assigned to its key, look for the corresponding <i>SessionConfig</i> ScriptableObject in the asset folder\n\n");
+#else
+            JLog("All gameobject that does not receive a value for customisation will be deactivated, it means that no value has been set in the Event Configuration tab of the event");
+#endif
+
             JLog("Finished Customization");
             CustomisationManagerHandlerData.CustomisationFinished();
         }
@@ -111,6 +116,7 @@ namespace RLTY.Customisation
             foreach (Customisable customisable in fullList)
                 if (customisable.type == type && customisable.key.Contains(k.key))
                 {
+                    JLog("Customize " + k.key + " value=" + k.value);
                     customisable.Customize(k);
                     found = true;
                     if (debug)
@@ -122,16 +128,6 @@ namespace RLTY.Customisation
                 }
             if (!found)
                 JLogError("No customisable found for key=" + k.key + " type=" + type);
-
-#if UNITY_EDITOR
-            JLog("\n <b>All gameobject that does not receive a value for customisation will be deactivated," +
-                "that can happen for two reasons: </b> \n" +
-                "1) It's SceneDescription key is not up to date and need to be regenerated <i>(Toolbar/RLTY/CreateSceneDescription)</i>\n" +
-                "2) No value as being assigned to its key, look for the corresponding <i>SessionConfig</i> ScriptableObject in the asset folder\n\n");
-#else
-            JLog("All gameobject that does not receive a value for customisation will be deactivated," +
-                "it means that no value has been set in the Event Configuration tab of the event");
-#endif
         }
 
         #endregion
