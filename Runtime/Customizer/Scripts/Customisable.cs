@@ -283,6 +283,7 @@ namespace RLTY.Customisation
 
         public void DeactivateGameobjectIfIntact()
         {
+#if UNITY_EDITOR
             if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
             {
                 if (gameObject.activeInHierarchy)
@@ -290,6 +291,7 @@ namespace RLTY.Customisation
 
                 JLog("No customisation asked for this customisable, deactivating Gameobject");
             }
+#endif
         }
 
         #region Observer Pattern
