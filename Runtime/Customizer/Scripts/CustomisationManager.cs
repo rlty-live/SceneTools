@@ -121,9 +121,7 @@ namespace RLTY.Customisation
                     }
                 }
             if (!found)
-                if (debug) Debug.LogError("No customisable found for key=" + k.key + " type=" + type);
-                else
-                    JLog(k.key + " was found in: " + foundKeys);
+                JLogError("No customisable found for key=" + k.key + " type=" + type);
 
 #if UNITY_EDITOR
             JLog("\n <b>All gameobject that does not receive a value for customisation will be deactivated," +
@@ -131,8 +129,7 @@ namespace RLTY.Customisation
                 "1) It's SceneDescription key is not up to date and need to be regenerated <i>(Toolbar/RLTY/CreateSceneDescription)</i>\n" +
                 "2) No value as being assigned to its key, look for the corresponding <i>SessionConfig</i> ScriptableObject in the asset folder\n\n");
 #else
-            if (Debug.isDebugBuild)
-                JLog("All gameobject that does not receive a value for customisation will be deactivated," +
+            JLog("All gameobject that does not receive a value for customisation will be deactivated," +
                 "it means that no value has been set in the Event Configuration tab of the event");
 #endif
         }
