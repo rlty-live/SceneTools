@@ -53,10 +53,11 @@ public static class ZoomUtility
     //     return virtualCamTransform.position;
     // }
 
-    public static Vector3 CalculateCameraPosition(CinemachineVirtualCamera virtualCam, Transform target, float fov,
-        float screenPercent = 1)
+    public static Vector3 CalculateCameraPosition(CinemachineVirtualCamera virtualCam, Transform target, float fov, float screenPercent = 1)
     {
-        if(target.TryGetComponent(out BoxCollider collider))
+        //Debug.Log("Zoom : " + target.gameObject.name + " FOV = "+fov+" ScreenPercent = "+screenPercent);
+        
+        if(target.TryGetComponent(out MeshRenderer meshRenderer))
             FitCameraToObject3D(virtualCam, target.gameObject, fov, screenPercent);
         else
             FitCameraToObjectUI(virtualCam, target.gameObject, fov, screenPercent);
@@ -111,16 +112,24 @@ public static class ZoomUtility
     
     private static float CalculateOptimalDistance(CinemachineVirtualCamera camera, Vector3 size, float fov, float zoomFactor)
     {
+        //Debug.Log("Zoom : size = " + size + " FOV = "+fov+" ScreenPercent = "+zoomFactor);
+        
         // Calculate the distance between the camera and the object
         float halfFOV = fov * 0.5f * Mathf.Deg2Rad;
-        float aspect = camera.m_Lens.Aspect;
+        
+        float screenHeight = Screen.height;
+        float screenWidth = Screen.width;
+        float aspect = screenWidth / screenHeight;
         float height = size.y;
         float width = size.x / aspect;
+        //Debug.Log("halfFOV = "+ halfFOV + " aspect = "+aspect+" screen height = "+screenHeight+" screen width = "+screenWidth);
+        
 
         // get the larger dimension (height or width)
         float maxDimension = Mathf.Max(height, width);
         maxDimension /= zoomFactor;
         
+        //Debug.Log("Zoom : maxdimension = "+maxDimension);
         // use the larger dimension to calculate distance
         float distance = maxDimension / (2 * Mathf.Tan(halfFOV));
         return distance;
