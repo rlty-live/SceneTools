@@ -27,42 +27,6 @@ namespace RLTY.Customisation
 
         #region EditorOnly Logic
 #if UNITY_EDITOR
-        public override Component FindComponent()
-        {
-            Component target = GetComponent<Renderer>();
-
-            if (target==null)
-            {
-                if (!TryGetComponent(out DecalProjector proj))
-                {
-                    if (debug)
-                        Debug.LogWarning("No Renderer or DecalProjector found in children" + commonWarning, this);
-                }
-                else
-                    target = proj;
-            }
-
-            return target;
-        }
-        public override void Customize(KeyValueBase keyValue)
-        {
-            switch (keyValue.Type)
-            {
-                case CustomisableType.Texture:
-                    Texture t = keyValue.data as Texture;
-                    if (t != null)
-                        SwapTextures(t);
-                    else
-                        JLogError("Couldn't process texture: " + keyValue);
-                    break;
-                case CustomisableType.Color:
-                    if (CustomisableUtility.TryParseColor(keyValue, out Color color))
-                        SwapColors(color);
-                    else
-                        JLogError("Couldn't parse color: " + keyValue);
-                    break;
-            }
-        }
 
         [Button("Get Materials")]
         public void GetMaterialsProperties()
@@ -113,6 +77,47 @@ namespace RLTY.Customisation
         #endregion
 
         #region Common Logic
+
+        public override Component FindComponent()
+        {
+            Component target = GetComponent<Renderer>();
+
+            if (target == null)
+            {
+                if (!TryGetComponent(out DecalProjector proj))
+                {
+                    if (debug)
+                        Debug.LogWarning("No Renderer or DecalProjector found in children" + commonWarning, this);
+                }
+                else
+                    target = proj;
+            }
+            return target;
+        }
+
+        public override void Customize(KeyValueBase keyValue)
+        {
+            switch (keyValue.Type)
+            {
+                case CustomisableType.Texture:
+                    Texture t = keyValue.data as Texture;
+                    if (t != null)
+                        SwapTextures(t);
+                    else
+                        JLogError("Couldn't process texture: " + keyValue);
+                    break;
+                case CustomisableType.Color:
+                    if (CustomisableUtility.TryParseColor(keyValue, out Color color))
+                        SwapColors(color);
+                    else
+                        JLogError("Couldn't parse color: " + keyValue);
+                    break;
+                default:
+                    JLogError("Unhandled type " + keyValue.Type);
+                    break;
+            }
+        }
+
         public void GetPropertiesToModify()
         {
             if (materialsSpecs.Any())
@@ -172,8 +177,6 @@ namespace RLTY.Customisation
             GetPropertiesToModify();
             if (propertiesToModify == null || propertiesToModify.Count == 0)
                 JLogError("No properties to modify");
-            else
-                JLog("TrySwapColors");
             if (modifyAllInstances)
             {
                 foreach (ModifiableProperty property in propertiesToModify)
@@ -185,7 +188,6 @@ namespace RLTY.Customisation
                         JLog("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color);
                     }
                 }
-
             }
             else
             {
@@ -203,7 +205,6 @@ namespace RLTY.Customisation
                     }
                 }
             }
-
         }
 
         #endregion

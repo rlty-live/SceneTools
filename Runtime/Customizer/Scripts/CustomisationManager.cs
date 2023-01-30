@@ -116,7 +116,6 @@ namespace RLTY.Customisation
             foreach (Customisable customisable in fullList)
                 if (customisable.type == type && customisable.key.Contains(k.key))
                 {
-                    JLog("Customize " + k.key + " value=" + k.value);
                     customisable.Customize(k);
                     found = true;
                     if (debug)

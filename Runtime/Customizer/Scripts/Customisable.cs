@@ -204,9 +204,14 @@ namespace RLTY.Customisation
                 ValidProcessorDebugLog(false);
             }
 
-            target = processor.FindComponent();
-            if (target == null)
-                JLogError("Processor target not found on " + name + " type=" + processor.GetType());
+            if (processor)
+            {
+                target = processor.FindComponent();
+                if (target == null)
+                    JLogError("Processor target not found on " + name + " type=" + processor.GetType());
+            }
+            else
+                JLogError("No processor found for type=" + type+" on " + name);
         }
 
         public void DestroyProcessor(Processor _processor)
@@ -271,13 +276,13 @@ namespace RLTY.Customisation
                     JLogError("Target is null on customisable " + processor.name);
                     return;
                 }
+                JLog("Using processor " + processor.GetType());
                 processor.Customize(_keyValue);
             }
         }
 
         public void DeactivateGameobjectIfIntact()
         {
-#if !UNITY_EDITOR
             if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
             {
                 if (gameObject.activeInHierarchy)
@@ -285,10 +290,9 @@ namespace RLTY.Customisation
 
                 JLog("No customisation asked for this customisable, deactivating Gameobject");
             }
-#endif
         }
 
-#region Observer Pattern
+        #region Observer Pattern
 
         public override void EventHandlerRegister()
         {
@@ -300,9 +304,9 @@ namespace RLTY.Customisation
             CustomisationManagerHandlerData.OnSceneCustomized -= DeactivateGameobjectIfIntact;
         }
 
-#endregion
+        #endregion
 
-#endregion
+        #endregion
     }
 }
 
