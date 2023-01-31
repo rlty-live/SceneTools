@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.SceneManagement;
 using UnityEditor;
+using RLTY.Customisation;
+using Newtonsoft.Json;
 
 [CreateAssetMenu(fileName = "AssetBundleSceneSetup", menuName = "RLTY/BuildSetup/Assetbundles", order = 1)]
 public class AssetbundleBuildSetup : ScriptableObject
@@ -16,6 +19,14 @@ public class AssetbundleBuildSetup : ScriptableObject
             if (!tmp.Contains(":"))
                 tmp = Application.dataPath + "/" + tmp;
             return tmp;
+        }
+    }
+
+    public string PublishS3Path
+    {
+        get
+        {
+            return "../Publish";
         }
     }
 

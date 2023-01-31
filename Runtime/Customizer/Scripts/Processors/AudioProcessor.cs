@@ -6,7 +6,7 @@ namespace RLTY.Customisation
 {
     public class AudioProcessor : Processor
     {
-        public override Component FindComponent(Component existingTarget)
+        public override Component FindComponent()
         {
             Component target = null;
             AudioSource audioSource = GetComponentInChildren<AudioSource>();

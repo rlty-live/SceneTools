@@ -10,18 +10,8 @@ namespace RLTY.Customisation
     {
         #region F/P
 
-        #region Serialize
-
         [SerializeField] private Button button = null;
         [SerializeField] private string url = "";
-
-        #endregion
-
-        #region Private
-
-        #endregion
-
-        #region Public
 
         public bool IsValid
         {
@@ -42,9 +32,7 @@ namespace RLTY.Customisation
 
         #endregion
 
-        #endregion
-
-        public override Component FindComponent(Component existingTarget)
+        public override Component FindComponent()
         {
             Component target = null;
             Button button = GetComponentInChildren<Button>();
@@ -59,54 +47,38 @@ namespace RLTY.Customisation
             return target;
         }
 
-        public override void Customize(Component target, KeyValueBase keyValue)
-        {
-            SetURL(keyValue.value);
-
-        }
-
-        #region Unity Methods
+        public override void Customize(KeyValueBase keyValue) => SetURL(keyValue.value);
+        /// <summary>
+        /// Set the url target to open when button clicked
+        /// </summary>
+        /// <param name="_url">URL target</param>
+        public void SetURL(string _url) => url = _url;
 
         public override void Start()
         {
             base.Start();
-
             if (!button) return;
-
             button.onClick.AddListener(() => OpenNewInternetPage(url));
         }
 
-        #endregion
-
-        #region Custom Methods
-
-        #region Private
-
-        #endregion
-
-        #region Public
         /// <summary>
-        /// Open an internet page with the URL given
+        /// Open an internet page with the given URL given
         /// </summary>
         /// <param name="_url">URL of the page web you want to open</param>
         public void OpenNewInternetPage(string _url)
         {
             if (!IsValid) return;
-
             Application.OpenURL(_url);
+            if (debug) 
+                Debug.Log("Trying to open external url: " + _url, this);
         }
 
-        /// <summary>
-        /// Set the url target to open when button clicked
-        /// </summary>
-        /// <param name="_url">URL target</param>
-        public void SetURL(string _url)
+        public void OpenNewInternetPage()
         {
-            url = _url;
+            if (!IsValid) return;
+            Application.OpenURL(url);
+            if (debug)
+                Debug.Log("Trying to open external url: " + url, this);
         }
-
-        #endregion
-
-        #endregion
     }
 }
