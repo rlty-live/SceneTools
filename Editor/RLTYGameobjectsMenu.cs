@@ -1,13 +1,13 @@
 using Judiva.Metaverse.Interactions;
-using UnityEditor.SceneManagement;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class RLTYGameobjectMenu : Editor
 {
     const string toolbarfolderName = "GameObject/RLTY/";
 
-    const string assetFolderName = "Assets/Plugins/RLTY/";
+    const string assetFolderName = "Packages/live.rlty.scenetools/Runtime";
     static readonly string[] prefabPaths =
     {
         assetFolderName + "Player/Prefabs/TriggerZone.prefab",
@@ -15,7 +15,6 @@ public class RLTYGameobjectMenu : Editor
         assetFolderName + "Player/Prefabs/SpawnPoint.prefab",
         assetFolderName + "Player/Prefabs/Teleport.prefab",
         assetFolderName + "Player/Prefabs/Jump.prefab"
-
     };
 
     [MenuItem(toolbarfolderName + "TriggerZone")]

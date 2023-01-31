@@ -67,7 +67,7 @@ namespace RLTY.Customisation
 
         #endregion
 
-        public override Component FindComponent(Component existingTarget)
+        public override Component FindComponent()
         {
             TextMeshPro textMeshPro = GetComponentInChildren<TextMeshPro>();
             TextMeshProUGUI textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();
@@ -89,7 +89,7 @@ namespace RLTY.Customisation
             return target;
         }
 
-        public override void Customize(Component target, RLTY.SessionInfo.KeyValueBase keyValue)
+        public override void Customize(KeyValueBase keyValue)
         {
             SwapText(keyValue.value);
         }

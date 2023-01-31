@@ -38,7 +38,16 @@ public static class UIManagerHandlerData
 
     public static void FadeIn(float time, Action onFinished = null) => OnFadeIn?.Invoke(time, onFinished);
 
-    public static void CrossFade(float outTime, float inTime, Action onFadedOut = null, Action onFinished = null) => OnCrossFade(outTime, inTime, onFadedOut, onFinished);
+    public static void CrossFade(float outTime, float inTime, Action onFadedOut = null, Action onFinished = null)
+    { 
+        if (OnCrossFade!=null)
+            OnCrossFade.Invoke(outTime, inTime, onFadedOut, onFinished);
+        else
+        {
+            onFadedOut?.Invoke();
+            onFinished?.Invoke();
+        }    
+    }
 
     #endregion
 }

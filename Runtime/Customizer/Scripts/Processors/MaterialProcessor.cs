@@ -4,8 +4,6 @@ using UnityEngine.Rendering.Universal;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
-using RLTY;
-using System.Drawing;
 
 namespace RLTY.Customisation
 {
@@ -27,53 +25,9 @@ namespace RLTY.Customisation
 
         #endregion
 
-        #region Callbacks
-#if UNITY_EDITOR
-        //public void Awake()
-        //{
-        //    GetMaterialsProperties();
-        //}
-
-        public void Reset()
-        {
-            GetMaterialsProperties();
-        }
-#endif
-        #endregion
-
-        public override Component FindComponent(Component existingTarget)
-        {
-            Renderer renderer = GetComponentInChildren<Renderer>();
-            Component target = null;
-            if (!renderer)
-            {
-                if (!TryGetComponent<DecalProjector>(out DecalProjector proj))
-                {
-                    if (debug)
-                        Debug.LogWarning("No Renderer or DecalProjector found in children" + commonWarning, this);
-
-                    else
-                        target = proj;
-                }
-            }
-            else
-                target = renderer;
-            return target;
-        }
-        public override void Customize(Component target, RLTY.SessionInfo.KeyValueBase keyValue)
-        {
-            RLTY.SessionInfo.KeyValueObject o = keyValue as RLTY.SessionInfo.KeyValueObject;
-            if (o!=null)
-                SwapTextures((Texture)o.downloadedAsset);
-            else
-            {
-                RLTY.SessionInfo.ColorKeyValue c= keyValue as RLTY.SessionInfo.ColorKeyValue;
-                if (c!=null)
-                    SwapColors(c.GetColor());
-            }
-        }
-
         #region EditorOnly Logic
+#if UNITY_EDITOR
+
         [Button("Get Materials")]
         public void GetMaterialsProperties()
         {
@@ -114,6 +68,56 @@ namespace RLTY.Customisation
         }
 
         [Button]
+
+        public void Reset()
+        {
+            GetMaterialsProperties();
+        }
+#endif
+        #endregion
+
+        #region Common Logic
+
+        public override Component FindComponent()
+        {
+            Component target = GetComponent<Renderer>();
+
+            if (target == null)
+            {
+                if (!TryGetComponent(out DecalProjector proj))
+                {
+                    if (debug)
+                        Debug.LogWarning("No Renderer or DecalProjector found in children" + commonWarning, this);
+                }
+                else
+                    target = proj;
+            }
+            return target;
+        }
+
+        public override void Customize(KeyValueBase keyValue)
+        {
+            switch (keyValue.Type)
+            {
+                case CustomisableType.Texture:
+                    Texture t = keyValue.data as Texture;
+                    if (t != null)
+                        SwapTextures(t);
+                    else
+                        JLogError("Couldn't process texture: " + keyValue);
+                    break;
+                case CustomisableType.Color:
+                    if (CustomisableUtility.TryParseColor(keyValue, out Color color))
+                        SwapColors(color);
+                    else
+                        JLogError("Couldn't parse color: " + keyValue);
+                    break;
+                default:
+                    JLogError("Unhandled type " + keyValue.Type);
+                    break;
+            }
+        }
+
         public void GetPropertiesToModify()
         {
             if (materialsSpecs.Any())
@@ -142,7 +146,7 @@ namespace RLTY.Customisation
                     {
                         property.mat.SetTexture(property.propertyName, tex);
                         modifiedProperties.Add(property);
-                        if (debug) Debug.Log("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex, this);
+                        JLog("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex);
                     }
                 }
             }
@@ -158,7 +162,7 @@ namespace RLTY.Customisation
                         if (mat.name.Contains(property.mat.name))
                         {
                             mat.SetTexture(property.propertyName, tex);
-                            if (debug) Debug.Log("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex, this);
+                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex);
                         }
                     }
                 }
@@ -168,10 +172,11 @@ namespace RLTY.Customisation
                 scaler.ResizeDecal();
         }
 
-        public void SwapColors(Color32 color)
+        public void SwapColors(Color color)
         {
             GetPropertiesToModify();
-
+            if (propertiesToModify == null || propertiesToModify.Count == 0)
+                JLogError("No properties to modify");
             if (modifyAllInstances)
             {
                 foreach (ModifiableProperty property in propertiesToModify)
@@ -180,10 +185,9 @@ namespace RLTY.Customisation
                     {
                         property.mat.SetColor(property.propertyName, color);
                         modifiedProperties.Add(property);
-                        if (debug) Debug.Log("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color, this);
+                        JLog("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color);
                     }
                 }
-
             }
             else
             {
@@ -196,153 +200,111 @@ namespace RLTY.Customisation
                         if (mat.name.Contains(property.mat.name))
                         {
                             mat.SetColor(property.propertyName, color);
-                            if (debug) Debug.Log("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color, this);
+                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
                         }
                     }
                 }
             }
-
         }
 
-        //OLD VERSION
-        //public void SwapColors(Color32 color)
-        //{
-        //            if (modifyAllInstances)
-        //{
-        //foreach (MaterialSpecs matSpecs in materialsSpecs)
-        //{
-        //    if (matSpecs.customize)
-        //    {
-        //        foreach (ModifiableProperty property in matSpecs.shaderProperties)
-        //        {
-        //            if (property.modifyThis)
-        //            {
-        //                matSpecs.sharedMaterial.SetColor(property.propertyName, color);
-        //            }
-        //        }
-        //    }
-        //}
-        //}
-        //else
-        //{
-        //    GetComponent<Renderer>().GetMaterials(materialInstances);
-        //
-        //    foreach (MaterialSpecs matSpecs in materialsSpecs)
-        //    {
-        //        if (matSpecs.customize)
-        //        {
-        //            foreach (ModifiableProperty property in matSpecs.shaderProperties)
-        //            {
-        //                if (property.modifyThis)
-        //                {
-        //                    foreach (Material instancedMat in materialInstances)
-        //                    {
-        //                        if (instancedMat.name.Contains(matSpecs.sharedMaterial.name))
-        //                            instancedMat.SetColor(property.propertyName, color);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        #endregion
     }
-}
-#endregion
 
-#region Data
-[System.Serializable]
-public class MaterialSpecs
-{
-    //Only Global changes until i get a better grasp of the instancing system
-    //[SerializeField]
-    //private Material localMat;
-
-    //WIP
-    //Only Global changes until i get a better grasp of the instancing system
-    //[SerializeField, ShowIf("customize", true)]
-    //[Header("Parameters"), Tooltip("Do you want to modify all instances of this material or just the one in this GameObject ?")]
-    //private bool global;
-
-    //Doesn't Serialize, doesn't show properly, Local and GlobalKeywords are readonly structs
-    //[SerializeField, ShowIf("customize", true)]
-    //public LocalKeyword[] localKeyWordsFromKeywordSpace;
-
-    //Keywords only returns the common parameters (see https://docs.unity3d.com/Packages/com.unity.shadergraph@14.0/api/UnityEditor.Rendering.BuiltIn.ShaderKeywordStrings.html)
-    //[SerializeField, ShowIf("customize", true)]
-    //private string[] localKeyWordsFromKeyWordSpaceStrings;
-    //localKeyWordsFromKeyWordSpaceStrings = _mat.shader.keywordSpace.keywordNames;
-
-    //Doesn't show anything
-    //texturesKeywords = _mat.enabledKeywords;
-    //keywordStrings = _mat.shaderKeywords;
-
-    private CustomisableType customisableType;
-    [ReadOnly]
-    public Material sharedMaterial;
-    [SerializeField]
-    public bool customize;
-
-    [SerializeField, ShowIf("customize", true)]
-    public List<ModifiableProperty> shaderProperties;
-
-    public MaterialSpecs(Material _sharedMat, CustomisableType _customisableType)
+    #region Data
+    [System.Serializable]
+    public class MaterialSpecs
     {
-        customisableType = _customisableType;
-        sharedMaterial = _sharedMat;
+        //Only Global changes until i get a better grasp of the instancing system
+        //[SerializeField]
+        //private Material localMat;
 
-        switch (_customisableType)
+        //WIP
+        //Only Global changes until i get a better grasp of the instancing system
+        //[SerializeField, ShowIf("customize", true)]
+        //[Header("Parameters"), Tooltip("Do you want to modify all instances of this material or just the one in this GameObject ?")]
+        //private bool global;
+
+        //Doesn't Serialize, doesn't show properly, Local and GlobalKeywords are readonly structs
+        //[SerializeField, ShowIf("customize", true)]
+        //public LocalKeyword[] localKeyWordsFromKeywordSpace;
+
+        //Keywords only returns the common parameters (see https://docs.unity3d.com/Packages/com.unity.shadergraph@14.0/api/UnityEditor.Rendering.BuiltIn.ShaderKeywordStrings.html)
+        //[SerializeField, ShowIf("customize", true)]
+        //private string[] localKeyWordsFromKeyWordSpaceStrings;
+        //localKeyWordsFromKeyWordSpaceStrings = _mat.shader.keywordSpace.keywordNames;
+
+        //Doesn't show anything
+        //texturesKeywords = _mat.enabledKeywords;
+        //keywordStrings = _mat.shaderKeywords;
+
+        private CustomisableType customisableType;
+        [ReadOnly]
+        public Material sharedMaterial;
+        [SerializeField]
+        public bool customize;
+
+        [SerializeField, ShowIf("customize", true)]
+        public List<ModifiableProperty> shaderProperties;
+
+        public MaterialSpecs(Material _sharedMat, CustomisableType _customisableType)
         {
-            case CustomisableType.Texture:
-                GetAllTextureProperties();
-                break;
-            case CustomisableType.Sprite:
-                GetAllTextureProperties();
-                break;
-            case CustomisableType.Color:
-                GetAllColorProperties();
-                break;
-            default:
-                break;
+            customisableType = _customisableType;
+            sharedMaterial = _sharedMat;
+
+            switch (_customisableType)
+            {
+                case CustomisableType.Texture:
+                    GetAllTextureProperties();
+                    break;
+                case CustomisableType.Sprite:
+                    GetAllTextureProperties();
+                    break;
+                case CustomisableType.Color:
+                    GetAllColorProperties();
+                    break;
+                default:
+                    break;
+            }
         }
-    }
 
-    public void GetAllTextureProperties()
-    {
-        float nProperties = sharedMaterial.shader.GetPropertyCount();
-        shaderProperties = new List<ModifiableProperty>();
-
-        for (int i = 0; i < nProperties; i++)
+        public void GetAllTextureProperties()
         {
-            if (sharedMaterial.shader.GetPropertyType(i) == ShaderPropertyType.Texture)
-                shaderProperties.Add(new ModifiableProperty(sharedMaterial, i));
+            float nProperties = sharedMaterial.shader.GetPropertyCount();
+            shaderProperties = new List<ModifiableProperty>();
+
+            for (int i = 0; i < nProperties; i++)
+            {
+                if (sharedMaterial.shader.GetPropertyType(i) == ShaderPropertyType.Texture)
+                    shaderProperties.Add(new ModifiableProperty(sharedMaterial, i));
+            }
         }
-    }
 
-    public void GetAllColorProperties()
-    {
-        float nProperties = sharedMaterial.shader.GetPropertyCount();
-        shaderProperties = new List<ModifiableProperty>();
-
-        for (int i = 0; i < nProperties; i++)
+        public void GetAllColorProperties()
         {
-            if (sharedMaterial.shader.GetPropertyType(i) == ShaderPropertyType.Color)
-                shaderProperties.Add(new ModifiableProperty(sharedMaterial, i));
+            float nProperties = sharedMaterial.shader.GetPropertyCount();
+            shaderProperties = new List<ModifiableProperty>();
+
+            for (int i = 0; i < nProperties; i++)
+            {
+                if (sharedMaterial.shader.GetPropertyType(i) == ShaderPropertyType.Color)
+                    shaderProperties.Add(new ModifiableProperty(sharedMaterial, i));
+            }
         }
     }
-}
 
-[System.Serializable]
-public class ModifiableProperty
-{
-    public Material mat;
-    [ReadOnly]
-    public string propertyName;
-    public bool modifyThis;
-
-    public ModifiableProperty(Material _mat, int propertyIndex)
+    [System.Serializable]
+    public class ModifiableProperty
     {
-        mat = _mat;
-        propertyName = mat.shader.GetPropertyName(propertyIndex);
+        public Material mat;
+        [ReadOnly]
+        public string propertyName;
+        public bool modifyThis;
+
+        public ModifiableProperty(Material _mat, int propertyIndex)
+        {
+            mat = _mat;
+            propertyName = mat.shader.GetPropertyName(propertyIndex);
+        }
     }
+    #endregion
 }
-#endregion

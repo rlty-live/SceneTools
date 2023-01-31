@@ -14,16 +14,26 @@ namespace RLTY.Customisation
             public string activeChainId;
         }
 
-        public override void Customize(Component target, RLTY.SessionInfo.KeyValueBase keyValue)
+        public override void Customize(KeyValueBase keyValue)
         {
+            if (string.IsNullOrEmpty(keyValue.value))
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+                
             string[] tmp = keyValue.value.Split(",");
-            _data = JsonConvert.SerializeObject(new Data() { smartContractAddress = tmp[0], activeChainId = tmp[1] });
+            if (tmp.Length != 2)
+                tmp = new string[2] { "nodata", "nodata" };
+            _data = JsonConvert.SerializeObject(new Data() { smartContractAddress = tmp[0].Trim(), activeChainId = tmp[1].Trim() });
         }
-
+        
+        [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
         [SerializeField] private string _data = "";
+
         private TriggerZone _zone;
 
-        private bool _donationStarted = false;
+        private bool _actionProcessed = false;
 
         protected override void Awake()
         {
@@ -36,16 +46,16 @@ namespace RLTY.Customisation
 
         private void OnEnable()
         {
-            _donationStarted = false;
+            _actionProcessed = false;
         }
 
         private void Update()
         {
             //check if we trigger a donation
-            if (!_donationStarted && Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.7f)
+            if (!_actionProcessed && (!_checkUserOrientationAlignedWithForward || Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.3f))
             {
-                _donationStarted = true;
-                SessionInfoManagerHandlerData.UserDonation(_data);
+                _actionProcessed = true;
+                SessionInfoManagerHandlerData.Web3Transaction(_data);
             }
         }
     }
