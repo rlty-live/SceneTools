@@ -211,7 +211,7 @@ namespace RLTY.Customisation
                     JLogError("Processor target not found on " + name + " type=" + processor.GetType());
             }
             else
-                JLogError("No processor found for type=" + type+" on " + name);
+                JLogError("No processor found for type=" + type + " on " + name);
         }
 
         public void DestroyProcessor(Processor _processor)
@@ -283,13 +283,16 @@ namespace RLTY.Customisation
 
         public void DeactivateGameobjectIfIntact()
         {
-#if !UNITY_EDITOR
-            if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
+#if !UNITY_EDITOR 
+            if(!Debug.isDebugBuild)
             {
-                if (gameObject.activeInHierarchy)
-                    gameObject.SetActive(false);
+                if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
+                {
+                    if (gameObject.activeInHierarchy)
+                        gameObject.SetActive(false);
 
-                JLog("No customisation asked for this customisable, deactivating Gameobject");
+                    JLog("No customisation asked for this customisable, deactivating Gameobject");
+                }
             }
 #endif
         }
