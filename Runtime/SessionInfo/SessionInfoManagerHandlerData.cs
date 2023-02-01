@@ -23,9 +23,6 @@ namespace RLTY.SessionInfo
         public static event Func<string> OnGetUserName;
         public static string GetUserName() => OnGetUserName?.Invoke();
         
-        public static event Func<string> OnGetEventName;
-        public static string GetEventName() => OnGetEventName?.Invoke();
-
         public static event Action OnServerReady;
         public static void ServerReady() => OnServerReady?.Invoke();
 
