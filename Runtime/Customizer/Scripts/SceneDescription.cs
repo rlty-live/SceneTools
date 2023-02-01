@@ -40,6 +40,8 @@ namespace RLTY.Customisation
 
         public AgoraToken agoraToken;
 
+        public string SOCIAL_API_HOST;
+
         [JsonIgnore]
         public int totalSize;
 
