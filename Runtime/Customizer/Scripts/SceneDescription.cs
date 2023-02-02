@@ -27,8 +27,8 @@ namespace RLTY.Customisation
         public string clientVersion;
         public string dnsName="localhost";
         public string playerSessionId="noPlayerSessionId";
-        public string socialWallAdress;
-        public string staticFramesAdress;
+        public string socialWallAddress;
+        public string staticFramesAddress;
 
         public string ResolvedDnsName {  get { return string.IsNullOrEmpty(dnsName) ? "localhost" : dnsName; } }
 
