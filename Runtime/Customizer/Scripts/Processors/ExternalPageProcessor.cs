@@ -23,7 +23,8 @@ namespace RLTY.Customisation
                 {
                     if (!TryGetComponent(out Button but))
                         return false;
-                    button = but;
+                    else
+                        button = but;
                 }
 
                 return true;
