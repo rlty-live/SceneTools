@@ -39,7 +39,7 @@ namespace RLTY.Customisation
 
             if (!button)
             {
-                if (debug)
+                if (Debug.isDebugBuild)
                     Debug.LogWarning("No Button found in children" + commonWarning, this);
             }
             else
@@ -69,7 +69,7 @@ namespace RLTY.Customisation
         {
             if (!IsValid) return;
             Application.OpenURL(_url);
-            if (debug) 
+            if (Debug.isDebugBuild)
                 Debug.Log("Trying to open external url: " + _url, this);
         }
 
@@ -77,7 +77,7 @@ namespace RLTY.Customisation
         {
             if (!IsValid) return;
             Application.OpenURL(url);
-            if (debug)
+            if (Debug.isDebugBuild)
                 Debug.Log("Trying to open external url: " + url, this);
         }
     }
