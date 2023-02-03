@@ -21,7 +21,7 @@ namespace RLTY.Customisation
     {
         #region Global variables
         [Title("Configuration")]
-        public bool IsDeactivable = false;
+        public bool invariable = false;
 
         [LabelWidth(40), Space(5)]
         public CustomisableType type;
@@ -39,17 +39,28 @@ namespace RLTY.Customisation
         [Title("Organization")]
         public static List<string> sections;
         public static List<string> groups;
+        public static List<string> labelGroups;
+
+        const int labelWidth = 80;
 
         [ValueDropdown("GetSections")]
         [Tooltip("Customisables in the same section appear in a panel named 'Section'")]
+        [LabelWidth(labelWidth)]
         public string section;
-        [SerializeField, HorizontalGroup("NewSection"), ShowIf("showUtilities", true)]
+        [SerializeField, HorizontalGroup("NewSection"), ShowIf("showUtilities", true), HideLabel]
         private string newSection;
         [ValueDropdown("GetGroups")]
         [Tooltip("Grouped customisable appear in the same bloc, without labels")]
+        [LabelWidth(labelWidth)]
         public string group;
-        [SerializeField, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true)]
+        [SerializeField, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true), HideLabel]
         private string newGroup;
+        [ValueDropdown("GetLabelGroups")]
+        [Tooltip("To be added")]
+        [LabelWidth(labelWidth)]
+        public string labelGroup;
+        [SerializeField, HorizontalGroup("NewLabelGroup"), ShowIf("showUtilities", true), HideLabel]
+        private string newLabelGroup;
 
         [Title("Description")]
         [SerializeField, ShowIf("showUtilities")]
@@ -86,6 +97,7 @@ namespace RLTY.Customisation
 #if UNITY_EDITOR
         public IEnumerable<string> GetGroups() { return groups; }
         public IEnumerable<string> GetSections() { return sections; }
+        public IEnumerable<string> GetLabelGroups() { return labelGroups; }
 
         [Button, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true)]
         public void AddGroup()
@@ -117,6 +129,21 @@ namespace RLTY.Customisation
             }
         }
 
+        [Button, HorizontalGroup("NewLabelGroup"), ShowIf("showUtilities", true)]
+        public void AddLabelGroup()
+        {
+            if (!customizer)
+            {
+                JLog("No CustomisationManager (Customizer) Component in the scene to add sections to");
+            }
+
+            else
+            {
+                if (newLabelGroup != null && newLabelGroup != string.Empty)
+                    customizer.groupLabel.Add(newSection);
+            }
+        }
+
         public void UpdateKey()
         {
             if (useGameobjectName)
@@ -128,7 +155,7 @@ namespace RLTY.Customisation
         public void UpdateCommentary()
         {
             if (!manualDescription)
-                commentary = section + "$" + group + "_" + displayCommentary;
+                commentary = labelGroups.IndexOf(labelGroup) + " #" + labelGroup + "/" + section + "$" + group + "_" + displayCommentary;
         }
 
         public void GetTechnicalInfo()
@@ -251,11 +278,6 @@ namespace RLTY.Customisation
                 return string.Empty;
         }
 
-        public void ReturnToInitialState()
-        {
-
-        }
-
         #endregion
 
         #region Runtime Logic
@@ -284,7 +306,7 @@ namespace RLTY.Customisation
         public void DeactivateGameobjectIfIntact()
         {
 #if !UNITY_EDITOR 
-            if(!Debug.isDebugBuild)
+            if(!Debug.isDebugBuild && invariable == true)
             {
                 if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
                 {
@@ -315,36 +337,39 @@ namespace RLTY.Customisation
     }
 }
 
-[System.Serializable]
-public class GroupEntry
-{
-    [ReadOnly]
-    public string groupName;
-    [ShowIf("renaming"), SerializeField]
-    private string newName;
 
-    public bool renaming;
-
-    [Button, HorizontalGroup("Edit")]
-    public void Remove()
-    {
-
-    }
-
-    [Button, HorizontalGroup("Edit")]
-    public void Rename() => renaming = true;
-
-    [Button, HorizontalGroup("Edit")]
-    public void Validate()
-    {
-        groupName = newName;
-        renaming = false;
-    }
-}
 
 //Keep for after OdinRemoval
 //Source: https://www.youtube.com/watch?v=ThcSHbVh7xc
 //Allows to create dropdown Lists from Lists
+
+//[System.Serializable]
+//public class GroupEntry
+//{
+//    [ReadOnly]
+//    public string groupName;
+//    [ShowIf("renaming"), SerializeField]
+//    private string newName;
+
+//    public bool renaming;
+
+//    [Button, HorizontalGroup("Edit")]
+//    public void Remove()
+//    {
+
+//    }
+
+//    [Button, HorizontalGroup("Edit")]
+//    public void Rename() => renaming = true;
+
+//    [Button, HorizontalGroup("Edit")]
+//    public void Validate()
+//    {
+//        groupName = newName;
+//        renaming = false;
+//    }
+//}
+
 //public class ListToDropDownSelector : PropertyAttribute
 //{
 //    public Type myType;
