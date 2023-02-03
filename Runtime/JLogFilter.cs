@@ -12,7 +12,7 @@ public class JLogFilter : ScriptableObject
     public class Entry
     {
         public bool log = true;
-        public Color color;
+        public Color color = Color.green;
         public List<string> list;
         public List<TextAsset> scriptsList;
     }
