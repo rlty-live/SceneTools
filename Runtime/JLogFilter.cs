@@ -14,6 +14,7 @@ public class JLogFilter : ScriptableObject
         public bool log = true;
         public Color color;
         public List<string> list;
+        public List<TextAsset> scriptsList;
     }
 
     public bool Filter(string inString, out string color)
@@ -25,6 +26,15 @@ public class JLogFilter : ScriptableObject
                     color  = ColorUtility.ToHtmlStringRGB(e.color);
                     return e.log;
                 }
+        
+        foreach (Entry e in filters)
+        foreach (TextAsset t in e.scriptsList)
+            if (inString.Contains(t.name))
+            {
+                color  = ColorUtility.ToHtmlStringRGB(e.color);
+                return e.log;
+            }
+        
         color= "FFFFFF";
         return logUnfiltered;
     }
