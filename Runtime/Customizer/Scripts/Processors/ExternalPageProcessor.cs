@@ -23,8 +23,7 @@ namespace RLTY.Customisation
                 {
                     if (!TryGetComponent(out Button but))
                         return false;
-                    else
-                        button = but;
+                    button = but;
                 }
 
                 return true;
@@ -35,17 +34,10 @@ namespace RLTY.Customisation
 
         public override Component FindComponent()
         {
-            Component target = null;
-            Button button = GetComponentInChildren<Button>();
-
             if (!button)
-            {
-                if (Debug.isDebugBuild)
+                if (debug)
                     Debug.LogWarning("No Button found in children" + commonWarning, this);
-            }
-            else
-                target = button;
-            return target;
+            return button;
         }
 
         public override void Customize(KeyValueBase keyValue) => SetURL(keyValue.value);
@@ -70,7 +62,7 @@ namespace RLTY.Customisation
         {
             if (!IsValid) return;
             Application.OpenURL(_url);
-            if (Debug.isDebugBuild)
+            if (debug) 
                 Debug.Log("Trying to open external url: " + _url, this);
         }
 
@@ -78,7 +70,7 @@ namespace RLTY.Customisation
         {
             if (!IsValid) return;
             Application.OpenURL(url);
-            if (Debug.isDebugBuild)
+            if (debug)
                 Debug.Log("Trying to open external url: " + url, this);
         }
     }
