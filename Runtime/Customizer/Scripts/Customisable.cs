@@ -113,7 +113,6 @@ namespace RLTY.Customisation
                     customizer.groups.Add(newGroup);
             }
         }
-
         [Button, HorizontalGroup("NewSection"), ShowIf("showUtilities", true)]
         public void AddSection()
         {
@@ -128,7 +127,6 @@ namespace RLTY.Customisation
                     customizer.sections.Add(newSection);
             }
         }
-
         [Button, HorizontalGroup("NewLabelGroup"), ShowIf("showUtilities", true)]
         public void AddLabelGroup()
         {
@@ -144,19 +142,23 @@ namespace RLTY.Customisation
             }
         }
 
+
         public void UpdateKey()
         {
             if (useGameobjectName)
                 displayKey = transform.name;
-            key = displayKey;
-            key = key.Replace(" ", "_");
-        }
 
+            key = displayKey;
+
+            if (!key.IsNullOrWhitespace())
+                key = key.Replace(" ", "_");
+        }
         public void UpdateCommentary()
         {
             if (!manualDescription)
                 commentary = labelGroups.IndexOf(labelGroup) + " #" + labelGroup + "/" + section + "$" + group + "_" + displayCommentary;
         }
+
 
         public void GetTechnicalInfo()
         {
@@ -173,8 +175,7 @@ namespace RLTY.Customisation
             if (!manualDescription)
                 UpdateCommentary();
 
-            if (processor)
-                CheckForProcessor();
+            CheckForProcessor();
 
             GetTechnicalInfo();
         }
@@ -207,7 +208,6 @@ namespace RLTY.Customisation
         /// <summary>
         /// Check this gameobject and his children for a processor and add a compatible one if possible
         /// </summary>
-        //PUT THE DESTROY IN A COROUTINE TO ENSURE ADDING NEWONE AFTER AND BEING ABLE TO YIELD
         [ExecuteInEditMode]
         public void CheckForProcessor()
         {
@@ -225,6 +225,7 @@ namespace RLTY.Customisation
                 }
 
             }
+
             if (processor == null && CustomisableUtility.Processors.ContainsKey(type))
             {
                 processor = (Processor)gameObject.AddComponent(CustomisableUtility.Processors[type].type);
