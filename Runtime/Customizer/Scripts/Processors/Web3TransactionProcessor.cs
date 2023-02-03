@@ -8,10 +8,14 @@ namespace RLTY.Customisation
     [RequireComponent(typeof(TriggerZone))]
     public class Web3TransactionProcessor : Processor
     {
+        [System.Serializable]
         public class Data
         {
-            public string smartContractAddress;
-            public string activeChainId;
+            public string Web3Transaction;
+            public string address;
+            public string tokenid;
+            public string image;
+            public string chain;
         }
 
         public override void Customize(KeyValueBase keyValue)
@@ -21,15 +25,19 @@ namespace RLTY.Customisation
                 gameObject.SetActive(false);
                 return;
             }
-                
-            string[] tmp = keyValue.value.Split(",");
-            if (tmp.Length != 2)
-                tmp = new string[2] { "nodata", "nodata" };
-            _data = JsonConvert.SerializeObject(new Data() { smartContractAddress = tmp[0].Trim(), activeChainId = tmp[1].Trim() });
+            try
+            {
+                _data = JsonConvert.DeserializeObject<Data>(keyValue.value);
+            }
+            catch (System.Exception e)
+            {
+                JLogError("Invalid Web3 data on key=" + keyValue.key+" value="+ keyValue.value);
+                gameObject.SetActive(false);
+            }
         }
         
         [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
-        [SerializeField] private string _data = "";
+        [SerializeField] private Data _data;
 
         private TriggerZone _zone;
 
@@ -55,7 +63,7 @@ namespace RLTY.Customisation
             if (!_actionProcessed && (!_checkUserOrientationAlignedWithForward || Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.3f))
             {
                 _actionProcessed = true;
-                SessionInfoManagerHandlerData.Web3Transaction(_data);
+                SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(_data));
             }
         }
     }
