@@ -35,6 +35,8 @@ public interface IPlayer
 
     bool IsAdmin { get; }
     uint AgoraUserId { get; set; }
+    
+    bool IsVoiceBoosted {get;set;}
 
     string Username { get; set; }
     string SkinDesc { get; set; }

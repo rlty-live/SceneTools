@@ -14,6 +14,7 @@ namespace RLTY.Customisation.Testing
 
         public bool IsAdmin => true;
         public uint AgoraUserId { get => 0; set { } }
+        public bool IsVoiceBoosted { get; set; }
         public string Username { get => "TestPlayer"; set { } }
         public string SkinDesc { get => null; set { } }
 
