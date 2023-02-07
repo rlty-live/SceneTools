@@ -12,6 +12,7 @@ namespace RLTY.Customisation.Testing
 
         public int ClientId => 0;
 
+        public bool IsAdmin => true;
         public uint AgoraUserId { get => 0; set { } }
         public string Username { get => "TestPlayer"; set { } }
         public string SkinDesc { get => null; set { } }

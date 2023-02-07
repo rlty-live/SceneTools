@@ -33,6 +33,7 @@ public interface IPlayer
 
     int ClientId { get; }
 
+    bool IsAdmin { get; }
     uint AgoraUserId { get; set; }
 
     string Username { get; set; }
