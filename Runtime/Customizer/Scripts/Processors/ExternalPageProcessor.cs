@@ -19,15 +19,19 @@ namespace RLTY.Customisation
 
         public override Component FindComponent()
         {
-            if (TryGetComponent(out Button button))
+            if (TryGetComponent(out Button _button))
             {
+                button = _button;
+
                 if (button.onClick.GetPersistentEventCount() == 0)
                     button.onClick.AddListener(OpenNewInternetPage);
                 return button;
             }
 
-            if (TryGetComponent(out RLTYMouseEvent rltyMouseEvent))
+            if (TryGetComponent(out RLTYMouseEvent _rltyMouseEvent))
             {
+                mouseEvent = _rltyMouseEvent;
+
                 if (mouseEvent.OnClick.GetPersistentEventCount() == 0)
                     mouseEvent.OnClick.AddListener(OpenNewInternetPage);
                 return mouseEvent;
