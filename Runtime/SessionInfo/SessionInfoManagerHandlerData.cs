@@ -20,6 +20,17 @@ namespace RLTY.SessionInfo
         /// <summary>
         /// Do not listen to this event otherwise you will override SessionInfoManager
         /// </summary>
+        public static event Func<string> OnGetAccessToken;
+
+        /// <summary>
+        /// Get the scene description
+        /// </summary>
+        /// <returns></returns>
+        public static string GetAccessToken() => OnGetAccessToken?.Invoke();
+
+        /// <summary>
+        /// Do not listen to this event otherwise you will override SessionInfoManager
+        /// </summary>
         public static event Func<string> OnGetUserName;
         public static string GetUserName() => OnGetUserName?.Invoke();
         

@@ -33,7 +33,7 @@ public interface IPlayer
 
     int ClientId { get; }
 
-    bool IsAdmin { get; }
+    bool IsAdmin { get; set; }
     uint AgoraUserId { get; set; }
     
     bool IsVoiceBoosted {get;set;}
