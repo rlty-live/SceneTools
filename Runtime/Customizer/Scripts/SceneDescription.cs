@@ -27,6 +27,8 @@ namespace RLTY.Customisation
         public string clientVersion;
         public string dnsName="localhost";
         public string playerSessionId="noPlayerSessionId";
+        public string eventId;
+        public string playerId;
         public string socialWallAddress;
         public string staticFramesAddress;
 
