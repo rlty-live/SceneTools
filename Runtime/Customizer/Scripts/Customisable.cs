@@ -155,7 +155,7 @@ namespace RLTY.Customisation
         }
         public void UpdateCommentary()
         {
-            if (!manualDescription)
+            if (!manualDescription && !displayCommentary.IsNullOrWhitespace())
                 commentary = labelGroups.IndexOf(labelGroup) + " #" + labelGroup + "/" + section + "$" + group + "_" + displayCommentary;
         }
 
