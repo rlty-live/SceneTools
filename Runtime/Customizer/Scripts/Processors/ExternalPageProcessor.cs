@@ -1,6 +1,7 @@
 using RLTY.Customisation;
 using RLTY.SessionInfo;
 using RLTY.UI;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem.Composites;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ namespace RLTY.Customisation
     [RequireComponent(typeof(Customisable))]
     public class ExternalPageProcessor : Processor
     {
+        [InfoBox("You need to add either a Button GameObject in a Canvas or a RLTY MouseEvent")]
         [SerializeField]
         private Button button = null;
         [SerializeField]
