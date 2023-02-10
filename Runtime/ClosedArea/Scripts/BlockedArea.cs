@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -298,6 +299,7 @@ public class BlockedArea : NetworkSceneTool
 #endregion
 }
 
+[Flags]
 public enum EventTypeBitmask
 {
     AdminQuizGame = 1 << 1,
