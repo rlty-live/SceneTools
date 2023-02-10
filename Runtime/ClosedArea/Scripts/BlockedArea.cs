@@ -168,19 +168,19 @@ public class BlockedArea : NetworkSceneTool
         obj.transform.SetParent(this.transform);
         obj.transform.position = BoxedRoomAreaSpawner.transform.position;
         BoxCollider col = BoxedRoomAreaSpawner.AddComponent<BoxCollider>();
-        SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (col.bounds.extents.x*(col.bounds.extents.x*2)) + ((SizeOfWallGeneratedWall/2)/(col.bounds.extents.x*2))), col.bounds.center.y,
+        SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (col.bounds.extents.x) + ((SizeOfWallGeneratedWall/2))), col.bounds.center.y,
             col.bounds.center.z), new Vector3(SizeOfWallGeneratedWall, col.bounds.extents.y*2, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
-        SpwanGeneratedWalls(new Vector3((col.bounds.center.x - (-col.bounds.extents.x*(-col.bounds.extents.x*2))-((SizeOfWallGeneratedWall/2)/(col.bounds.extents.x*2))), col.bounds.center.y,
+        SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (-col.bounds.extents.x)-((SizeOfWallGeneratedWall/2))), col.bounds.center.y,
             col.bounds.center.z), new Vector3(SizeOfWallGeneratedWall, col.bounds.extents.y*2, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
-        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y + (col.bounds.extents.y*(col.bounds.extents.y*2))+((SizeOfWallGeneratedWall/2)/(col.bounds.extents.y*2)),
+        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y + (col.bounds.extents.y)+((SizeOfWallGeneratedWall/2)),
             col.bounds.center.z), new Vector3(col.bounds.extents.x*2, 0.1f, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
-        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y - (-col.bounds.extents.y*(-col.bounds.extents.y*2))-((SizeOfWallGeneratedWall/2)/(col.bounds.extents.y*2)),
+        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y + (-col.bounds.extents.y)-((SizeOfWallGeneratedWall/2)),
             col.bounds.center.z), new Vector3(col.bounds.extents.x*2, 0.1f, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
         SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y,
-                col.bounds.center.z + (col.bounds.extents.z*(col.bounds.extents.z*2))+((SizeOfWallGeneratedWall/2)/(col.bounds.extents.z*2))),
+                col.bounds.center.z + (col.bounds.extents.z)+((SizeOfWallGeneratedWall/2))),
             new Vector3(col.bounds.extents.x*2, col.bounds.extents.y*2, SizeOfWallGeneratedWall)).transform.SetParent(obj.transform);
         SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y,
-                col.bounds.center.z - (-col.bounds.extents.z*(-col.bounds.extents.z*2))-((SizeOfWallGeneratedWall/2)/(col.bounds.extents.z*2))),
+                col.bounds.center.z + (-col.bounds.extents.z)-((SizeOfWallGeneratedWall/2))),
             new Vector3(col.bounds.extents.x*2, col.bounds.extents.y*2, SizeOfWallGeneratedWall)).transform.SetParent(obj.transform);
         DestroyImmediate(obj.GetComponent<MeshRenderer>());
         DestroyImmediate(obj.GetComponent<BoxCollider>());
@@ -305,8 +305,7 @@ public enum EventTypeBitmask
     AdminQuizGame = 1 << 1,
     EventBasedOnAreaName= 1 << 2,
     CloseAllRoom= 1 << 3,
-    Admin= 1 << 4,
-    All = AdminQuizGame | EventBasedOnAreaName | CloseAllRoom | Admin
+    All = AdminQuizGame | EventBasedOnAreaName | CloseAllRoom
 }
 
 public enum ToggleEnum
