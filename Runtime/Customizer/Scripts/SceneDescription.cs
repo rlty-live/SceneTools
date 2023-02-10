@@ -21,7 +21,10 @@ namespace RLTY.Customisation
         /// URL of the assetbundle to load on the client side
         /// </summary>
         public string assetbundleClient="";
-
+        /// <summary>
+        /// Explicit URL of the assetbundle, as the web overlay puts "client" in assetbundleClient, god knows why
+        /// </summary>
+        public string assetbundleClientUrl = "";
         public string eventSlug;
         public string eventSession;
         public string clientVersion;
