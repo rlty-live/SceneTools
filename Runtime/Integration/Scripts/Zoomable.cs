@@ -9,8 +9,6 @@ public class Zoomable : SceneTool
     [ReadOnly, InfoBox(warningMessage)]
     public Collider col;
 
-    private bool showUtilities;
-
     public const string warningMessage = "For now a zoomable must have specifically a BoxCollider component. \n\n" +
     "The camera will move toward and face the object looking at it's bounds center, aligned with the positive Z axis (the blue line)";
 
