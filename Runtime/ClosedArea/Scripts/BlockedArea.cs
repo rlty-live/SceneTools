@@ -167,6 +167,7 @@ public class BlockedArea : NetworkSceneTool
         GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
         obj.transform.SetParent(this.transform);
         obj.transform.position = BoxedRoomAreaSpawner.transform.position;
+        obj.transform.rotation = BoxedRoomAreaSpawner.transform.rotation;
         BoxCollider col = BoxedRoomAreaSpawner.AddComponent<BoxCollider>();
         SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (col.bounds.extents.x) + ((SizeOfWallGeneratedWall/2))), col.bounds.center.y,
             col.bounds.center.z), new Vector3(SizeOfWallGeneratedWall, col.bounds.extents.y*2, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
