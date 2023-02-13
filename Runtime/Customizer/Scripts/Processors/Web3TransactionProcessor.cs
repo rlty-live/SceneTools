@@ -53,6 +53,7 @@ namespace RLTY.Customisation
         public void Web3Transaction()
         {
             SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(_data));
+            RLTYLog(_data.ToString(), this, LogType.Log);
         }
 
         //USE THIS TO ACTIVATE TRANSACTION ON COLLISION
