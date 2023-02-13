@@ -2,12 +2,16 @@ using UnityEngine;
 using Judiva.Metaverse.Interactions;
 using RLTY.SessionInfo;
 using Newtonsoft.Json;
+using System;
 
 namespace RLTY.Customisation
 {
     [RequireComponent(typeof(TriggerZone))]
     public class Web3TransactionProcessor : Processor
     {
+        public static Action<string, Action<Texture>> downloadImageAction;
+        public Renderer image;
+
         [System.Serializable]
         public class Data
         {
@@ -28,6 +32,7 @@ namespace RLTY.Customisation
             try
             {
                 _data = JsonConvert.DeserializeObject<Data>(keyValue.value);
+                downloadImageAction?.Invoke(_data.image, (x) => image.material.mainTexture = x);
             }
             catch (System.Exception e)
             {

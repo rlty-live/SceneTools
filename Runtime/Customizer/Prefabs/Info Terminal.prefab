@@ -52,7 +52,7 @@ MonoBehaviour:
   showUtilities: 1
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  invariable: 0
   type: 11
   displayKey: Info Terminal
   key: Info_Terminal
@@ -61,6 +61,8 @@ MonoBehaviour:
   newSection: 
   group: 
   newGroup: 
+  labelGroup: 
+  newLabelGroup: 
   manualDescription: 1
   displayCommentary: 
   commentary: 
@@ -543,18 +545,6 @@ MonoBehaviour:
   OnPointerUp:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2746819140394514760}
-        m_TargetAssemblyTypeName: RLTY.Customisation.TypeFormProcessor, rlty.scenetools.runtime
-        m_MethodName: OpenTypeForm
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 2698337355345011526}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: ResetTrigger
@@ -569,7 +559,19 @@ MonoBehaviour:
         m_CallState: 2
   OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2746819140394514760}
+        m_TargetAssemblyTypeName: RLTY.Customisation.TypeFormProcessor, rlty.scenetools.runtime
+        m_MethodName: OpenTypeForm
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1777166564920701343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 48f5e8f35dd375949bc1be3c66e64181, type: 3}
