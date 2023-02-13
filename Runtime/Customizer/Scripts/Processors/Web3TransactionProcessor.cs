@@ -11,6 +11,7 @@ namespace RLTY.Customisation
     {
         public static Action<string, Action<Texture>> downloadImageAction;
         public Renderer image;
+        public Renderer backFaceImage;
 
         [System.Serializable]
         public class Data
@@ -32,44 +33,54 @@ namespace RLTY.Customisation
             try
             {
                 _data = JsonConvert.DeserializeObject<Data>(keyValue.value);
-                downloadImageAction?.Invoke(_data.image, (x) => image.material.mainTexture = x);
+
+                if (image.material)
+                    downloadImageAction?.Invoke(_data.image, (x) => image.material.mainTexture = x);
+
+                if (image.material.mainTexture && backFaceImage.material)
+                    backFaceImage.material.mainTexture = image.material.mainTexture;
             }
             catch (System.Exception e)
             {
-                JLogError("Invalid Web3 data on key=" + keyValue.key+" value="+ keyValue.value);
+                JLogError("Invalid Web3 data on key=" + keyValue.key + " value=" + keyValue.value);
                 gameObject.SetActive(false);
             }
         }
-        
+
         [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
         [SerializeField] private Data _data;
 
-        private TriggerZone _zone;
-
-        private bool _actionProcessed = false;
-
-        protected override void Awake()
+        public void Web3Transaction()
         {
-            base.Awake();
-            _zone = GetComponent<TriggerZone>();
-            _zone.onPlayerEnter += (x) => enabled = true;
-            _zone.onPlayerExit += (x) => enabled = false;
-            enabled = false;
+            SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(_data));
         }
 
-        private void OnEnable()
-        {
-            _actionProcessed = false;
-        }
+        //USE THIS TO ACTIVATE TRANSACTION ON COLLISION
+        //private TriggerZone _zone;
+        //private bool _actionProcessed = false;
 
-        private void Update()
-        {
-            //check if we trigger a donation
-            if (!_actionProcessed && (!_checkUserOrientationAlignedWithForward || Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.3f))
-            {
-                _actionProcessed = true;
-                SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(_data));
-            }
-        }
+        //protected override void Awake()
+        //{
+        //    base.Awake();
+        //    _zone = GetComponent<TriggerZone>();
+        //    _zone.onPlayerEnter += (x) => enabled = true;
+        //    _zone.onPlayerExit += (x) => enabled = false;
+        //    enabled = false;
+        //}
+
+        //private void OnEnable()
+        //{
+        //    _actionProcessed = false;
+        //}
+
+        //private void Update()
+        //{
+        //    //check if we trigger a donation
+        //    if (!_actionProcessed && (!_checkUserOrientationAlignedWithForward || Vector3.Dot(AllPlayers.Me.Transform.forward, transform.forward) > 0.3f))
+        //    {
+        //        _actionProcessed = true;
+        //        SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(_data));
+        //    }
+        //}
     }
 }
