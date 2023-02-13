@@ -137,6 +137,7 @@ public class BlockedArea : NetworkSceneTool
             DestroyImmediate(obj.GetComponent<MeshFilter>());
             DestroyImmediate(obj.GetComponent<MeshRenderer>());
             obj.AddComponent<BoxScaleDrawer>();
+            obj.AddComponent<ArrowDrawer>();
             buttonPosition = obj.transform;
         }
         else
@@ -156,6 +157,7 @@ public class BlockedArea : NetworkSceneTool
         obj.transform.localScale = scale;
         obj.name = "GeneratedWall";
         obj.AddComponent<BoxScaleDrawer>();
+        obj.AddComponent<ArrowDrawer>();
         DestroyImmediate(obj.GetComponent<BoxCollider>());
         DestroyImmediate(obj.GetComponent<MeshRenderer>());
         DestroyImmediate(obj.GetComponent<MeshFilter>());
@@ -199,6 +201,7 @@ public class BlockedArea : NetworkSceneTool
         obj.name = "Wall";
         obj.transform.localScale = new Vector3(3, 2, SizeOfWallGeneratedWall);
         obj.AddComponent<BoxScaleDrawer>();
+        obj.AddComponent<ArrowDrawer>();
         DestroyImmediate(obj.GetComponent<BoxCollider>());
         DestroyImmediate(obj.GetComponent<MeshRenderer>());
         DestroyImmediate(obj.GetComponent<MeshFilter>());
