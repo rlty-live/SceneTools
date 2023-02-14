@@ -1,83 +1,62 @@
 using RLTY.Customisation;
 using RLTY.SessionInfo;
+using RLTY.UI;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem.Composites;
 using UnityEngine.UI;
 
 namespace RLTY.Customisation
 {
     [AddComponentMenu("RLTY/Customisable/Processors/External web page")]
+    [RequireComponent(typeof(Customisable))]
     public class ExternalPageProcessor : Processor
     {
-        #region F/P
-
-        [SerializeField] private Button button = null;
+        [InfoBox("You need to add either a Button GameObject in a Canvas or a RLTY MouseEvent")]
+        [SerializeField]
+        private Button button = null;
+        [SerializeField]
+        private RLTYMouseEvent mouseEvent;
         [SerializeField] private string url = "";
-
-        public bool IsValid
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(url)) return false;
-
-                if (!button)
-                {
-                    if (!TryGetComponent(out Button but))
-                        return false;
-                    button = but;
-                }
-
-                return true;
-            }
-        }
-
-        #endregion
 
         public override Component FindComponent()
         {
-            Component target = null;
-            Button button = GetComponentInChildren<Button>();
-
-            if (!button)
+            if (TryGetComponent(out Button _button))
             {
-                if (debug)
-                    Debug.LogWarning("No Button found in children" + commonWarning, this);
+                button = _button;
+
+                if (button.onClick.GetPersistentEventCount() == 0)
+                    button.onClick.AddListener(OpenNewInternetPage);
+                return button;
             }
-            else
-                target = button;
-            return target;
+
+            if (TryGetComponent(out RLTYMouseEvent _rltyMouseEvent))
+            {
+                mouseEvent = _rltyMouseEvent;
+
+                if (mouseEvent.OnClick.GetPersistentEventCount() == 0)
+                    mouseEvent.OnClick.AddListener(OpenNewInternetPage);
+                return mouseEvent;
+            }
+
+            if (Debug.isDebugBuild)
+                Debug.LogWarning("No Button or RLTYMouseEvent found" + gameObject.GetComponent<Customisable>().key + ", won't be clickable." + commonWarning, this);
+            return null;
         }
 
         public override void Customize(KeyValueBase keyValue) => SetURL(keyValue.value);
+
         /// <summary>
         /// Set the url target to open when button clicked
         /// </summary>
         /// <param name="_url">URL target</param>
         public void SetURL(string _url) => url = _url;
 
-        public override void Start()
-        {
-            base.Start();
-            if (!button) return;
-            button.onClick.AddListener(() => OpenNewInternetPage(url));
-        }
-
-        /// <summary>
-        /// Open an internet page with the given URL given
-        /// </summary>
-        /// <param name="_url">URL of the page web you want to open</param>
-        public void OpenNewInternetPage(string _url)
-        {
-            if (!IsValid) return;
-            Application.OpenURL(_url);
-            if (debug) 
-                Debug.Log("Trying to open external url: " + _url, this);
-        }
-
         public void OpenNewInternetPage()
         {
-            if (!IsValid) return;
             Application.OpenURL(url);
-            if (debug)
+
+            if (Debug.isDebugBuild)
                 Debug.Log("Trying to open external url: " + url, this);
         }
     }

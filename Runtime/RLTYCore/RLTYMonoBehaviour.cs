@@ -16,7 +16,7 @@ public abstract class RLTYMonoBehaviour : RLTYMonoBehaviourBase
 
 public abstract class RLTYMonoBehaviourBase : JMonoBehaviour
 {
-    [Space(10), Title("Utilities")]
+    [Space(10)]
     [SerializeField, PropertyOrder(30), LabelWidth(90)]
     protected bool showUtilities;
 
@@ -28,6 +28,8 @@ public abstract class RLTYMonoBehaviourBase : JMonoBehaviour
     [PropertyOrder(32), HorizontalGroup("debug", LabelWidth = 90)]
     protected bool correctSetup;
 
+    //To be deprecateds
+    [Tooltip("To be deprecated, won't always deactivate logs")]
     [SerializeField, ShowIf("showUtilities", true), PropertyOrder(33)]
     [HorizontalGroup("debug", VisibleIf = "showUtilities", LabelWidth = 20)]
     protected bool debug = true;

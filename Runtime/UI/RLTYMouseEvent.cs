@@ -5,6 +5,7 @@ using System;
 
 namespace RLTY.UI
 {
+    [RequireComponent(typeof(Collider))]
     public class RLTYMouseEvent : JMonoBehaviour
     {
         /// <summary>

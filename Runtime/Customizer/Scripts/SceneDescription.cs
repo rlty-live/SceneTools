@@ -21,12 +21,19 @@ namespace RLTY.Customisation
         /// URL of the assetbundle to load on the client side
         /// </summary>
         public string assetbundleClient="";
-
+        /// <summary>
+        /// Explicit URL of the assetbundle, as the web overlay puts "client" in assetbundleClient, god knows why
+        /// </summary>
+        public string assetbundleClientUrl = "";
         public string eventSlug;
         public string eventSession;
         public string clientVersion;
         public string dnsName="localhost";
         public string playerSessionId="noPlayerSessionId";
+        public string eventId;
+        public string playerId;
+        public string socialWallAddress;
+        public string staticFramesAddress;
 
         public string ResolvedDnsName {  get { return string.IsNullOrEmpty(dnsName) ? "localhost" : dnsName; } }
 
@@ -39,6 +46,8 @@ namespace RLTY.Customisation
         public List<CustomisableTypeEntry> entries = new List<CustomisableTypeEntry>();
 
         public AgoraToken agoraToken;
+
+        public string SOCIAL_API_HOST;
 
         [JsonIgnore]
         public int totalSize;
