@@ -40,7 +40,7 @@ public class AmbientOrMusicZone : SceneTool
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Matrix4x4 trs = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Matrix4x4 trs = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
         Gizmos.matrix = trs;
         
         Color32 color = Color.green;

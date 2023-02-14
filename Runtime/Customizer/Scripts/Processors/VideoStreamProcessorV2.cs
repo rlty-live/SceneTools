@@ -25,7 +25,7 @@ namespace RLTY.Customisation
         [Title("Rendering")]
         [Tooltip("Apply either to shared material or instanced material")]
         public bool applyToMeshes;
-        [ShowIf("applyToMeshes")]
+        [ShowIf("applyToMeshes"), InfoBox("All those meshes will have their material swapped with one loaded with the video, all material customisations will be lost.")]
         public Renderer[] targetRenderers;
 
         public bool applyToUI;

@@ -15,14 +15,30 @@ namespace RLTY.Customisation
     public class CustomisationManager : RLTYMonoBehaviour
     {
         #region Global variables
+        [SerializeField, ReadOnly]
+        [DetailedInfoBox("How to", howTo, InfoMessageType.Info)]
+        private string sceneToolsVersion;
+
+        [Title("Sorting")]
+        [InfoBox("groupLabel ...")]
+        public List<string> groupLabel;
+        [InfoBox("Groups are displayed in the same labeless box on the website")]
+        public List<string> groups;
+        [InfoBox("Sections are labeled boxes that encompasses groups")]
+        public List<string> sections;
+
+        [SerializeField]
+        private const string howTo =
+    "1) Reorder those lists to change their displaying order on the website \n" +
+    "2) You can add and set groups on any Customizable component";
+
+
 
         [PropertyOrder(40)]
         [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
-        public List<string> groups, sections;
 
-        [SerializeField]
-        private string sceneToolsVersion;
+
         #endregion
 
         #region EditorOnly logic
@@ -45,7 +61,7 @@ namespace RLTY.Customisation
 
         public void OnValidate()
         {
-            foreach(PackageInfo packageInfo in PackageInfo.GetAllRegisteredPackages())
+            foreach (PackageInfo packageInfo in PackageInfo.GetAllRegisteredPackages())
             {
                 if (packageInfo.name == "live.rlty.scenetools")
                     sceneToolsVersion = packageInfo.version;
@@ -55,12 +71,11 @@ namespace RLTY.Customisation
         #endregion
 
         #region Runtime logic
-
         private static CustomisationManager _instance;
 
         public void Awake()
         {
-            if (_instance!=null)
+            if (_instance != null)
             {
                 enabled = false;
                 return;
@@ -76,13 +91,14 @@ namespace RLTY.Customisation
         }
 
         /// <summary>
-        /// Asks every loaded and activated customisable to modify its correponding Components
+        /// Gathers all customisables, check compatibility with SceneDescription stored in database, 
+        /// and starts customization
         /// </summary>
         /// <param name="sceneDescription">The configuration file that lists all customisation keys and values for this building and this event</param>
         public void CustomizeScene(SceneDescription sceneDescription)
         {
             Customisable[] fullList = FindObjectsOfType<Customisable>();
-            JLog("Starting Customization, customisable count="+fullList.Length);
+            JLog("Starting Customization, customisable count=" + fullList.Length);
             CustomisationManagerHandlerData.CustomizationStarted();
             foreach (CustomisableTypeEntry entry in sceneDescription.entries)
             {
@@ -128,7 +144,6 @@ namespace RLTY.Customisation
             if (!found)
                 JLogError("No customisable found for key=" + k.key + " type=" + type);
         }
-
         #endregion
 
         #region Observer Pattern

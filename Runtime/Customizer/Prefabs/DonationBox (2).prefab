@@ -401,6 +401,9 @@ MonoBehaviour:
           m_StringArgument: Clicked
           m_BoolArgument: 0
         m_CallState: 2
+  OnClick:
+    m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 5814585881416698891}
         m_TargetAssemblyTypeName: RLTY.Customisation.DonationBoxProcessor, rlty.scenetools.runtime
         m_MethodName: UserDonation
@@ -413,9 +416,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5814585881416698884
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,7 +484,7 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  invariable: 0
   type: 9
   displayKey: DonationBox (2)
   key: DonationBox_(2)
@@ -493,6 +493,8 @@ MonoBehaviour:
   newSection: 
   group: 
   newGroup: 
+  labelGroup: 
+  newLabelGroup: 
   manualDescription: 1
   displayCommentary: 
   commentary: 
