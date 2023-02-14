@@ -42,11 +42,14 @@ namespace RLTY.Customisation
 
                 RLTYLog("Deserialized =" + data.Web3Transaction + data.address + data.tokenid + data.image, this, LogType.Log);
 
-                if (image.material)
-                    downloadImageAction?.Invoke(data.image, (x) => image.material.mainTexture = x);
+                if (string.IsNullOrEmpty(data.image))
+                {
+                    if (image.material)
+                        downloadImageAction?.Invoke(data.image, (x) => image.material.mainTexture = x);
 
-                if (backFaceImage.material)
-                    downloadImageAction?.Invoke(data.image, (x) => backFaceImage.material.mainTexture = x);
+                    if (backFaceImage.material)
+                        downloadImageAction?.Invoke(data.image, (x) => backFaceImage.material.mainTexture = x);
+                }
             }
 
             catch (System.Exception e)
