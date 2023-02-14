@@ -1626,13 +1626,6 @@ MonoBehaviour:
   debug: 1
   image: {fileID: 0}
   backFaceImage: {fileID: 0}
-  _checkUserOrientationAlignedWithForward: 0
-  _data:
-    Web3Transaction: 
-    address: 
-    tokenid: 
-    image: 
-    chain: 
 --- !u!1 &3708465040163913325
 GameObject:
   m_ObjectHideFlags: 0

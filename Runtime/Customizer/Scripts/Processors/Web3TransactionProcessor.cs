@@ -3,24 +3,23 @@ using Judiva.Metaverse.Interactions;
 using RLTY.SessionInfo;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 namespace RLTY.Customisation
 {
     [RequireComponent(typeof(TriggerZone))]
     public class Web3TransactionProcessor : Processor
     {
+        [SerializeField]
+        public NFTData data;
+
         public static Action<string, Action<Texture>> downloadImageAction;
         public Renderer image;
         public Renderer backFaceImage;
 
-        [System.Serializable]
-        public class Data
+        public static NFTData DeserializeJson(string json)
         {
-            public string Web3Transaction;
-            public string address;
-            public string tokenid;
-            public string image;
-            public string chain;
+            return JsonConvert.DeserializeObject<NFTData>(json);
         }
 
         public override void Customize(KeyValueBase keyValue)
@@ -32,14 +31,24 @@ namespace RLTY.Customisation
             }
             try
             {
-                _data = JsonConvert.DeserializeObject<Data>(keyValue.value);
+                RLTYLog("key value = " + keyValue.value, this, LogType.Log);
+
+                string formatedKeyValue = keyValue.value.Replace(@"\", "");
+
+                RLTYLog("formatted key value = " + formatedKeyValue, this, LogType.Log);
+
+                data = new NFTData();
+                data = DeserializeJson(formatedKeyValue);
+
+                RLTYLog("Deserialized =" + data.Web3Transaction + data.address + data.tokenid + data.image, this, LogType.Log);
 
                 if (image.material)
-                    downloadImageAction?.Invoke(_data.image, (x) => image.material.mainTexture = x);
+                    downloadImageAction?.Invoke(data.image, (x) => image.material.mainTexture = x);
 
-                if (image.material.mainTexture && backFaceImage.material)
-                    backFaceImage.material.mainTexture = image.material.mainTexture;
+                if (backFaceImage.material)
+                    downloadImageAction?.Invoke(data.image, (x) => backFaceImage.material.mainTexture = x);
             }
+
             catch (System.Exception e)
             {
                 JLogError("Invalid Web3 data on key=" + keyValue.key + " value=" + keyValue.value);
@@ -47,18 +56,16 @@ namespace RLTY.Customisation
             }
         }
 
-        [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
-        [SerializeField] private Data _data;
-
         public void Web3Transaction()
         {
-            SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(_data));
-            RLTYLog(_data.ToString(), this, LogType.Log);
+            SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(data));
+            RLTYLog("Web3: " + JsonConvert.SerializeObject(data), this, LogType.Log);
         }
 
         //USE THIS TO ACTIVATE TRANSACTION ON COLLISION
         //private TriggerZone _zone;
         //private bool _actionProcessed = false;
+        //[SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
 
         //protected override void Awake()
         //{
@@ -84,4 +91,14 @@ namespace RLTY.Customisation
         //    }
         //}
     }
+}
+
+[System.Serializable]
+public class NFTData
+{
+    public string Web3Transaction { get; set; }
+    public string address { get; set; }
+    public string tokenid { get; set; }
+    public string image { get; set; }
+    public string chain { get; set; }
 }

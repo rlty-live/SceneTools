@@ -388,15 +388,8 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  image: {fileID: 0}
-  backFaceImage: {fileID: 0}
-  _checkUserOrientationAlignedWithForward: 0
-  _data:
-    Web3Transaction: 
-    address: 
-    tokenid: 
-    image: 
-    chain: 
+  image: {fileID: 2964491336432834308}
+  backFaceImage: {fileID: 2841885566193683842}
 --- !u!95 &574607409235118689
 Animator:
   serializedVersion: 4
