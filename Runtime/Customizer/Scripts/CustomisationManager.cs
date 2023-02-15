@@ -3,9 +3,9 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 #if UNITY_EDITOR
-using UnityEditor;
 using UnityEditor.PackageManager;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
+using UnityEditor;
 #endif
 
 namespace RLTY.Customisation

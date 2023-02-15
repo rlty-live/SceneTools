@@ -80,7 +80,8 @@ namespace RLTY.Customisation
 
         public override Component FindComponent()
         {
-            Component target = GetComponent<Renderer>();
+            TryGetComponent(out Renderer rd);
+            Component target = rd;
 
             if (target == null)
             {
@@ -214,29 +215,6 @@ namespace RLTY.Customisation
     [System.Serializable]
     public class MaterialSpecs
     {
-        //Only Global changes until i get a better grasp of the instancing system
-        //[SerializeField]
-        //private Material localMat;
-
-        //WIP
-        //Only Global changes until i get a better grasp of the instancing system
-        //[SerializeField, ShowIf("customize", true)]
-        //[Header("Parameters"), Tooltip("Do you want to modify all instances of this material or just the one in this GameObject ?")]
-        //private bool global;
-
-        //Doesn't Serialize, doesn't show properly, Local and GlobalKeywords are readonly structs
-        //[SerializeField, ShowIf("customize", true)]
-        //public LocalKeyword[] localKeyWordsFromKeywordSpace;
-
-        //Keywords only returns the common parameters (see https://docs.unity3d.com/Packages/com.unity.shadergraph@14.0/api/UnityEditor.Rendering.BuiltIn.ShaderKeywordStrings.html)
-        //[SerializeField, ShowIf("customize", true)]
-        //private string[] localKeyWordsFromKeyWordSpaceStrings;
-        //localKeyWordsFromKeyWordSpaceStrings = _mat.shader.keywordSpace.keywordNames;
-
-        //Doesn't show anything
-        //texturesKeywords = _mat.enabledKeywords;
-        //keywordStrings = _mat.shaderKeywords;
-
         private CustomisableType customisableType;
         [ReadOnly]
         public Material sharedMaterial;
