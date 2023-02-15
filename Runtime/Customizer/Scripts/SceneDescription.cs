@@ -34,6 +34,7 @@ namespace RLTY.Customisation
         public string playerId;
         public string socialWallAddress;
         public string staticFramesAddress;
+        public string backendApiHost;
 
         public string ResolvedDnsName {  get { return string.IsNullOrEmpty(dnsName) ? "localhost" : dnsName; } }
 
