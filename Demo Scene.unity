@@ -3141,6 +3141,14 @@ PrefabInstance:
       propertyPath: showUtilities
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2702595832870863184, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
+      propertyPath: ID
+      value: frame-L1fdfdf
+      objectReference: {fileID: 0}
+    - target: {fileID: 2702595832870863184, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
+      propertyPath: OnlyUsedByAdmin
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3090995951556070462, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: section
       value: Colors
@@ -3528,6 +3536,10 @@ PrefabInstance:
     - target: {fileID: 8052752211317288769, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: showUtilities
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206962036304628793, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
+      propertyPath: OnlyUsedByAdmin
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8399273299057484573, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: section
