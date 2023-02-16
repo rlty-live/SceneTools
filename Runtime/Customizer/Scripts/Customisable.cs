@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-//using VLB;
+using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 
@@ -37,9 +37,12 @@ namespace RLTY.Customisation
         private bool useGameobjectName;
 
         [Title("Organization")]
-        public static List<string> sections;
-        public static List<string> groups;
-        public static List<string> labelGroups;
+        [SerializeField]
+        private static List<string> sections = new List<string>();
+        [SerializeField]
+        private static List<string> groups = new List<string>();
+        [SerializeField]
+        private static List<string> labelGroups = new List<string>();
 
         const int labelWidth = 80;
 
@@ -102,46 +105,40 @@ namespace RLTY.Customisation
         [Button, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true)]
         public void AddGroup()
         {
-            if (!customizer)
-            {
-                JLog("No CustomisationManager (Customizer) Component in the scene to add sections to");
-            }
-
-            else
-            {
-                if (newGroup != null && newGroup != string.Empty)
-                    customizer.groups.Add(newGroup);
-            }
+            if (newGroup != null && newGroup != string.Empty)
+                customizer.groups.Add(newGroup);
         }
         [Button, HorizontalGroup("NewSection"), ShowIf("showUtilities", true)]
         public void AddSection()
         {
-            if (!customizer)
-            {
-                JLog("No CustomisationManager (Customizer) Component in the scene to add sections to");
-            }
-
-            else
-            {
-                if (newGroup != null && newGroup != string.Empty)
-                    customizer.sections.Add(newSection);
-            }
+            if (newGroup != null && newGroup != string.Empty)
+                customizer.sections.Add(newSection);
         }
         [Button, HorizontalGroup("NewLabelGroup"), ShowIf("showUtilities", true)]
         public void AddLabelGroup()
         {
-            if (!customizer)
-            {
-                JLog("No CustomisationManager (Customizer) Component in the scene to add sections to");
-            }
-
-            else
-            {
-                if (newLabelGroup != null && newLabelGroup != string.Empty)
-                    customizer.groupLabel.Add(newSection);
-            }
+            if (newLabelGroup != null && newLabelGroup != string.Empty)
+                customizer.groupLabel.Add(newSection);
         }
 
+        public void UpdateCustomisableOrganisation()
+        {
+            if (groups.Count == 0)
+                group = string.Empty;
+            if (sections.Count == 0)
+                section = string.Empty;
+            if (labelGroups.Count == 0)
+                labelGroup = string.Empty;
+
+            if (!customizer)
+                customizer = FindObjectOfType<CustomisationManager>();
+            else
+            {
+                customizer.groupLabel = labelGroups;
+                customizer.groups = groups;
+                customizer.sections = sections;
+            }
+        }
 
         public void UpdateKey()
         {
@@ -169,8 +166,7 @@ namespace RLTY.Customisation
         {
             UpdateKey();
 
-            if (!customizer)
-                customizer = FindObjectOfType<CustomisationManager>();
+            UpdateCustomisableOrganisation();
 
             if (!manualDescription)
                 UpdateCommentary();

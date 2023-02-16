@@ -97,7 +97,7 @@ MonoBehaviour:
   showUtilities: 1
   correctSetup: 0
   debug: 0
-  sceneToolsVersion: 2.0.1
+  sceneToolsVersion: 2.0.2
   groupLabel: []
   groups: []
   sections: []

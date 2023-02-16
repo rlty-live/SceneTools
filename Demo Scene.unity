@@ -2835,15 +2835,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373456833643, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: group
-      value: Group 01
+      value: WithSeeds
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373456833643, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: section
-      value: Images
+      value: Banana
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373456833643, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: commentary
       value: Images$Group 01_
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830119373456833643, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
+      propertyPath: labelGroup
+      value: Fruits
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373456833643, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: showUtilities
@@ -2911,23 +2915,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: groups.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: sections.Array.size
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: groups.Array.data[0]
-      value: Group 01
+      value: WithSeeds
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: groups.Array.data[1]
       value: Group 02
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
+      propertyPath: groupLabel.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: sections.Array.data[0]
-      value: Colors
+      value: Banana
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: sections.Array.data[1]
@@ -2944,6 +2952,10 @@ PrefabInstance:
     - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: sections.Array.data[4]
       value: Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830119373516348429, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
+      propertyPath: groupLabel.Array.data[0]
+      value: Fruits
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373532813848, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: section

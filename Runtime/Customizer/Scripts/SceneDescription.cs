@@ -141,8 +141,6 @@ namespace RLTY.Customisation
         }
     }
 
-    
-
     #region Processor declaration
 
     public enum CustomisableType
