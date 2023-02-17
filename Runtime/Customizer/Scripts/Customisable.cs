@@ -21,7 +21,7 @@ namespace RLTY.Customisation
     {
         #region Global variables
         [Title("Configuration")]
-        public bool invariable = false;
+        public bool deactivable = true;
 
         [LabelWidth(40), Space(5)]
         public CustomisableType type;
@@ -303,7 +303,7 @@ namespace RLTY.Customisation
         public void DeactivateGameobjectIfIntact()
         {
 #if !UNITY_EDITOR 
-            if(!Debug.isDebugBuild && invariable == true)
+            if(!Debug.isDebugBuild && deactivable == true)
             {
                 if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
                 {

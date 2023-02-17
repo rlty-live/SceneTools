@@ -33,13 +33,22 @@ namespace RLTY.SessionInfo
         /// </summary>
         public static event Func<string> OnGetUserName;
         public static string GetUserName() => OnGetUserName?.Invoke();
-        
+
         public static event Action OnServerReady;
         public static void ServerReady() => OnServerReady?.Invoke();
 
+
         public static event Action OnClientReady;
-        public static void ClientReady() => OnClientReady?.Invoke();
-        
+        public static void NotifyClientReady()
+        {
+            JLogBase.Log("Client ready", typeof(SessionInfoManagerHandlerData));
+            OnClientReady?.Invoke();
+        }
+
+        public static event Action OnClientJoined;
+        public static void NotifyClientJoined() => OnClientJoined?.Invoke();
+
+
         public static event Action<float> OnAssetLoadProgress;
         public static void AssetLoadProgress(float p) => OnAssetLoadProgress?.Invoke(p);
 
@@ -72,6 +81,7 @@ namespace RLTY.SessionInfo
         public static void DisconnectPlayer(string playerSessionId, Action<bool> callback) => OnPlayerDisconnect?.Invoke(playerSessionId, callback);
 
         public static event Action<Action<bool>> OnServerClose;
+
         public static void ServerClose(Action<bool> callback) => OnServerClose?.Invoke(callback);
         
         public static event Action<string> OnChangeCurrentUrl;
