@@ -20,7 +20,7 @@ namespace RLTY.Customisation
         private List<Material> materialInstances;
 
         public static List<ModifiableProperty> modifiedProperties = new List<ModifiableProperty>();
-        [ReadOnly, ShowIf("showUtilities"), SerializeField]
+        [ShowIf("showUtilities"), SerializeField]
         private List<ModifiableProperty> propertiesToModify = new List<ModifiableProperty>();
 
         #endregion
