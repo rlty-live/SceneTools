@@ -72,8 +72,10 @@ namespace RLTY.SessionInfo
         public static void DisconnectPlayer(string playerSessionId, Action<bool> callback) => OnPlayerDisconnect?.Invoke(playerSessionId, callback);
 
         public static event Action<Action<bool>> OnServerClose;
-
         public static void ServerClose(Action<bool> callback) => OnServerClose?.Invoke(callback);
+        
+        public static event Action<string> OnChangeCurrentUrl;
+        public static void ChangeCurrentUrl(string url) => OnChangeCurrentUrl?.Invoke(url);
 
     }
 
