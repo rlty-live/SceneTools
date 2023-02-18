@@ -203,7 +203,7 @@ namespace RLTY.Customisation
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
-                Debug.Log("Material Customisation Color 02b", this);
+                Debug.Log("Material Customisation Color 02b for" + color.ToString(), this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
