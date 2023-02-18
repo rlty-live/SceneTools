@@ -67,11 +67,10 @@ namespace RLTY.Customisation
             }
         }
 
-        [Button]
-
         public void Reset()
         {
             GetMaterialsProperties();
+            GetPropertiesToModify();
         }
 #endif
         #endregion
@@ -103,13 +102,19 @@ namespace RLTY.Customisation
                 case CustomisableType.Texture:
                     Texture t = keyValue.data as Texture;
                     if (t != null)
+                    {
+                        Debug.Log("Material Customisation Texture 01", this);
                         SwapTextures(t);
+                    }
                     else
                         JLogError("Couldn't process texture: " + keyValue);
                     break;
                 case CustomisableType.Color:
                     if (CustomisableUtility.TryParseColor(keyValue, out Color color))
+                    {
+                        Debug.Log("Material Customisation Color 01", this);
                         SwapColors(color);
+                    }
                     else
                         JLogError("Couldn't parse color: " + keyValue);
                     break;
@@ -138,9 +143,11 @@ namespace RLTY.Customisation
         public void SwapTextures(Texture tex)
         {
             GetPropertiesToModify();
+            Debug.Log("Material Customisation Texture 02", this);
 
             if (modifyAllInstances)
             {
+                Debug.Log("Material Customisation Texture 02a", this);
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
                     if (!modifiedProperties.Contains(property))
@@ -155,6 +162,7 @@ namespace RLTY.Customisation
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
+                Debug.Log("Material Customisation Texture 02b", this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
@@ -180,6 +188,8 @@ namespace RLTY.Customisation
                 JLogError("No properties to modify");
             if (modifyAllInstances)
             {
+                Debug.Log("Material Customisation Color 02a", this);
+
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
                     if (!modifiedProperties.Contains(property))
@@ -193,6 +203,7 @@ namespace RLTY.Customisation
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
+                Debug.Log("Material Customisation Color 02b", this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
@@ -273,6 +284,7 @@ namespace RLTY.Customisation
     [System.Serializable]
     public class ModifiableProperty
     {
+        [ReadOnly]
         public Material mat;
         [ReadOnly]
         public string propertyName;
