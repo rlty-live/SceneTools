@@ -97,6 +97,14 @@ namespace RLTY.Customisation
 
         public override void Customize(KeyValueBase keyValue)
         {
+            GetPropertiesToModify();
+
+            if (propertiesToModify == null || propertiesToModify.Count == 0)
+            {
+                JLogError("No properties to modify");
+                return;
+            }
+
             switch (keyValue.Type)
             {
                 case CustomisableType.Texture:
@@ -142,38 +150,44 @@ namespace RLTY.Customisation
         #region Runtime Logic
         public void SwapTextures(Texture tex)
         {
-            GetPropertiesToModify();
             Debug.Log("Material Customisation Texture 02" + tex.name, this);
 
             if (modifyAllInstances)
             {
-                Debug.Log("Material Customisation Texture 02a", this);
+                Debug.Log("shared Material Customisation Texture", this);
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    if (!modifiedProperties.Contains(property))
+                    if (property.mat && !modifiedProperties.Contains(property))
                     {
                         property.mat.SetTexture(property.propertyName, tex);
                         modifiedProperties.Add(property);
                         JLog("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex);
                     }
+                    else
+                        JLog("Either property has already been modified or material is missing");
                 }
             }
 
+            //Modify to have only on instance of this material be applied to all meshrenderer
+            //Instead of an instance for each meshrenderer
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
-                Debug.Log("Material Customisation Texture 02b", this);
+                Debug.Log("Instanced Material Customisation Texture 02b", this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    foreach (Material mat in materialInstances)
-                    {
-                        if (mat.name.Contains(property.mat.name))
+                    if (property.mat)
+                        foreach (Material mat in materialInstances)
                         {
-                            mat.SetTexture(property.propertyName, tex);
-                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex);
+                            if (mat.name.Contains(property.mat.name))
+                            {
+                                mat.SetTexture(property.propertyName, tex);
+                                JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex);
+                            }
                         }
-                    }
+                    else
+                        JLog("Missing material in for " + property);
                 }
             }
 
@@ -183,24 +197,21 @@ namespace RLTY.Customisation
 
         public void SwapColors(Color color)
         {
-            Color newColor = new Color();
-            newColor = color;
-
-            GetPropertiesToModify();
-            if (propertiesToModify == null || propertiesToModify.Count == 0)
-                JLogError("No properties to modify");
-
             if (modifyAllInstances)
             {
                 Debug.Log("Material Customisation Color 02a", this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    if (!modifiedProperties.Contains(property))
+                    if (!modifiedProperties.Contains(property) && property.mat)
                     {
-                        property.mat.SetColor(property.propertyName, newColor);
+                        property.mat.SetColor(property.propertyName, color);
                         modifiedProperties.Add(property);
                         JLog("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color);
+                    }
+                    else
+                    {
+                        JLog("Either property has already been modified or material is missing");
                     }
                 }
             }
@@ -212,24 +223,21 @@ namespace RLTY.Customisation
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
                     Debug.Log("Material Customisation Color 02b2 " + property.propertyName, this);
-
-                    foreach (Material mat in materialInstances)
-                    {
-                        Debug.Log("Material Customisation Color 02b3 " + mat.name, this);
-
-                        if (mat.name.Contains(property.mat.name))
+                    if(property.mat)
+                        foreach (Material mat in materialInstances)
                         {
-                            mat.color = newColor;
-                            Debug.Log("switched main color to " + newColor.ToString());
-                            
-                            mat.SetColor(property.propertyName, newColor);
-                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
+                            Debug.Log("Material Customisation Color 02b3 " + mat.name, this);
+
+                            if (mat.name.Contains(property.mat.name))
+                            {
+                                mat.SetColor(property.propertyName, color);
+                                JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
+                            }
+                            else
+                                JLog(property.propertyName + " is not featured in " + mat.name);
                         }
-                        else
-                        {
-                            JLog(property.propertyName + " is not feature in " + mat.name);
-                        }
-                    }
+                    else
+                        JLog("Either property has already been modified or material is missing");
                 }
             }
         }
