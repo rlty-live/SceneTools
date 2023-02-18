@@ -207,12 +207,20 @@ namespace RLTY.Customisation
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
+                    Debug.Log("Material Customisation Color 02b2 " + property.propertyName, this);
+
                     foreach (Material mat in materialInstances)
                     {
+                        Debug.Log("Material Customisation Color 02b3" + mat.name, this);
+
                         if (mat.name.Contains(property.mat.name))
                         {
                             mat.SetColor(property.propertyName, color);
                             JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
+                        }
+                        else
+                        {
+                            JLog(property.propertyName + " is not feature in " + mat.name);
                         }
                     }
                 }
