@@ -143,7 +143,7 @@ namespace RLTY.Customisation
         public void SwapTextures(Texture tex)
         {
             GetPropertiesToModify();
-            Debug.Log("Material Customisation Texture 02", this);
+            Debug.Log("Material Customisation Texture 02" + tex.name, this);
 
             if (modifyAllInstances)
             {
@@ -183,9 +183,13 @@ namespace RLTY.Customisation
 
         public void SwapColors(Color color)
         {
+            Color newColor = new Color();
+            newColor = color;
+
             GetPropertiesToModify();
             if (propertiesToModify == null || propertiesToModify.Count == 0)
                 JLogError("No properties to modify");
+
             if (modifyAllInstances)
             {
                 Debug.Log("Material Customisation Color 02a", this);
@@ -194,7 +198,7 @@ namespace RLTY.Customisation
                 {
                     if (!modifiedProperties.Contains(property))
                     {
-                        property.mat.SetColor(property.propertyName, color);
+                        property.mat.SetColor(property.propertyName, newColor);
                         modifiedProperties.Add(property);
                         JLog("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color);
                     }
@@ -211,11 +215,14 @@ namespace RLTY.Customisation
 
                     foreach (Material mat in materialInstances)
                     {
-                        Debug.Log("Material Customisation Color 02b3" + mat.name, this);
+                        Debug.Log("Material Customisation Color 02b3 " + mat.name, this);
 
                         if (mat.name.Contains(property.mat.name))
                         {
-                            mat.SetColor(property.propertyName, color);
+                            mat.color = newColor;
+                            Debug.Log("switched main color to " + newColor.ToString());
+                            
+                            mat.SetColor(property.propertyName, newColor);
                             JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
                         }
                         else
