@@ -54,7 +54,8 @@ namespace RLTY.Customisation
 
         public void OpenNewInternetPage()
         {
-            Application.OpenURL(url);
+            if (url != null && url != "")
+                Application.OpenURL(url);
 
             if (Debug.isDebugBuild)
                 Debug.Log("Trying to open external url: " + url, this);
