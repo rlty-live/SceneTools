@@ -21,6 +21,7 @@ namespace RLTY.Customisation
         {
             return JsonConvert.DeserializeObject<NFTData>(json);
         }
+        string formatedKeyValue;
 
         public override void Customize(KeyValueBase keyValue)
         {
@@ -29,20 +30,21 @@ namespace RLTY.Customisation
                 gameObject.SetActive(false);
                 return;
             }
+
             try
             {
                 RLTYLog("key value = " + keyValue.value, this, LogType.Log);
 
-                string formatedKeyValue = keyValue.value.Replace(@"\", "");
+                formatedKeyValue = keyValue.value.Replace(@"\", "");
 
                 RLTYLog("formatted key value = " + formatedKeyValue, this, LogType.Log);
 
                 data = new NFTData();
                 data = DeserializeJson(formatedKeyValue);
 
-                RLTYLog("Deserialized =" + data.Web3Transaction + data.address + data.tokenid + data.image, this, LogType.Log);
+                RLTYLog("Deserialized =" + data.type + ", " + data.address + ", " + data.tokenid /*+ data.image*/, this, LogType.Log);
 
-                if (string.IsNullOrEmpty(data.image))
+                if (!string.IsNullOrEmpty(data.image))
                 {
                     if (image.material)
                         downloadImageAction?.Invoke(data.image, (x) => image.material.mainTexture = x);
@@ -99,9 +101,18 @@ namespace RLTY.Customisation
 [System.Serializable]
 public class NFTData
 {
-    public string Web3Transaction { get; set; }
+    public string type { get; set; }
     public string address { get; set; }
     public string tokenid { get; set; }
     public string image { get; set; }
     public string chain { get; set; }
+
+    public NFTData()
+    {
+        type = string.Empty;
+        address = string.Empty;
+        tokenid = string.Empty;
+        image = string.Empty;
+        chain = string.Empty;
+    }
 }

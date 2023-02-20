@@ -20,7 +20,7 @@ namespace RLTY.Customisation
         private List<Material> materialInstances;
 
         public static List<ModifiableProperty> modifiedProperties = new List<ModifiableProperty>();
-        [ReadOnly, ShowIf("showUtilities"), SerializeField]
+        [ShowIf("showUtilities"), SerializeField]
         private List<ModifiableProperty> propertiesToModify = new List<ModifiableProperty>();
 
         #endregion
@@ -67,11 +67,10 @@ namespace RLTY.Customisation
             }
         }
 
-        [Button]
-
         public void Reset()
         {
             GetMaterialsProperties();
+            GetPropertiesToModify();
         }
 #endif
         #endregion
@@ -80,7 +79,8 @@ namespace RLTY.Customisation
 
         public override Component FindComponent()
         {
-            Component target = GetComponent<Renderer>();
+            TryGetComponent(out Renderer rd);
+            Component target = rd;
 
             if (target == null)
             {
@@ -97,18 +97,32 @@ namespace RLTY.Customisation
 
         public override void Customize(KeyValueBase keyValue)
         {
+            GetPropertiesToModify();
+
+            if (propertiesToModify == null || propertiesToModify.Count == 0)
+            {
+                JLogError("No properties to modify");
+                return;
+            }
+
             switch (keyValue.Type)
             {
                 case CustomisableType.Texture:
                     Texture t = keyValue.data as Texture;
                     if (t != null)
+                    {
+                        Debug.Log("Material Customisation Texture 01", this);
                         SwapTextures(t);
+                    }
                     else
                         JLogError("Couldn't process texture: " + keyValue);
                     break;
                 case CustomisableType.Color:
                     if (CustomisableUtility.TryParseColor(keyValue, out Color color))
+                    {
+                        Debug.Log("Material Customisation Color 01", this);
                         SwapColors(color);
+                    }
                     else
                         JLogError("Couldn't parse color: " + keyValue);
                     break;
@@ -136,35 +150,44 @@ namespace RLTY.Customisation
         #region Runtime Logic
         public void SwapTextures(Texture tex)
         {
-            GetPropertiesToModify();
+            Debug.Log("Material Customisation Texture 02" + tex.name, this);
 
             if (modifyAllInstances)
             {
+                Debug.Log("shared Material Customisation Texture", this);
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    if (!modifiedProperties.Contains(property))
+                    if (property.mat && !modifiedProperties.Contains(property))
                     {
                         property.mat.SetTexture(property.propertyName, tex);
                         modifiedProperties.Add(property);
                         JLog("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex);
                     }
+                    else
+                        JLog("Either property has already been modified or material is missing");
                 }
             }
 
+            //Modify to have only on instance of this material be applied to all meshrenderer
+            //Instead of an instance for each meshrenderer
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
+                Debug.Log("Instanced Material Customisation Texture 02b", this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    foreach (Material mat in materialInstances)
-                    {
-                        if (mat.name.Contains(property.mat.name))
+                    if (property.mat)
+                        foreach (Material mat in materialInstances)
                         {
-                            mat.SetTexture(property.propertyName, tex);
-                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex);
+                            if (mat.name.Contains(property.mat.name))
+                            {
+                                mat.SetTexture(property.propertyName, tex);
+                                JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex);
+                            }
                         }
-                    }
+                    else
+                        JLog("Missing material in for " + property);
                 }
             }
 
@@ -174,35 +197,47 @@ namespace RLTY.Customisation
 
         public void SwapColors(Color color)
         {
-            GetPropertiesToModify();
-            if (propertiesToModify == null || propertiesToModify.Count == 0)
-                JLogError("No properties to modify");
             if (modifyAllInstances)
             {
+                Debug.Log("Material Customisation Color 02a", this);
+
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    if (!modifiedProperties.Contains(property))
+                    if (!modifiedProperties.Contains(property) && property.mat)
                     {
                         property.mat.SetColor(property.propertyName, color);
                         modifiedProperties.Add(property);
                         JLog("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color);
+                    }
+                    else
+                    {
+                        JLog("Either property has already been modified or material is missing");
                     }
                 }
             }
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
+                Debug.Log("Material Customisation Color 02b for" + color.ToString(), this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    foreach (Material mat in materialInstances)
-                    {
-                        if (mat.name.Contains(property.mat.name))
+                    Debug.Log("Material Customisation Color 02b2 " + property.propertyName, this);
+                    if(property.mat)
+                        foreach (Material mat in materialInstances)
                         {
-                            mat.SetColor(property.propertyName, color);
-                            JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
+                            Debug.Log("Material Customisation Color 02b3 " + mat.name, this);
+
+                            if (mat.name.Contains(property.mat.name))
+                            {
+                                mat.SetColor(property.propertyName, color);
+                                JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
+                            }
+                            else
+                                JLog(property.propertyName + " is not featured in " + mat.name);
                         }
-                    }
+                    else
+                        JLog("Either property has already been modified or material is missing");
                 }
             }
         }
@@ -214,29 +249,6 @@ namespace RLTY.Customisation
     [System.Serializable]
     public class MaterialSpecs
     {
-        //Only Global changes until i get a better grasp of the instancing system
-        //[SerializeField]
-        //private Material localMat;
-
-        //WIP
-        //Only Global changes until i get a better grasp of the instancing system
-        //[SerializeField, ShowIf("customize", true)]
-        //[Header("Parameters"), Tooltip("Do you want to modify all instances of this material or just the one in this GameObject ?")]
-        //private bool global;
-
-        //Doesn't Serialize, doesn't show properly, Local and GlobalKeywords are readonly structs
-        //[SerializeField, ShowIf("customize", true)]
-        //public LocalKeyword[] localKeyWordsFromKeywordSpace;
-
-        //Keywords only returns the common parameters (see https://docs.unity3d.com/Packages/com.unity.shadergraph@14.0/api/UnityEditor.Rendering.BuiltIn.ShaderKeywordStrings.html)
-        //[SerializeField, ShowIf("customize", true)]
-        //private string[] localKeyWordsFromKeyWordSpaceStrings;
-        //localKeyWordsFromKeyWordSpaceStrings = _mat.shader.keywordSpace.keywordNames;
-
-        //Doesn't show anything
-        //texturesKeywords = _mat.enabledKeywords;
-        //keywordStrings = _mat.shaderKeywords;
-
         private CustomisableType customisableType;
         [ReadOnly]
         public Material sharedMaterial;
@@ -295,6 +307,7 @@ namespace RLTY.Customisation
     [System.Serializable]
     public class ModifiableProperty
     {
+        [ReadOnly]
         public Material mat;
         [ReadOnly]
         public string propertyName;

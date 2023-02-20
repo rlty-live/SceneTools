@@ -1551,7 +1551,7 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  invariable: 0
+  deactivable: 1
   type: 10
   displayKey: Web3Transaction
   key: Web3Transaction
@@ -1961,7 +1961,7 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  invariable: 0
+  deactivable: 1
   type: 11
   displayKey: TypeForm
   key: TypeForm
@@ -2282,7 +2282,7 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  invariable: 0
+  deactivable: 1
   type: 9
   displayKey: DonationBox
   key: DonationBox

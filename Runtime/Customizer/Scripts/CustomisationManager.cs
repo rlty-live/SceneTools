@@ -3,9 +3,9 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 #if UNITY_EDITOR
-using UnityEditor;
 using UnityEditor.PackageManager;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
+using UnityEditor;
 #endif
 
 namespace RLTY.Customisation
@@ -16,33 +16,65 @@ namespace RLTY.Customisation
     {
         #region Global variables
         [SerializeField, ReadOnly]
-        [DetailedInfoBox("How to", howTo, InfoMessageType.Info)]
         private string sceneToolsVersion;
 
         [Title("Sorting")]
-        [InfoBox("groupLabel ...")]
-        public List<string> groupLabel;
-        [InfoBox("Groups are displayed in the same labeless box on the website")]
-        public List<string> groups;
-        [InfoBox("Sections are labeled boxes that encompasses groups")]
-        public List<string> sections;
+        [Space(5)]
+        [DetailedInfoBox("How to", howTo, InfoMessageType.Info)]
+        public List<string> groupLabel = new List<string>();
+        public List<string> groups = new List<string>();
+        public List<string> sections = new List<string>();
+
+        //Set in Reset()
+        Texture2D customisableClassification;
 
         [SerializeField]
         private const string howTo =
     "1) Reorder those lists to change their displaying order on the website \n" +
-    "2) You can add and set groups on any Customizable component";
-
-
+    "2) You can add and set groups on any Customizable component \n" +
+            "see documentation for more information.";
 
         [PropertyOrder(40)]
         [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
+        #endregion
 
+        #region ThreadSafe Singleton
+        /// Source: https://refactoring.guru/design-patterns/singleton/csharp/example#example-1
+        /// This Singleton implementation is called "double check lock". It is safe in multithreaded environment and provides lazy initialization for the Singleton object.
+        private CustomisationManager() { }
+        private static CustomisationManager _instance;
 
+        /// We now have a lock object that will be used to synchronize threads during first access to the Singleton.
+        private static readonly object _lock = new object();
+
+        public static CustomisationManager GetInstance()
+        {
+            ///This conditional is needed to prevent threads stumbling over the lock once the instance is ready.
+            if (_instance == null)
+            {
+                /// Now, imagine that the program has just been launched. 
+                /// Since there's no Singleton instance yet, multiple threads can simultaneously pass the previous conditional and reach this point almost at the same time. 
+                /// The first of them will acquire lock and will proceed further, while the rest will wait here.
+                lock (_lock)
+                {
+                    /// The first thread to acquire the lock, reaches this conditional, goes inside and creates the Singleton instance.
+                    /// Once it leaves the lock block, a thread that might have been waiting for the lock release may then enter this section.
+                    /// But since the Singleton field is already initialized, the thread won't create a new object.
+                    if (_instance == null)
+                        _instance = new CustomisationManager();
+                }
+            }
+            return _instance;
+        }
         #endregion
 
         #region EditorOnly logic
 #if UNITY_EDITOR
+
+        [Button]
+        public void OpenDocumentation() => Application.OpenURL("https://rlty.notion.site/How-to-set-descriptions-for-customizables-15f2ae881601470084454b994f8c1cbf");
+
         /// <summary>
         /// Select all Customisable corresponding to CustomisablesToSelect in Hierarchy
         /// </summary>
@@ -66,21 +98,28 @@ namespace RLTY.Customisation
                 if (packageInfo.name == "live.rlty.scenetools")
                     sceneToolsVersion = packageInfo.version;
             }
+
+            //Two way update, if the list is changed in customisable it will change in customisation manager
+            //Same thing the other way,
+            //Customisable.groups = groups;
+            //Customisable.sections = sections;
+            //Customisable.labelGroups = groupLabel;
+
+            //Should be user started to avoid two way overwrite
+        }
+
+        public void Reset()
+        {
+            customisableClassification = (Texture2D)AssetDatabase.LoadAssetAtPath("Packages/com.live.rlty.scenetools/Docs/Customisables/classification.png", typeof(Texture2D));
         }
 #endif
         #endregion
 
         #region Runtime logic
-        private static CustomisationManager _instance;
 
         public void Awake()
         {
-            if (_instance != null)
-            {
-                enabled = false;
-                return;
-            }
-            _instance = this;
+            GetInstance();
             LogPackageVersion();
         }
 
@@ -129,6 +168,7 @@ namespace RLTY.Customisation
         {
             string foundKeys = null;
             bool found = false;
+
             foreach (Customisable customisable in fullList)
                 if (customisable.type == type && customisable.key.Contains(k.key))
                 {
@@ -163,3 +203,4 @@ namespace RLTY.Customisation
         #endregion
     }
 }
+
