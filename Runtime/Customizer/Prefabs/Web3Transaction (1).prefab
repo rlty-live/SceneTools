@@ -152,7 +152,7 @@ MonoBehaviour:
   OnPointerEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 574607409235118689}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: SetTrigger
         m_Mode: 5
@@ -164,7 +164,7 @@ MonoBehaviour:
           m_StringArgument: Selected
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 574607409235118689}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: ResetTrigger
         m_Mode: 5
@@ -179,7 +179,7 @@ MonoBehaviour:
   OnPointerExit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 574607409235118689}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: SetTrigger
         m_Mode: 5
@@ -191,7 +191,7 @@ MonoBehaviour:
           m_StringArgument: Unselected
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 574607409235118689}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: ResetTrigger
         m_Mode: 5
@@ -206,7 +206,7 @@ MonoBehaviour:
   OnPointerDown:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 574607409235118689}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: SetTrigger
         m_Mode: 5
@@ -221,7 +221,7 @@ MonoBehaviour:
   OnPointerUp:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 574607409235118689}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: ResetTrigger
         m_Mode: 5
@@ -315,7 +315,7 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  invariable: 0
+  deactivable: 1
   type: 10
   displayKey: Web3Transaction (1)
   key: Web3Transaction_(1)

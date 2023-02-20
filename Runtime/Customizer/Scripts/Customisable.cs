@@ -303,7 +303,7 @@ namespace RLTY.Customisation
         public void DeactivateGameobjectIfIntact()
         {
 #if !UNITY_EDITOR 
-            if(!Debug.isDebugBuild && deactivable == true)
+            if(deactivable == true)
             {
                 if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
                 {
