@@ -7,16 +7,15 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs-Frosted glass_Texture
-  m_Shader: {fileID: -6465566751694194690, guid: f47acf6e1b5afb3498f18667842fb189, type: 3}
+  m_Name: Shader Graphs_Cloud Plane
+  m_Shader: {fileID: -6465566751694194690, guid: 3c4b19d9fdcb65a4db71fe132c342026, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -35,33 +34,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.5
-    - _AlphaClip: 0
-    - _Blend: 0
-    - _CastShadows: 1
-    - _Cull: 2
-    - _Dither: 0
-    - _DstBlend: 0
-    - _Layering_offset: 0.75
-    - _Noise_Scale: 1000
-    - _Normal_Strength: 0.01
+    - _Cloudiness: 0.35
+    - _First_layer_Wind_Orientation: 90
+    - _Float: 0
+    - _Normal_Strength: 10
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
-    - _Smoothness: 0.5
-    - _SrcBlend: 1
-    - _Surface: 0
-    - _Triplanar_Blend_Sharpeness: 2.91
-    - _Use_Normal_map: 0
-    - _Use_scene_depth: 0
-    - _WorkflowMode: 1
-    - _ZTest: 4
-    - _ZWrite: 1
-    - _ZWriteControl: 0
+    - _Scale: 0.0028
+    - _Second_Cloud_Layer_Scale_Offset: 0.63
+    - _Second_layer_Wind_Orientation: 142
+    - _Smoothness: 0.68
+    - _Wind_Speed_Fist_layer: 0.0498
+    - _Wind_Speed_Second_Layer: 0.0172
     m_Colors:
-    - _Tint: {r: 1, g: 1, b: 1, a: 0.1568628}
+    - _Cloud_Tint: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &3870564693523381471
+--- !u!114 &5723852627422534062
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

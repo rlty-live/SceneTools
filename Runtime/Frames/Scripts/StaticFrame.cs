@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,12 +12,26 @@ using UnityEditor;
 
 public class StaticFrame : SceneTool
 {
+    [Title("Settings")]
+    public string ID;
+    public bool OnlyUsedByAdmin = false;
+    
+    [Title("Size")]
     public Vector2Int ScreenSize = new Vector2Int(1920, 1080);
     [PropertyRange(1,10)]
     public float Scale = 1;
 
-    public string ID;
-    public string MediaUrl;
+#if UNITY_EDITOR
+    private void Reset()
+    {
+        ID = SceneManager.GetActiveScene().name + "_Frame_" + DateTime.Now.Second + DateTime.Now.Millisecond;
+        OnValidate();
+    }
+
+    private void OnValidate()
+    {
+        ID = ID.Replace(" ", "_");
+    }
 
 
     [Button]
@@ -25,12 +41,14 @@ public class StaticFrame : SceneTool
         ScreenSize = newVector2;
     }
     
-#if UNITY_EDITOR
+    Color32 FrameBaseColor = Color.blue;
+
     void OnDrawGizmos()
     {
         Vector2 screenSize = new Vector2(ScreenSize.x, ScreenSize.y) / ScreenSize.y * Scale;
         
-        Color32 color = Color.blue;
+        Color32 color = FrameBaseColor;
+        if (OnlyUsedByAdmin) color = new Color(0.1f, 0.5f, 1);
         color.a = 255;
         Gizmos.color = color;
         
@@ -52,6 +70,7 @@ public class StaticFrame : SceneTool
         
         Handles.Label(transform.position, "Frame : "+ idDisplay);
         
+        color = FrameBaseColor;
         color.a = 125;
         Gizmos.color = color;
         

@@ -8,103 +8,139 @@ using UnityEditor;
 namespace RLTY.Tools
 {
 #if UNITY_EDITOR
-    [CanEditMultipleObjects,AddComponentMenu("RLTY/Integration/Transform randomizer")]
+    [CanEditMultipleObjects]
+    [AddComponentMenu("RLTY/Integration/Transform randomizer")]
+    [HideMonoScript]
 #endif
-    public class TransformRandomizer : RLTYMonoBehaviour
+    public class TransformRandomizer : RLTYMonoBehaviourBase
     {
 #if UNITY_EDITOR
-        #region Global Variables       
-        [Title("Amplitudes")]
-        [SerializeField, ShowIf("showUtilities", true)]
-        bool separateAxis = false;
-        [SerializeField, HorizontalGroup("Scale"), Range(0.1f, 1)]
-        float scaleMin = 0.1f;
-        [SerializeField, HorizontalGroup("Scale"), Range(1, 10)]
-        float scaleMax = 10;
-        [SerializeField, ShowIf("separateAxis", true)]
-        float yScaleMin, yScaleMax, zScaleMin, ZScaleMax;
-
-        [SerializeField, HorizontalGroup("Rotation"), Range(-180, 180), Space(10)]
-        float rotationMin = 0.1f;
-        [SerializeField, Range(180, 360)]
-        float rotationMax = 360;
+        #region Global Variables   
+        [Title("Scale")]
         [SerializeField]
-        bool freezeAxis = true;
-        [SerializeField, ShowIf("freezeAxis", true) /*, HorizontalGroup("Axis")*/]
-        bool x = true;
-        [SerializeField, ShowIf("freezeAxis", true) /*, HorizontalGroup("Axis")*/]
-        bool y = false;
-        [SerializeField, ShowIf("freezeAxis", true) /*, HorizontalGroup("Axis")*/]
-        bool z = false;
+        bool separateScaleAxis;
+        [SerializeField, HideIf("separateScaleAxis"), MinMaxSlider(0.5f, 2f, true)]
+        Vector2 scaleRange = new Vector2(0.5f, 2f);
 
-        Vector3 initialScale = Vector3.zero;
-        Quaternion initialRotation = Quaternion.identity;
+        [SerializeField]
+        [ShowIf("separateScaleAxis", true)]
+        [MinMaxSlider(0.5f, 2f, true)]
+        Vector2 xScaleRange = new Vector2(0.5f, 2f), 
+            yScaleRange = new Vector2(0.5f, 2f), 
+            zScaleRange = new Vector2(0.5f, 2f);
+
+        [SerializeField, Space(5)]
+        bool freezeScaleAxis;
+        [SerializeField]
+        [HorizontalGroup("Frozen scale axis", VisibleIf = "freezeScaleAxis"), LabelWidth(10), LabelText("x")]
+        bool frozenXScale;
+        [SerializeField]
+        [HorizontalGroup("Frozen scale axis"), LabelText("y"), LabelWidth(10)]
+        bool frozenYScale;
+        [SerializeField]
+        [HorizontalGroup("Frozen scale axis"), LabelText("z"), LabelWidth(10)]
+        bool frozenZScale;
+
+        [Title("Rotation")]
+        [SerializeField]
+        bool separateRotationAxis;
+        [SerializeField]
+        [HideIf("separateRotationAxis")]
+        [MinMaxSlider(-180, 180, true)]
+        Vector2 rotationRange = new Vector2(-180,180);
+
+        [SerializeField]
+        [ShowIf("separateRotationAxis")]
+        [MinMaxSlider(-180, 180, true)]
+        Vector2 xRotationRange = new Vector2(-180, 180),
+            yRotationRange = new Vector2(-180, 180),
+            zRotationRange = new Vector2(-180, 180);
+
+        [SerializeField, Space(5)]
+        bool freezeRotationAxis;
+        [SerializeField]
+        [HorizontalGroup("Frozen rotation axis", VisibleIf = "freezeRotationAxis"), LabelText("x"), LabelWidth(10)]
+        bool frozenXRotation;
+        [SerializeField]
+        [HorizontalGroup("Frozen rotation axis"), LabelText("y"), LabelWidth(10)]
+        bool frozenYRotation;
+        [SerializeField]
+        [HorizontalGroup("Frozen rotation axis"), LabelText("z"), LabelWidth(10)]
+        bool frozenZRotation;
         #endregion
 
-        #region EditorOnly Logic
-#if UNITY_EDITOR
-        private void RandomizePosition()
+        [HorizontalGroup("Buttons", Title = "Randomize"), Button("Scale")]
+        private void RandomizeScale()
         {
-            if(initialScale == Vector3.zero)
-                initialScale = transform.localScale;
+            Undo.RecordObject(transform, "Randomize Scale");
 
-            float commonScaleFactor = Random.Range(scaleMin, scaleMax);
+            float xScaling = transform.localScale.x;
+            float yScaling = transform.localScale.y;
+            float zScaling = transform.localScale.z;
 
-            if (separateAxis)
-                transform.localScale = new Vector3(
-                    commonScaleFactor * transform.localScale.x,
-                    Random.Range(scaleMin, scaleMax) * transform.localScale.y,
-                    Random.Range(scaleMin, scaleMax) * transform.localScale.z);
+            if (separateScaleAxis)
+            {
+                xScaling *= frozenXScale ? 1 : Random.Range(xScaleRange.x, xScaleRange.y);
+                yScaling *= frozenYScale ? 1 : Random.Range(yScaleRange.x, yScaleRange.y);
+                zScaling *= frozenZScale ? 1 : Random.Range(zScaleRange.x, zScaleRange.y);
+            }
+
             else
-                transform.localScale = new Vector3(
-                    commonScaleFactor * transform.localScale.x,
-                    commonScaleFactor * transform.localScale.y,
-                    commonScaleFactor * transform.localScale.z);
+            {
+                float commonScaleFactor = Random.Range(scaleRange.x, scaleRange.y);
+
+                xScaling *= frozenXScale ? 1 : commonScaleFactor;
+                yScaling *= frozenYScale ? 1 : commonScaleFactor;
+                zScaling *= frozenZScale ? 1 : commonScaleFactor;
+            }
+
+            transform.localScale = new Vector3(xScaling, yScaling, zScaling);
         }
 
+        [HorizontalGroup("Buttons"), Button("Rotation")]
         private void RandomizeRotation()
         {
-            float newRotationX, newRotationY, newRotationZ;
+            Undo.RecordObject(transform, "Randomize Rotation");
 
-            if (initialRotation == Quaternion.identity)
-                initialRotation = transform.rotation;
+            float xRotation = transform.eulerAngles.x;
+            float yRotation = transform.eulerAngles.y;
+            float zRotation = transform.eulerAngles.z;
 
-            if (x) newRotationX = 0;
-            else newRotationX = Random.Range(rotationMin, rotationMax) * transform.rotation.x;
+            if (separateRotationAxis)
+            {
+                xRotation *= frozenXRotation ? 1 : Random.Range(xRotationRange.x, xRotationRange.y);
+                yRotation *= frozenXRotation ? 1 : Random.Range(yRotationRange.x, yRotationRange.y);
+                zRotation *= frozenXRotation ? 1 : Random.Range(zRotationRange.x, zRotationRange.y);
+            }
 
-            if (y) newRotationY = 0;
-            else newRotationY = Random.Range(rotationMin, rotationMax) * transform.rotation.y;
+            else
+            {
+                float commonrRotationFactor = Random.Range(rotationRange.x, rotationRange.y);
 
-            if (z) newRotationZ = 1;
-            else newRotationZ = Random.Range(rotationMin, rotationMax) * transform.rotation.z;
+                xRotation *= frozenXScale ? 1 : commonrRotationFactor;
+                yRotation *= frozenYScale ? 1 : commonrRotationFactor;
+                zRotation *= frozenZScale ? 1 : commonrRotationFactor;
+            }
 
-            transform.Rotate(new Vector3(newRotationX, newRotationY, newRotationZ), Space.Self);
+            transform.Rotate(new Vector3(xRotation, yRotation, zRotation), Space.Self);
         }
 
-        [Button("Randomize")]
+        //TBC
+        //[HorizontalGroup("Buttons"), Button("Position")]
+        //private void RandomPositionOffset()
+        //{
+        //
+        //}
+
+        [HorizontalGroup("Buttons"), Button("Both")]
         private void RandomizeBoth()
         {
-            Undo.RegisterCompleteObjectUndo(this.gameObject, "Restore transform");
+            Undo.RecordObject(transform, "Randomized position and rotation");
 
-            RandomizePosition();
+            RandomizeScale();
             RandomizeRotation();
         }
-
-        [Button("Restore")]
-        private void Restore()
-        {
-            transform.localScale = initialScale;
-            transform.rotation = initialRotation;
-        }
 #endif
-        #endregion
-#endif
-
-        public override void EventHandlerRegister()
-        { }
-        public override void EventHandlerUnRegister()
-        { }
-
     }
 
 }
