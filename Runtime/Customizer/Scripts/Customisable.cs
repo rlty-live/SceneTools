@@ -302,18 +302,14 @@ namespace RLTY.Customisation
 
         public void DeactivateGameobjectIfIntact()
         {
-#if !UNITY_EDITOR 
-            if(deactivable == true)
+            if (deactivable == true)
             {
                 if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
                 {
-                    if (gameObject.activeInHierarchy)
-                        gameObject.SetActive(false);
-
+                    gameObject.SetActive(false);
                     JLog("No customisation asked for this customisable, deactivating Gameobject");
                 }
             }
-#endif
         }
 
         #region Observer Pattern
