@@ -216,7 +216,8 @@ namespace RLTY.Customisation
                     ValidProcessorDebugLog(true);
                 else
                 {
-                    DestroyProcessor(processor);
+                    if (!Application.isPlaying)
+                        DestroyProcessor(processor);
                     processor = null;
                 }
 
