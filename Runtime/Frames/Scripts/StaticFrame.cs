@@ -14,7 +14,12 @@ public class StaticFrame : SceneTool
 {
     [Title("Settings")]
     public string ID;
-    public bool OnlyUsedByAdmin = false;
+    public enum StaticFrameTypeEnum
+    {
+        StaticFramePublic,
+        StaticFrameReservedToAdmins,
+    }
+    public StaticFrameTypeEnum Type = StaticFrameTypeEnum.StaticFramePublic;
     
     [Title("Size")]
     public Vector2Int ScreenSize = new Vector2Int(1920, 1080);
@@ -41,14 +46,25 @@ public class StaticFrame : SceneTool
         ScreenSize = newVector2;
     }
     
-    Color32 FrameBaseColor = Color.blue;
+    private Color32 FrameBaseColor = Color.blue;
+    private Color32 AdminColor = new Color(0.1f, 0.5f, 1);
 
     void OnDrawGizmos()
     {
         Vector2 screenSize = new Vector2(ScreenSize.x, ScreenSize.y) / ScreenSize.y * Scale;
+        Color32 color = Color.white;
+        switch (Type)
+        {
+            case StaticFrameTypeEnum.StaticFramePublic:
+                color = FrameBaseColor;
+                break;
+            case StaticFrameTypeEnum.StaticFrameReservedToAdmins:
+                color = AdminColor;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         
-        Color32 color = FrameBaseColor;
-        if (OnlyUsedByAdmin) color = new Color(0.1f, 0.5f, 1);
         color.a = 255;
         Gizmos.color = color;
         
