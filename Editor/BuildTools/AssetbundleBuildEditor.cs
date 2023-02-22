@@ -192,27 +192,29 @@ public class AssetbundleBuildEditor : EditorWindow
         }
 
         //build manifests
-        foreach (var e in _setup.environmentList)
-            if (e.rebuild)
+        foreach (var environment in _setup.environmentList)
+            if (environment.rebuild)
             {
                 List<Customisable> list = new List<Customisable>();
-                foreach (SceneAsset s in e.scenes)
+                foreach (SceneAsset sceneAsset in environment.scenes)
                 {
-                    string path = AssetDatabase.GetAssetPath(s);
+                    string path = AssetDatabase.GetAssetPath(sceneAsset);
                     EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
                     list.AddRange(FindObjectsOfType<Customisable>());
                 }
                 SceneManifest manifest = new SceneManifest();
-                foreach (Customisable c in list)
+                foreach (Customisable customisable in list)
                 {
-                    if (c.gameObject.activeInHierarchy)
-                        manifest.Populate(c.type, c.key, c.commentary);
+                    if (customisable.gameObject.activeInHierarchy)
+                        manifest.Populate(customisable.type, customisable.key, customisable.commentary);
                 }
 
                 string data = JsonConvert.SerializeObject(manifest, Formatting.Indented);
                 if (!Directory.Exists(GetManifestPath()))
                     Directory.CreateDirectory(GetManifestPath());
-                File.WriteAllText(GetManifestPath() + "/" + e.id + "_manifest.json", data);
+                File.WriteAllText(GetManifestPath() + "/" + environment.id + "_manifest.json", data);
+                
+                File.WriteAllText(GetManifestPath() + "/"+ environment.id + "_static_frames.json", StaticFramesManifest.GetStaticFramesManifest());
             }
 
         yield return null;

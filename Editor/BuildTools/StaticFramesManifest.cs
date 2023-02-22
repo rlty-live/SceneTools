@@ -20,13 +20,13 @@ namespace RLTY.Customisation
             {
                 StaticFrameConfig staticFrameConfig = new StaticFrameConfig();
                 staticFrameConfig.FrameID = frame.ID;
-                staticFrameConfig.Type = frame.Type.ToString();
+                staticFrameConfig.IsAdmin = frame.Type != StaticFrame.StaticFrameTypeEnum.StaticFramePublic;
                 
                 staticFrameConfigs.Add(staticFrameConfig);
             }
             Debug.Log("staticFrameConfigs.Count = " + staticFrameConfigs.Count);
 
-            string st = JsonConvert.SerializeObject(staticFrameConfigs);
+            string st = JsonConvert.SerializeObject(staticFrameConfigs, Formatting.Indented);
             if(allStaticFrames.Length == 0) st = "no Frames found";
             if(staticFrameConfigs.Count == 0) st = "staticFrameConfigs.Count = 0";
 
@@ -45,6 +45,5 @@ namespace RLTY.Customisation
     {
         public string FrameID;
         public bool IsAdmin;
-        public string Type;
     }
 }
