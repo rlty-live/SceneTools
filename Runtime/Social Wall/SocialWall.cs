@@ -5,19 +5,26 @@ using UnityEngine;
 
 public class SocialWall : SceneTool
 {
-    [PropertyRange(1,10)]
+    [PropertyRange(1,20)]
     public float Scale = 1;
+    [PropertyRange(2,10)]
+    public float Lenght = 2;
+
+    public Vector2 GetScreenSize()
+    {
+        return new Vector2(1080 * Lenght, 1080);
+    }
 
 
-    private Vector2 _ScreenSize = new Vector2(2280, 1080);
-    [HideInInspector] public Vector2 ScreenSize => _ScreenSize;
+    //private Vector2 _ScreenSize = new Vector2(2280, 1080);
+    //[HideInInspector] public Vector2 ScreenSize => GetScreenSize();
     
     
     
     #if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        Vector2 screenSize = _ScreenSize / 1080 * Scale;
+        Vector2 screenSize = GetScreenSize() / 1080 * Scale;
         
         Color32 color = new Color(0.1f, 0, 0.5f);
         color.a = 255;
