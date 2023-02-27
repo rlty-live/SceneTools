@@ -48,30 +48,11 @@ namespace RLTY.Customisation
             videoURL = kvo.value;
             Debug.Log("Got " + kvo.value + " from sceneDescription", this);
         }
+
+        public void FindTriggerZone()
+        {
+            if (!triggerZone && GetComponentInChildren<TriggerZone>())
+                triggerZone = GetComponentInChildren<TriggerZone>();
+        }
     }
-
-    //#if UNITY_EDITOR
-    //[CustomEditor(typeof(VideoStreamProcessorV2))]
-    //public class VideoStreamProcessorEditorTest : Editor
-    //{
-    //    public override void OnInspectorGUI()
-    //    {
-    //        VideoStreamProcessorV2 videoStreamProcessorV2 = (VideoStreamProcessorV2)target;
-
-    //        // will enable the default inpector UI 
-    //        base.OnInspectorGUI();
-
-    //        // implement your UI code here
-    //        if (GUILayout.Button("Instantiate"))
-    //        {
-    //            //videoStreamProcessorV2.InstantiatePlayer();
-    //            videoStreamProcessorV2.StartPlayback();
-    //        }
-
-    //        //if (GUILayout.Button("Disable")) videoStreamProcessorV2.mediaPlayer.enabled = false;
-
-    //        if (GUILayout.Button("Destroy")) videoStreamProcessorV2.DestroyPlayer();
-    //    }
-    //}
-    //#endif
 }

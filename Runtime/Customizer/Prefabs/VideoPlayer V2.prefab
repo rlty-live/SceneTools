@@ -185,7 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc75d4b983862a4479fb57cc122389c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
@@ -213,23 +212,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  deactivable: 1
   type: 2
   displayKey: VideoPlayer V2
   key: VideoPlayer_V2
   useGameobjectName: 1
+  section: 
+  newSection: 
   group: 
+  newGroup: 
+  labelGroup: 
+  newLabelGroup: 
+  manualDescription: 1
+  displayCommentary: 
   commentary: 
   technicalInfo: 
+  _keyValue:
+    key: 
+    value: 
   processor: {fileID: 2206407946427434477}
-  target: {fileID: 0}
+  target: {fileID: 2206407946427434477}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
-  _instanceId: 0
 --- !u!1 &303112040515808284
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,7 +1252,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7921583488504840810}
   - component: {fileID: 5211737990575618314}
-  - component: {fileID: 1558264428623329146}
   m_Layer: 0
   m_Name: Audio Source_Front Right
   m_TagString: Untagged
@@ -1364,21 +1370,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1558264428623329146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6403636159765577569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9e46dfa830dabe4db9b253e4a9e6c24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
-  verticalPosition: 1
-  target: {fileID: 0}
 --- !u!1 &6656643762788875839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1537,7 +1528,7 @@ SpriteRenderer:
   m_Size: {x: 1.6, y: 0.9}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!65 &6518283530841837195

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -18,12 +19,15 @@ namespace RLTY.Customisation
         [SerializeField, ReadOnly]
         private string sceneToolsVersion;
 
-        [Title("Sorting")]
+        [Title("Organizing")]
         [Space(5)]
         [DetailedInfoBox("How to", howTo, InfoMessageType.Info)]
         public List<string> groupLabel = new List<string>();
         public List<string> groups = new List<string>();
         public List<string> sections = new List<string>();
+
+        [Title("Sorting")]
+        public List<Customisable> customisablesInScene = new List<Customisable>();
 
         //Set in Reset()
         Texture2D customisableClassification;
@@ -99,18 +103,65 @@ namespace RLTY.Customisation
                     sceneToolsVersion = packageInfo.version;
             }
 
-            //Two way update, if the list is changed in customisable it will change in customisation manager
-            //Same thing the other way,
-            //Customisable.groups = groups;
-            //Customisable.sections = sections;
-            //Customisable.labelGroups = groupLabel;
-
-            //Should be user started to avoid two way overwrite
+            GetCustomisableList();
         }
 
         public void Reset()
         {
             customisableClassification = (Texture2D)AssetDatabase.LoadAssetAtPath("Packages/com.live.rlty.scenetools/Docs/Customisables/classification.png", typeof(Texture2D));
+        }
+
+        [ExecuteInEditMode]
+        public void GetCustomisableList()
+        {
+            //Check if a previous List exists
+            if (customisablesInScene != null)
+            {
+                //If there are elements in it
+                if (customisablesInScene.Count > 0)
+                {
+                    Customisable[] tempCustomisablesInScene = FindObjectsOfType<Customisable>();
+
+                    //Only add the new ones at the end
+                    foreach (Customisable custo in tempCustomisablesInScene)
+                    {
+                        if (customisablesInScene.Contains(custo)) continue;
+                        else customisablesInScene.Add(custo);
+                    }
+
+                    tempCustomisablesInScene = null;
+
+                    JLogBase.Log("Updated customisable List", this);
+                }
+                //if not create new list
+                else
+                {
+                    customisablesInScene = new List<Customisable>();
+                    Customisable[] tempCustomisablesInScene = FindObjectsOfType<Customisable>();
+
+                    foreach (Customisable custo in tempCustomisablesInScene)
+                        customisablesInScene.Add(custo);
+
+                    tempCustomisablesInScene = null;
+                    JLogBase.Log("Created new List", this);
+                }
+            }
+            //if not create new list
+            else
+            {
+                customisablesInScene = new List<Customisable>();
+                Customisable[] tempCustomisablesInScene = FindObjectsOfType<Customisable>();
+
+                foreach (Customisable custo in tempCustomisablesInScene)
+                    customisablesInScene.Add(custo);
+
+                tempCustomisablesInScene = null;
+
+                JLogBase.Log("Created new List", this);
+            }
+
+            foreach (Customisable custo in customisablesInScene)
+                custo.UpdateCommentary();
         }
 #endif
         #endregion
@@ -163,7 +214,6 @@ namespace RLTY.Customisation
             JLog("Finished Customization");
             CustomisationManagerHandlerData.CustomisationFinished();
         }
-
         void SearchAndCustomize(CustomisableType type, Customisable[] fullList, KeyValueBase k)
         {
             string foundKeys = null;

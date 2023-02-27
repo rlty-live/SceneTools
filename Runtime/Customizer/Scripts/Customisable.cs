@@ -123,12 +123,21 @@ namespace RLTY.Customisation
 
         public void UpdateCustomisableOrganisation()
         {
+            //Empty selections if list is empty
             if (groups.Count == 0)
                 group = string.Empty;
             if (sections.Count == 0)
                 section = string.Empty;
             if (labelGroups.Count == 0)
                 labelGroup = string.Empty;
+
+            //Add Empty slot if there are none
+            if (!groups.Contains(""))
+                groups.Add("");
+            if (!sections.Contains(""))
+                sections.Add("");
+            if (!labelGroups.Contains(""))
+                labelGroups.Add("");
 
             if (!customizer)
                 customizer = FindObjectOfType<CustomisationManager>();
@@ -153,7 +162,17 @@ namespace RLTY.Customisation
         public void UpdateCommentary()
         {
             if (!manualDescription && !displayCommentary.IsNullOrWhitespace())
-                commentary = labelGroups.IndexOf(labelGroup) + " #" + labelGroup + "/" + section + "$" + group + "_" + displayCommentary;
+            {
+                string indexStr = string.Empty;
+                if (customizer && customizer.customisablesInScene.Contains(this))
+                indexStr = customizer.customisablesInScene.IndexOf(this).ToString() + " #"; 
+
+                string labelGroupStr = string.IsNullOrWhiteSpace(labelGroup) ?  string.Empty : labelGroup + "/" ;
+                string sectionStr    = string.IsNullOrWhiteSpace(section) ?     string.Empty : section +    "$";
+                string groupStr      = string.IsNullOrWhiteSpace(group) ?       string.Empty : group +      "_";
+
+                commentary = indexStr + labelGroupStr + sectionStr + groupStr + displayCommentary;
+            }   
         }
 
 
