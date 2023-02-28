@@ -20,7 +20,9 @@ namespace RLTY.Customisation
     public class Customisable : RLTYMonoBehaviour
     {
         #region Global variables
+
         [Title("Configuration")]
+        [InfoBox("If you want to copy this gameobject just give it the same name and it will be customized the same way")]
         public bool deactivable = true;
 
         [LabelWidth(40), Space(5)]
@@ -50,20 +52,14 @@ namespace RLTY.Customisation
         [Tooltip("Customisables in the same section appear in a panel named 'Section'")]
         [LabelWidth(labelWidth)]
         public string section;
-        [SerializeField, HorizontalGroup("NewSection"), ShowIf("showUtilities", true), HideLabel]
-        private string newSection;
         [ValueDropdown("GetGroups")]
         [Tooltip("Grouped customisable appear in the same bloc, without labels")]
         [LabelWidth(labelWidth)]
         public string group;
-        [SerializeField, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true), HideLabel]
-        private string newGroup;
         [ValueDropdown("GetLabelGroups")]
         [Tooltip("To be added")]
         [LabelWidth(labelWidth)]
         public string labelGroup;
-        [SerializeField, HorizontalGroup("NewLabelGroup"), ShowIf("showUtilities", true), HideLabel]
-        private string newLabelGroup;
 
         [Title("Description")]
         [SerializeField, ShowIf("showUtilities")]
@@ -102,35 +98,8 @@ namespace RLTY.Customisation
         public IEnumerable<string> GetSections() { return sections; }
         public IEnumerable<string> GetLabelGroups() { return labelGroups; }
 
-        [Button, HorizontalGroup("NewGroup"), ShowIf("showUtilities", true)]
-        public void AddGroup()
-        {
-            if (newGroup != null && newGroup != string.Empty)
-                customizer.groups.Add(newGroup);
-        }
-        [Button, HorizontalGroup("NewSection"), ShowIf("showUtilities", true)]
-        public void AddSection()
-        {
-            if (newGroup != null && newGroup != string.Empty)
-                customizer.sections.Add(newSection);
-        }
-        [Button, HorizontalGroup("NewLabelGroup"), ShowIf("showUtilities", true)]
-        public void AddLabelGroup()
-        {
-            if (newLabelGroup != null && newLabelGroup != string.Empty)
-                customizer.groupLabel.Add(newSection);
-        }
-
         public void UpdateCustomisableOrganisation()
         {
-            //Empty selections if list is empty
-            if (groups.Count == 0)
-                group = string.Empty;
-            if (sections.Count == 0)
-                section = string.Empty;
-            if (labelGroups.Count == 0)
-                labelGroup = string.Empty;
-
             //Add Empty slot if there are none
             if (!groups.Contains(""))
                 groups.Add("");
@@ -138,15 +107,6 @@ namespace RLTY.Customisation
                 sections.Add("");
             if (!labelGroups.Contains(""))
                 labelGroups.Add("");
-
-            if (!customizer)
-                customizer = FindObjectOfType<CustomisationManager>();
-            else
-            {
-                customizer.groupLabel = labelGroups;
-                customizer.groups = groups;
-                customizer.sections = sections;
-            }
         }
 
         public void UpdateKey()
@@ -164,15 +124,15 @@ namespace RLTY.Customisation
             if (!manualDescription && !displayCommentary.IsNullOrWhitespace())
             {
                 string indexStr = string.Empty;
-                if (customizer && customizer.customisablesInScene.Contains(this))
-                indexStr = customizer.customisablesInScene.IndexOf(this).ToString() + " #"; 
+                //if (customizer && customizer.customisablesInScene.Contains(this))
+                //    indexStr = customizer.customisablesInScene.IndexOf(this).ToString() + " #";
 
-                string labelGroupStr = string.IsNullOrWhiteSpace(labelGroup) ?  string.Empty : labelGroup + "/" ;
-                string sectionStr    = string.IsNullOrWhiteSpace(section) ?     string.Empty : section +    "$";
-                string groupStr      = string.IsNullOrWhiteSpace(group) ?       string.Empty : group +      "_";
+                string labelGroupStr = string.IsNullOrWhiteSpace(labelGroup) ? string.Empty : labelGroup + "/";
+                string sectionStr = string.IsNullOrWhiteSpace(section) ? string.Empty : section + "$";
+                string groupStr = string.IsNullOrWhiteSpace(group) ? string.Empty : group + "_";
 
                 commentary = indexStr + labelGroupStr + sectionStr + groupStr + displayCommentary;
-            }   
+            }
         }
 
 

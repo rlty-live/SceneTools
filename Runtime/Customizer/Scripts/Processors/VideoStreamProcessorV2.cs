@@ -53,6 +53,8 @@ namespace RLTY.Customisation
         {
             if (!triggerZone && GetComponentInChildren<TriggerZone>())
                 triggerZone = GetComponentInChildren<TriggerZone>();
+            else
+                JLogBase.LogError("No Trigger zone associated, and none can be found in children, the associated video will never start", this);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace RLTY.UX
         public float timer;
         [Tooltip("in seconds")]
         [ShowIf("showUtilities")]
-        [SerializeField] 
+        [SerializeField]
         private float updateFrequency = 1f;
         float lookAtTime = 1f;
 
@@ -39,11 +39,6 @@ namespace RLTY.UX
         #region UnityCallbacks
         public void Start()
         {
-            if (Camera.main)
-                mainCamera = Camera.main;
-            else
-                if (debug) Debug.Log("No mainCamera present in the scene, facing won't work until there's one", this);
-
             rectTransform = transform.GetComponent<RectTransform>();
             pointer = new GameObject(this.name + " pointer").transform;
 
@@ -56,13 +51,15 @@ namespace RLTY.UX
         {
             timer += Time.deltaTime;
 
-            if(mainCamera)
+            if (mainCamera)
             {
                 currentDistance = Vector3.Distance(mainCamera.transform.position, rectTransform.position);
 
                 if (currentDistance < activationDistance && timer > updateFrequency)
                     StartCoroutine(LerpToPointAtMainCamera());
             }
+            else
+                JLogBase.Log("No mainCamera present in the scene, facing won't work until there's one", this);
         }
 
         public void FaceCamera() => StartCoroutine(LerpToPointAtMainCamera());
