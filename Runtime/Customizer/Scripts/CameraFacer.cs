@@ -45,6 +45,9 @@ namespace RLTY.UX
             pointer.SetParent(rectTransform.parent);
             pointer.localPosition = Vector3.zero;
             pointer.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
+            if (!Camera.main)
+                JLogBase.Log("No mainCamera present in the scene, facing won't work until there's one", this);
         }
 
         void Update()
@@ -58,8 +61,6 @@ namespace RLTY.UX
                 if (currentDistance < activationDistance && timer > updateFrequency)
                     StartCoroutine(LerpToPointAtMainCamera());
             }
-            else
-                JLogBase.Log("No mainCamera present in the scene, facing won't work until there's one", this);
         }
 
         public void FaceCamera() => StartCoroutine(LerpToPointAtMainCamera());
@@ -68,7 +69,7 @@ namespace RLTY.UX
         {
             timer = 0;
             float elapsedTime = 0;
-            if (debug) Debug.Log("Started facing main camera.", this);
+            JLogBase.Log("Started facing main camera at " + pointer.transform.position, this);
 
             Vector3 startPosition = mainCamera.transform.position;
             pointer.LookAt(new Vector3(startPosition.x, rectTransform.position.y, startPosition.z));

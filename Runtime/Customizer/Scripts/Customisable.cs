@@ -141,8 +141,26 @@ namespace RLTY.Customisation
             //no processor-specific code here, please call a method on the processor instead
         }
 
+
+
         public void OnValidate()
         {
+            if (!customizer)
+            {
+                GameObject customisationManger;
+
+                if (!FindObjectOfType<CustomisationManager>())
+                {
+                    customisationManger = new GameObject("Customisation Manager", typeof(CustomisationManager));
+                    customizer = customisationManger.GetComponent<CustomisationManager>();
+                }
+
+                else
+                    customizer = FindObjectOfType<CustomisationManager>();
+
+                customisationManger = null;
+            }
+
             UpdateKey();
 
             UpdateCustomisableOrganisation();

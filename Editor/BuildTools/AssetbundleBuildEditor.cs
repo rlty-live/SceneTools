@@ -212,9 +212,15 @@ public class AssetbundleBuildEditor : EditorWindow
                 string data = JsonConvert.SerializeObject(manifest, Formatting.Indented);
                 if (!Directory.Exists(GetManifestPath()))
                     Directory.CreateDirectory(GetManifestPath());
-                File.WriteAllText(GetManifestPath() + "/" + environment.id + "_manifest.json", data);
-                
-                File.WriteAllText(GetManifestPath() + "/"+ environment.id + "_static_frames.json", StaticFramesManifest.GetStaticFramesManifest());
+
+                //File.WriteAllText(GetManifestPath() + "/" + environment.id + "_manifest.json", data);
+                //File.WriteAllText(GetManifestPath() + "/"+ environment.id + "_static_frames.json", StaticFramesManifest.GetStaticFramesManifest());
+
+                data = data.Remove(data.Length - 1, 1);
+
+                File.WriteAllText(
+                    "Assets/" + manifest + ".Json",
+                    data + ",\"static_frames\":" + StaticFramesManifest.GetStaticFramesManifest() + "}");
             }
 
         yield return null;
