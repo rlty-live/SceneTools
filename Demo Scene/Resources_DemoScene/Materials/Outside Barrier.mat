@@ -7,11 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_VLBReplacementTest
-  m_Shader: {fileID: -6465566751694194690, guid: be3eb2e540e71b545bff30672b9bdc3e, type: 3}
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_Name: Outside Barrier
+  m_Shader: {fileID: -6465566751694194690, guid: deb18e4724078144c8e208f17eca10e6, type: 3}
+  m_ValidKeywords:
+  - _COMPENSATE_SCALING
+  - _SHOW_INTERSECTIONS
+  m_InvalidKeywords:
+  - _IGNORE_HOMOGENEOUS_SCALING
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -34,14 +37,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.68
-    - _Fresnel_Power: 1.57
+    - _Activation_Distance: 10
+    - _Animation_Speed: 4
+    - _COMPENSATE_SCALING: 1
+    - _IGNORE_HOMOGENEOUS_SCALING: 1
+    - _Intersection_Distance: 4.4
+    - _Intersection_Fading: 12
+    - _Intersection_Offset: 0.25
+    - _Intersection_Thickness: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _SHOW_INTERSECTIONS: 1
+    - _Speed_Modulation: 0
+    - _Thickness: 0.092
+    - _Voronoi_Scale: 1.4
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 0.772549, a: 0}
+    - _Color: {r: 2, g: 1.1294118, b: 0, a: 0}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &240908483839570643
+--- !u!114 &1020757220061821430
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

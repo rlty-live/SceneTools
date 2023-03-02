@@ -14,43 +14,49 @@ public class Zoomable : SceneTool
 
 #if UNITY_EDITOR
     [Title("Display")]
-    private bool alwaysDisplay;
     [ShowIf("showUtilities"), SerializeField]
     private float cameraGizmoRadius = 0.3f;
     [ShowIf("showUtilities"), SerializeField]
-    private float cameraLineDistance = 1, cameraLineLength = 2;
-
+    private float cameraLineLength = 2;
+    [ShowIf("showUtilities"), SerializeField]
+    private Color gizmoColor = new Color(1, 0, 0, 0.8f);
+    static Color allZoomableGizmosColor = new Color(1,0,0,0.8f);
 
     public void OnDrawGizmos()
     {
-        if (alwaysDisplay) DrawCameraGizmo();
+        DrawCameraGizmo();
     }
 
-    public void OnDrawGizmosSelected() => DrawCameraGizmo();
+    public void OnDrawGizmosSelected()
+    {
+        DrawCameraGizmo();
+    }
 
-    public void Reset() => showUtilities = true;
+    public void Reset()
+    {
+        showUtilities = true;
+        if (TryGetComponent(out BoxCollider _col)) col = _col;
+        else Debug.Log(warningMessage);
+
+    }
 
     public void OnValidate()
     {
         if (TryGetComponent(out BoxCollider _col)) col = _col;
-        else Debug.Log(warningMessage);
+
+        if (gizmoColor != null)
+            allZoomableGizmosColor = gizmoColor;
     }
 
-    //Possible upgrade: Add an Arrow model, or just a cone
     public void DrawCameraGizmo()
     {
-        Vector3 cameraLineStart = new Vector3(0, 0, cameraLineDistance);
-        Vector3 cameraLineEnd = new Vector3(0, 0, cameraLineDistance + cameraLineLength);
+        Gizmos.color = allZoomableGizmosColor;
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(col.bounds.center + cameraLineStart, col.bounds.center + cameraLineEnd - new Vector3(0, 0, cameraGizmoRadius * 2));
-        Gizmos.DrawWireSphere(col.bounds.center + cameraLineEnd, cameraGizmoRadius);
+        Vector3 cameraLineStart = col.bounds.center - transform.forward;
+        Vector3 cameraLineEnd = col.bounds.center + transform.forward * -cameraLineLength;
 
-        Gizmos.DrawLine(col.bounds.center + cameraLineEnd + new Vector3(cameraGizmoRadius, 0, 0), col.bounds.center + cameraLineEnd - new Vector3(0, 0, cameraGizmoRadius * 2));
-        Gizmos.DrawLine(col.bounds.center + cameraLineEnd - new Vector3(cameraGizmoRadius, 0, 0), col.bounds.center + cameraLineEnd - new Vector3(0, 0, cameraGizmoRadius * 2));
-
-        Gizmos.DrawLine(col.bounds.center + cameraLineEnd + new Vector3(0, cameraGizmoRadius, 0), col.bounds.center + cameraLineEnd - new Vector3(0, 0, cameraGizmoRadius * 2));
-        Gizmos.DrawLine(col.bounds.center + cameraLineEnd - new Vector3(0, cameraGizmoRadius, 0), col.bounds.center + cameraLineEnd - new Vector3(0, 0, cameraGizmoRadius * 2));
+        Gizmos.DrawLine(cameraLineStart, cameraLineEnd);
+        Gizmos.DrawSphere(cameraLineEnd, cameraGizmoRadius);
     }
 #endif
 }

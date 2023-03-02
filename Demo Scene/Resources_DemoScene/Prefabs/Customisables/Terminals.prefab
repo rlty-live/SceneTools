@@ -1557,11 +1557,8 @@ MonoBehaviour:
   key: Web3Transaction
   useGameobjectName: 1
   section: 
-  newSection: 
   group: 
-  newGroup: 
   labelGroup: 
-  newLabelGroup: 
   manualDescription: 1
   displayCommentary: 
   commentary: 
@@ -1967,11 +1964,8 @@ MonoBehaviour:
   key: TypeForm
   useGameobjectName: 1
   section: 
-  newSection: 
   group: 
-  newGroup: 
   labelGroup: 
-  newLabelGroup: 
   manualDescription: 1
   displayCommentary: 
   commentary: 
@@ -2288,11 +2282,8 @@ MonoBehaviour:
   key: DonationBox
   useGameobjectName: 1
   section: 
-  newSection: 
   group: 
-  newGroup: 
   labelGroup: 
-  newLabelGroup: 
   manualDescription: 1
   displayCommentary: 
   commentary: 

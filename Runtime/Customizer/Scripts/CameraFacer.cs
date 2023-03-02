@@ -26,7 +26,7 @@ namespace RLTY.UX
         public float timer;
         [Tooltip("in seconds")]
         [ShowIf("showUtilities")]
-        [SerializeField] 
+        [SerializeField]
         private float updateFrequency = 1f;
         float lookAtTime = 1f;
 
@@ -39,24 +39,22 @@ namespace RLTY.UX
         #region UnityCallbacks
         public void Start()
         {
-            if (Camera.main)
-                mainCamera = Camera.main;
-            else
-                if (debug) Debug.Log("No mainCamera present in the scene, facing won't work until there's one", this);
-
             rectTransform = transform.GetComponent<RectTransform>();
             pointer = new GameObject(this.name + " pointer").transform;
 
             pointer.SetParent(rectTransform.parent);
             pointer.localPosition = Vector3.zero;
             pointer.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
+            if (!Camera.main)
+                JLogBase.Log("No mainCamera present in the scene, facing won't work until there's one", this);
         }
 
         void Update()
         {
             timer += Time.deltaTime;
 
-            if(mainCamera)
+            if (mainCamera)
             {
                 currentDistance = Vector3.Distance(mainCamera.transform.position, rectTransform.position);
 
@@ -71,7 +69,7 @@ namespace RLTY.UX
         {
             timer = 0;
             float elapsedTime = 0;
-            if (debug) Debug.Log("Started facing main camera.", this);
+            JLogBase.Log("Started facing main camera at " + pointer.transform.position, this);
 
             Vector3 startPosition = mainCamera.transform.position;
             pointer.LookAt(new Vector3(startPosition.x, rectTransform.position.y, startPosition.z));
