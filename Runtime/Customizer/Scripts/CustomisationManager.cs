@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -18,12 +20,15 @@ namespace RLTY.Customisation
         [SerializeField, ReadOnly]
         private string sceneToolsVersion;
 
-        [Title("Sorting")]
+        [Title("Organizing")]
         [Space(5)]
         [DetailedInfoBox("How to", howTo, InfoMessageType.Info)]
         public List<string> groupLabel = new List<string>();
         public List<string> groups = new List<string>();
         public List<string> sections = new List<string>();
+
+        [Title("Sorting")]
+        public List<Customisable> customisablesInScene = new List<Customisable>();
 
         //Set in Reset()
         Texture2D customisableClassification;
@@ -99,106 +104,125 @@ namespace RLTY.Customisation
                     sceneToolsVersion = packageInfo.version;
             }
 
-            //Two way update, if the list is changed in customisable it will change in customisation manager
-            //Same thing the other way,
-            //Customisable.groups = groups;
-            //Customisable.sections = sections;
-            //Customisable.labelGroups = groupLabel;
-
-            //Should be user started to avoid two way overwrite
+            RefreshCustomisableList();
         }
 
         public void Reset()
         {
             customisableClassification = (Texture2D)AssetDatabase.LoadAssetAtPath("Packages/com.live.rlty.scenetools/Docs/Customisables/classification.png", typeof(Texture2D));
         }
-#endif
-        #endregion
 
-        #region Runtime logic
-
-        public void Awake()
-        {
-            GetInstance();
-            LogPackageVersion();
-        }
-
-        public void LogPackageVersion()
-        {
-            if (sceneToolsVersion != null)
-                JLog("RLTY SceneTools package version: " + sceneToolsVersion);
-        }
-
-        /// <summary>
-        /// Gathers all customisables, check compatibility with SceneDescription stored in database, 
-        /// and starts customization
-        /// </summary>
-        /// <param name="sceneDescription">The configuration file that lists all customisation keys and values for this building and this event</param>
-        public void CustomizeScene(SceneDescription sceneDescription)
-        {
-            Customisable[] fullList = FindObjectsOfType<Customisable>();
-            JLog("Starting Customization, customisable count=" + fullList.Length);
-            CustomisationManagerHandlerData.CustomizationStarted();
-            foreach (CustomisableTypeEntry entry in sceneDescription.entries)
+        public void RefreshCustomisableList()
+        {                
+            //If there are elements in it
+            if (customisablesInScene.Any())
             {
-                CustomisableType type = entry.Type;
-                foreach (KeyValueBase k in entry.keyPairs)
+                Customisable[] tempCustomisablesInScene = FindObjectsOfType<Customisable>();
+
+                //Only add the new ones at the end
+                foreach (Customisable custo in tempCustomisablesInScene)
                 {
-                    if (type == CustomisableType.Invalid)
-                        JLogError("Invalid key type in scene description: key=" + k.key + " value=" + k.value + " type=" + entry.type);
-                    else
-                        SearchAndCustomize(type, fullList, k);
+                    if (customisablesInScene.Contains(custo)) continue;
+                    else customisablesInScene.Add(custo);
                 }
+
+                JLogBase.Log("Updated customisable List", this);
+            }
+            //if not create new list
+            else
+            {
+                customisablesInScene = FindObjectsOfType<Customisable>().ToList();
+                JLogBase.Log("Created new List", this);
             }
 
+            customisablesInScene.RemoveAll(item => item == null);
+        }
+#endif
+#endregion
+
+#region Runtime logic
+
+public void Awake()
+{
+    GetInstance();
+    LogPackageVersion();
+}
+
+public void LogPackageVersion()
+{
+    if (sceneToolsVersion != null)
+        JLog("RLTY SceneTools package version: " + sceneToolsVersion);
+}
+
+/// <summary>
+/// Gathers all customisables, check compatibility with SceneDescription stored in database, 
+/// and starts customization
+/// </summary>
+/// <param name="sceneDescription">The configuration file that lists all customisation keys and values for this building and this event</param>
+public void CustomizeScene(SceneDescription sceneDescription)
+{
+    Customisable[] fullList = FindObjectsOfType<Customisable>();
+    JLog("Starting Customization, customisable count=" + fullList.Length);
+    CustomisationManagerHandlerData.CustomizationStarted();
+    foreach (CustomisableTypeEntry entry in sceneDescription.entries)
+    {
+        CustomisableType type = entry.Type;
+        foreach (KeyValueBase k in entry.keyPairs)
+        {
+            if (type == CustomisableType.Invalid)
+                JLogError("Invalid key type in scene description: key=" + k.key + " value=" + k.value + " type=" + entry.type);
+            else
+                SearchAndCustomize(type, fullList, k);
+        }
+    }
+
 #if UNITY_EDITOR
-            JLog("\n <b>All gameobject that does not receive a value for customisation will be deactivated," +
-                "that can happen for two reasons: </b> \n" +
-                "1) It's SceneDescription key is not up to date and need to be regenerated <i>(Toolbar/RLTY/CreateSceneDescription)</i>\n" +
-                "2) No value as being assigned to its key, look for the corresponding <i>SessionConfig</i> ScriptableObject in the asset folder\n\n");
+    JLog("\n <b>All gameobject that does not receive a value for customisation will be deactivated," +
+        "that can happen for two reasons: </b> \n" +
+        "1) It's SceneDescription key is not up to date and need to be regenerated <i>(Toolbar/RLTY/CreateSceneDescription)</i>\n" +
+        "2) No value as being assigned to its key, look for the corresponding <i>SessionConfig</i> ScriptableObject in the asset folder\n\n");
 #else
             JLog("All gameobject that does not receive a value for customisation will be deactivated, it means that no value has been set in the Event Configuration tab of the event");
 #endif
 
-            JLog("Finished Customization");
-            CustomisationManagerHandlerData.CustomisationFinished();
-        }
+    JLog("Finished Customization");
+    CustomisationManagerHandlerData.CustomisationFinished();
+}
+void SearchAndCustomize(CustomisableType type, Customisable[] fullList, KeyValueBase k)
+{
+    string foundKeys = null;
+    bool found = false;
 
-        void SearchAndCustomize(CustomisableType type, Customisable[] fullList, KeyValueBase k)
+    foreach (Customisable customisable in fullList)
+        if (customisable.type == type && customisable.key.Contains(k.key))
         {
-            string foundKeys = null;
-            bool found = false;
-
-            foreach (Customisable customisable in fullList)
-                if (customisable.type == type && customisable.key.Contains(k.key))
-                {
-                    customisable.Customize(k);
-                    found = true;
-                    if (debug)
-                    {
-                        if (foundKeys != null)
-                            foundKeys += ",";
-                        foundKeys += customisable.key;
-                    }
-                }
-            if (!found)
-                JLogError("No customisable found for key=" + k.key + " type=" + type);
+            customisable.Customize(k);
+            found = true;
+            if (debug)
+            {
+                if (foundKeys != null)
+                    foundKeys += ",";
+                foundKeys += customisable.key;
+            }
         }
-        #endregion
+    if (!found)
+        JLogError("No customisable found for key=" + k.key + " type=" + type);
+}
+#endregion
 
-        #region Observer Pattern
+#region Observer Pattern
 
-        public override void EventHandlerRegister()
-        {
-            AssetDownloaderManagerHandlerData.OnAllDownloadFinished += CustomizeScene;
-            //AssetDownloaderManagerHandlerData.OnDownloadSuccess += PrepareCustomization;
-        }
+public override void EventHandlerRegister()
+{
+    AssetDownloaderManagerHandlerData.OnAllDownloadFinished += CustomizeScene;
+    //AssetDownloaderManagerHandlerData.OnDownloadSuccess += PrepareCustomization;
+}
 
-        public override void EventHandlerUnRegister()
-        {
-            AssetDownloaderManagerHandlerData.OnAllDownloadFinished -= CustomizeScene;
-            //AssetDownloaderManagerHandlerData.OnDownloadSuccess -= PrepareCustomization;
-        }
+public override void EventHandlerUnRegister()
+{
+    AssetDownloaderManagerHandlerData.OnAllDownloadFinished -= CustomizeScene;
+    //AssetDownloaderManagerHandlerData.OnDownloadSuccess -= PrepareCustomization;
+}
 
         #endregion
     }

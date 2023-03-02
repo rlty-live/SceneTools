@@ -14,7 +14,12 @@ public class StaticFrame : SceneTool
 {
     [Title("Settings")]
     public string ID;
-    public bool OnlyUsedByAdmin = false;
+    public enum StaticFrameTypeEnum
+    {
+        StaticFramePublic,
+        StaticFrameReservedToAdmins,
+    }
+    public StaticFrameTypeEnum Type = StaticFrameTypeEnum.StaticFramePublic;
     
     [Title("Size")]
     public Vector2Int ScreenSize = new Vector2Int(1920, 1080);
@@ -33,7 +38,6 @@ public class StaticFrame : SceneTool
         ID = ID.Replace(" ", "_");
     }
 
-
     [Button]
     private void FlipXY()
     {
@@ -41,16 +45,34 @@ public class StaticFrame : SceneTool
         ScreenSize = newVector2;
     }
     
-    Color32 FrameBaseColor = Color.blue;
+    private Color32 _FrameBaseColor = Color.blue;
+    private Color32 _AdminColor = new Color(0.1f, 0.5f, 1);
+
+    private Color32 GetGizmoColor()
+    {
+        Color32 color = Color.white;
+        switch (Type)
+        {
+            case StaticFrameTypeEnum.StaticFramePublic:
+                color = _FrameBaseColor;
+                break;
+            case StaticFrameTypeEnum.StaticFrameReservedToAdmins:
+                color = _AdminColor;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return color;
+    }
 
     void OnDrawGizmos()
     {
         Vector2 screenSize = new Vector2(ScreenSize.x, ScreenSize.y) / ScreenSize.y * Scale;
-        
-        Color32 color = FrameBaseColor;
-        if (OnlyUsedByAdmin) color = new Color(0.1f, 0.5f, 1);
-        color.a = 255;
-        Gizmos.color = color;
+
+        Color32 gizmoColor = GetGizmoColor();
+        gizmoColor.a = 255;
+        Gizmos.color = gizmoColor;
         
         if(String.IsNullOrEmpty(ID)) Gizmos.color = Color.red;
         
@@ -70,12 +92,41 @@ public class StaticFrame : SceneTool
         
         Handles.Label(transform.position, "Frame : "+ idDisplay);
         
-        color = FrameBaseColor;
-        color.a = 125;
-        Gizmos.color = color;
+        gizmoColor = _FrameBaseColor;
+        gizmoColor.a = 125;
+        Gizmos.color = gizmoColor;
         
         if(String.IsNullOrEmpty(ID)) Gizmos.color = new Color(1,0,0,0.5f);
         Gizmos.DrawCube(Vector3.zero, new Vector3(screenSize.x, screenSize.y, 0.0001f));
     }
+
+
+    private void OnDrawGizmosSelected()
+    {
+        
+        List<Transform> framesWithSameID = GeteveryFrameWithSameID();
+
+        foreach (var otherFrameTransform in framesWithSameID)
+        {
+            Debug.DrawLine(otherFrameTransform.position, gameObject.transform.position, GetGizmoColor());
+        }
+    }
+    
+    
+    
+    
+    private List<Transform> GeteveryFrameWithSameID()
+    {
+        StaticFrame[] AllStaticFrames = FindObjectsOfType<StaticFrame>();
+        List<Transform> transforms= new List<Transform>();
+
+        foreach (var staticFrame in AllStaticFrames)
+        {
+            if(staticFrame.ID == ID && !String.IsNullOrEmpty(ID)) transforms.Add(staticFrame.transform);
+        }
+
+        return transforms;
+    }
+    
 #endif
 }

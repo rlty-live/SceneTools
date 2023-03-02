@@ -14,15 +14,39 @@ Use Unity 2021.3.4f1.
   ![Screenshot of the GitHub token creation page](Docs~/Token.png)
 </details>
 
+
+## Configure access
+  ### On Windows
  - Find or create the `.upmconfig.toml` file (see https://docs.unity3d.com/Manual/upm-config-scoped.html#upmconfigUser for details). On Windows, it is in `%USERPROFILE%\.upmconfig.toml`.
  - Add the token in the file like this:
 
- ```
-[npmAuth."https://npm.pkg.github.com/@rlty-live"]
-token = "<the new token>"
-```
+  ```
+  [npmAuth."https://npm.pkg.github.com/@rlty-live"]
+  token = "<the new token>"
+  ```
 
- - Close all Unity Editor instance.
+  ### On MacOS
+  To create  .upconfig.toml  on mac:
+  ".xxx" files cannot be created via Finder because these name formats are reserved for system files.
+
+  To create them you have to use the Terminal:
+  - Cmd + Space : Terminal
+
+  In the terminal paste the following commands (without "")
+  - 'cd /etc'                 (to access the global user folder)
+  - 'touch .upconfig.toml'    (to create the file)
+  - 'open .upmconfig.toml'    (to open it)
+  You can also find it in finder by displaying the hidden files in finder options.
+  
+  - Add the token in the file like this:
+   ```
+  [npmAuth."https://npm.pkg.github.com/@rlty-live"]
+  token = "<the new token>"
+  ```
+
+## Add the package
+
+ <!-- - If you do it manually close all Unity Editor instance. -->
  - Configure the scope registry. You can do it from the Unity Editor (`Edit -> Project Settings`):
 
 <details>

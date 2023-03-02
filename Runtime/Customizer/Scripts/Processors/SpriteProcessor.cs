@@ -299,12 +299,9 @@ namespace RLTY.Customisation
             correctSetup = SpriteRenderer!=null || Image!=null;
 
             if (!correctSetup)
-                Debug.LogError("Customisable doesn't have neither a Sprite Renderer nor Image component, please add one or remove this customisable", this);
+                JLogBase.LogWarning("Customisable doesn't have neither a Sprite Renderer nor Image component, please add one or remove this customisable", this);
         }
 
-
-        public override void EventHandlerRegister() { }
-        public override void EventHandlerUnRegister() { }
         #endregion
 
         #region EditorOnly Logic

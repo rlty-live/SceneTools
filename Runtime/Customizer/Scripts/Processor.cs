@@ -4,7 +4,7 @@ using UnityEngine;
 namespace RLTY.Customisation
 {
     [RequireComponent(typeof(Customisable)), DisallowMultipleComponent]
-    public class Processor : RLTYMonoBehaviour
+    public class Processor : SceneTool
     {
         protected static string commonWarning = "Please add one or remove this Customisable";
         public virtual Component FindComponent()
@@ -26,13 +26,7 @@ namespace RLTY.Customisation
         }
 
         #region Observer pattern
-        public override void EventHandlerRegister()
-        {
-        }
 
-        public override void EventHandlerUnRegister()
-        {
-        }
         #endregion
     }
 
