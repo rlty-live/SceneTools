@@ -38,10 +38,12 @@ Use Unity 2021.3.4f1.
   - 'open .upmconfig.toml'    (to open it)
   You can also find it in finder by displaying the hidden files in finder options.
   
+  ## On Both
   - Add the token in the file like this:
- 
-
-```
+  ```
+  [npmAuth."https://npm.pkg.github.com/@rlty-live"]
+  token = "<the new token>"
+  ```
 
  - Close all Unity Editor instance.
  - Configure the scope registry. You can do it from the Unity Editor (`Edit -> Project Settings`):
