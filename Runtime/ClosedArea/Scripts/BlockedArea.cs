@@ -54,6 +54,7 @@ public class BlockedArea : NetworkSceneTool
     [TitleGroup("BlockedAreaTool/ButtonSettings", order: 7)]
     [HorizontalGroup("BlockedAreaTool/ButtonSettings/Split")]
     [BoxGroup("BlockedAreaTool/ButtonSettings/Split/Button"), LabelWidth(100)]
+    [SerializeField]
     public Transform buttonPosition;
 
     [HideIf("_toggleButton")]
