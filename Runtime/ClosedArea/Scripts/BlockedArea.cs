@@ -8,121 +8,124 @@ using UnityEngine.UI;
 
 public class BlockedArea : NetworkSceneTool
 {
-#region Properties
+    #region Properties
     [InfoBox("Your blocked area need a name !"
         , InfoMessageType.Error, "CheckIfHasAName")]
     [BoxGroup("BlockedAreaTool", true, true, 0)]
     public string name;
 
-#region ToggleButtonSection
+    #region ToggleButtonSection
 
     [InfoBox("You must select one of the button bellow.", InfoMessageType.Error, "InfoBoxButtonDisplayError")]
     [Button("UseButton"), GUIColor("GetUseButtonColor")]
-    [HorizontalGroup("BlockedAreaTool/Buttons", order:5)]
+    [HorizontalGroup("BlockedAreaTool/Buttons", order: 5)]
     private void ToogleUseButton()
     {
         this._toggleButton = !this._toggleButton;
         ManageSpawnButton(!_toggleButton);
         _toggleEvent = true;
     }
-    
+
     [InfoBox("You must select one of the button bellow.", InfoMessageType.Error, "InfoBoxButtonDisplayError")]
     [Button("UseEvent"), GUIColor("GetEventColor")]
-    [HorizontalGroup("BlockedAreaTool/Buttons", order:6)]
+    [HorizontalGroup("BlockedAreaTool/Buttons", order: 6)]
     private void ToogleUseEvent()
     {
-        
+
         this._toggleEvent = !this._toggleEvent;
         if (!_toggleButton)
             ManageSpawnButton(_toggleButton);
         _toggleButton = true;
     }
-#endregion
-#region SpawnButtonGroupSection
+    #endregion
+    #region SpawnButtonGroupSection
+    [SerializeField, HideInInspector]
     private bool _toggleButton = true;
+    [SerializeField, HideInInspector]
     private bool _toggleEvent = true;
-    
+
     private Vector3 _oldButtonPosition;
     private Quaternion _oldButtonQuaternion;
     private Vector3 _oldButtonLocalScale;
-    
+
     [HideIf("_toggleButton")]
     [InfoBox("Button is missing, if you deleted it by mistake please re toggle the button"
         , InfoMessageType.Error, "CheckButtonPositionExist")]
-    [TitleGroup("BlockedAreaTool/ButtonSettings", order:7)]
+    [TitleGroup("BlockedAreaTool/ButtonSettings", order: 7)]
     [HorizontalGroup("BlockedAreaTool/ButtonSettings/Split")]
     [BoxGroup("BlockedAreaTool/ButtonSettings/Split/Button"), LabelWidth(100)]
+    [SerializeField]
     public Transform buttonPosition;
-    
+
     [HideIf("_toggleButton")]
     [BoxGroup("BlockedAreaTool/ButtonSettings/Split/Button"), LabelWidth(100)]
     [EnumToggleButtons]
     public ToggleEnum IsAdminOnly;
-    
+
     [HideIf("_toggleButton")]
     [InfoBox("You are missing an Image for your button when it's Open"
         , InfoMessageType.Error, "CheckButtonOpenSprite")]
     [BoxGroup("BlockedAreaTool/ButtonSettings/Split/Textures"), LabelWidth(100)]
     [OnInspectorGUI("DrawPreviewOpen", append: true)]
     public Sprite buttonOpenImage;
-    
+
     [HideIf("_toggleButton")]
     [InfoBox("You are missing an Image for your button when it's Closed"
         , InfoMessageType.Error, "CheckButtonCloseSprite")]
     [BoxGroup("BlockedAreaTool/ButtonSettings/Split/Textures"), LabelWidth(100)]
     [OnInspectorGUI("DrawPreviewClose", append: true)]
     public Sprite buttonCloseImage;
-#endregion
-#region EventTriggerSection
+    #endregion
+    #region EventTriggerSection
     [HideIf("_toggleEvent")]
     [BoxGroup("BlockedAreaTool/EventSettings", true, true, 7)]
     [Title("Event Type")]
-    [EnumToggleButtons,HideLabel]
+    [EnumToggleButtons, HideLabel]
     public EventTypeBitmask EventAction;
-    [BoxGroup("BlockedAreaTool/BlockedZone", order:0)]
+    [BoxGroup("BlockedAreaTool/BlockedZone", order: 0)]
     public float SizeOfWallGeneratedWall = 0.1f;
-#endregion
-#region WallAndRoomSpawnSection
+    #endregion
+    #region WallAndRoomSpawnSection
     [InfoBox("BoxedRoomAreaSpawner Is missing Please reimport the Prefab"
         , InfoMessageType.Error, "CheckBoxedAreaSpawner")]
-    [BoxGroup("BlockedAreaTool/BlockedZone", order:1)]
+    [BoxGroup("BlockedAreaTool/BlockedZone", order: 1)]
     public GameObject BoxedRoomAreaSpawner;
-    
+
     [InfoBox("You need to spawn at least one wall or room !"
         , InfoMessageType.Error, "CheckWallsExist")]
-    [BoxGroup("BlockedAreaTool/BlockedZone", order:3)]
+    [BoxGroup("BlockedAreaTool/BlockedZone", order: 3)]
     [HorizontalGroup("BlockedAreaTool/BlockedZone/Split")]
-    [BoxGroup("BlockedAreaTool/BlockedZone/Split/WallList", order:1)]
+    [BoxGroup("BlockedAreaTool/BlockedZone/Split/WallList", order: 1)]
     [ListDrawerSettings(CustomAddFunction = nameof(SpawnWall), CustomRemoveElementFunction = nameof(DestroyWall), HideAddButton = true)]
     public List<GameObject> RoomWalls;
-    
+
     [InfoBox("You need to spawn at least one wall or room !"
         , InfoMessageType.Error, "CheckWallsExist")]
     [InfoBox("Spawning room wont work if there are no BoxedRoomAreaSpawner !"
         , InfoMessageType.Error, "CheckBoxedAreaSpawner")]
     [HorizontalGroup("BlockedAreaTool/BlockedZone/Split")]
-    [BoxGroup("BlockedAreaTool/BlockedZone/Split/RoomList", order:1)]
-    [ListDrawerSettings(CustomAddFunction = nameof(SpawnRoom), CustomRemoveElementFunction = nameof(DestroyRoom),HideAddButton = true)]
+    [BoxGroup("BlockedAreaTool/BlockedZone/Split/RoomList", order: 1)]
+    [ListDrawerSettings(CustomAddFunction = nameof(SpawnRoom), CustomRemoveElementFunction = nameof(DestroyRoom), HideAddButton = true)]
     public List<GameObject> RoomArea;
-    
+
     [HideIf("CheckBoxedAreaSpawner")]
     [Button("SpawnRoom")]
     [HorizontalGroup("BlockedAreaTool/BlockedZone/Split")]
-    [BoxGroup("BlockedAreaTool/BlockedZone/Split/RoomList", order:0)]
+    [BoxGroup("BlockedAreaTool/BlockedZone/Split/RoomList", order: 0)]
     private void SpawnRoomButton()
     {
         RoomArea.Add(SpawnRoom());
     }
     [Button("SpawnWall")]
     [HorizontalGroup("BlockedAreaTool/BlockedZone/Split")]
-    [BoxGroup("BlockedAreaTool/BlockedZone/Split/WallList", order:0)]
+    [BoxGroup("BlockedAreaTool/BlockedZone/Split/WallList", order: 0)]
     private void SpawnWallButton()
     {
         RoomWalls.Add(SpawnWall());
     }
-#endregion
-#endregion
-#region ObjectsInstantiationSection
+    #endregion
+    #endregion
+    #region ObjectsInstantiationSection
     public void ManageSpawnButton(bool spawn)
     {
         if (spawn)
@@ -163,7 +166,7 @@ public class BlockedArea : NetworkSceneTool
         DestroyImmediate(obj.GetComponent<MeshFilter>());
         return obj;
     }
-    
+
     public GameObject SpawnRoom()
     {
         GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -171,25 +174,25 @@ public class BlockedArea : NetworkSceneTool
         obj.transform.position = BoxedRoomAreaSpawner.transform.position;
         obj.transform.rotation = BoxedRoomAreaSpawner.transform.rotation;
         BoxCollider col = BoxedRoomAreaSpawner.AddComponent<BoxCollider>();
-        SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (col.bounds.extents.x) + ((SizeOfWallGeneratedWall/2))), col.bounds.center.y,
-            col.bounds.center.z), new Vector3(SizeOfWallGeneratedWall, col.bounds.extents.y*2, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
-        SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (-col.bounds.extents.x)-((SizeOfWallGeneratedWall/2))), col.bounds.center.y,
-            col.bounds.center.z), new Vector3(SizeOfWallGeneratedWall, col.bounds.extents.y*2, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
-        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y + (col.bounds.extents.y)+((SizeOfWallGeneratedWall/2)),
-            col.bounds.center.z), new Vector3(col.bounds.extents.x*2, 0.1f, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
-        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y + (-col.bounds.extents.y)-((SizeOfWallGeneratedWall/2)),
-            col.bounds.center.z), new Vector3(col.bounds.extents.x*2, 0.1f, col.bounds.extents.z*2)).transform.SetParent(obj.transform);
+        SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (col.bounds.extents.x) + ((SizeOfWallGeneratedWall / 2))), col.bounds.center.y,
+            col.bounds.center.z), new Vector3(SizeOfWallGeneratedWall, col.bounds.extents.y * 2, col.bounds.extents.z * 2)).transform.SetParent(obj.transform);
+        SpwanGeneratedWalls(new Vector3((col.bounds.center.x + (-col.bounds.extents.x) - ((SizeOfWallGeneratedWall / 2))), col.bounds.center.y,
+            col.bounds.center.z), new Vector3(SizeOfWallGeneratedWall, col.bounds.extents.y * 2, col.bounds.extents.z * 2)).transform.SetParent(obj.transform);
+        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y + (col.bounds.extents.y) + ((SizeOfWallGeneratedWall / 2)),
+            col.bounds.center.z), new Vector3(col.bounds.extents.x * 2, 0.1f, col.bounds.extents.z * 2)).transform.SetParent(obj.transform);
+        SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y + (-col.bounds.extents.y) - ((SizeOfWallGeneratedWall / 2)),
+            col.bounds.center.z), new Vector3(col.bounds.extents.x * 2, 0.1f, col.bounds.extents.z * 2)).transform.SetParent(obj.transform);
         SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y,
-                col.bounds.center.z + (col.bounds.extents.z)+((SizeOfWallGeneratedWall/2))),
-            new Vector3(col.bounds.extents.x*2, col.bounds.extents.y*2, SizeOfWallGeneratedWall)).transform.SetParent(obj.transform);
+                col.bounds.center.z + (col.bounds.extents.z) + ((SizeOfWallGeneratedWall / 2))),
+            new Vector3(col.bounds.extents.x * 2, col.bounds.extents.y * 2, SizeOfWallGeneratedWall)).transform.SetParent(obj.transform);
         SpwanGeneratedWalls(new Vector3(col.bounds.center.x, col.bounds.center.y,
-                col.bounds.center.z + (-col.bounds.extents.z)-((SizeOfWallGeneratedWall/2))),
-            new Vector3(col.bounds.extents.x*2, col.bounds.extents.y*2, SizeOfWallGeneratedWall)).transform.SetParent(obj.transform);
+                col.bounds.center.z + (-col.bounds.extents.z) - ((SizeOfWallGeneratedWall / 2))),
+            new Vector3(col.bounds.extents.x * 2, col.bounds.extents.y * 2, SizeOfWallGeneratedWall)).transform.SetParent(obj.transform);
         DestroyImmediate(obj.GetComponent<MeshRenderer>());
         DestroyImmediate(obj.GetComponent<BoxCollider>());
         DestroyImmediate(obj.GetComponent<MeshFilter>());
         DestroyImmediate(col);
-        obj.name =  name+"_GeneratedRoom_N°"+ RoomArea.Count;
+        obj.name = name + "_GeneratedRoom_N°" + RoomArea.Count;
         return obj;
     }
 
@@ -207,20 +210,20 @@ public class BlockedArea : NetworkSceneTool
         DestroyImmediate(obj.GetComponent<MeshFilter>());
         return obj;
     }
-    
+
     public void DestroyWall(GameObject obj)
     {
         RoomWalls.Remove(obj);
         DestroyImmediate(obj);
     }
-    
+
     public void DestroyRoom(GameObject obj)
     {
         RoomArea.Remove(obj);
         DestroyImmediate(obj);
     }
-#endregion
-#region PropertyDrawerSection
+    #endregion
+    #region PropertyDrawerSection
     private void DrawPreviewOpen()
     {
         if (buttonOpenImage == null) return;
@@ -228,7 +231,7 @@ public class BlockedArea : NetworkSceneTool
         GUILayout.Label(buttonOpenImage.texture);
         GUILayout.EndVertical();
     }
-    
+
     private void DrawPreviewClose()
     {
         if (buttonCloseImage == null) return;
@@ -236,8 +239,8 @@ public class BlockedArea : NetworkSceneTool
         GUILayout.Label(buttonCloseImage.texture);
         GUILayout.EndVertical();
     }
-#endregion
-#region SetButtonColorSection
+    #endregion
+    #region SetButtonColorSection
     private Color GetUseButtonColor()
     {
         if (!_toggleButton)
@@ -249,7 +252,7 @@ public class BlockedArea : NetworkSceneTool
             return Color.red;
         }
     }
-    
+
     private Color GetEventColor()
     {
         if (!_toggleEvent)
@@ -261,8 +264,8 @@ public class BlockedArea : NetworkSceneTool
             return Color.red;
         }
     }
-#endregion
-#region ConditionalMethodForDisplay
+    #endregion
+    #region ConditionalMethodForDisplay
     public bool InfoBoxButtonDisplayError()
     {
         if (_toggleButton && _toggleEvent)
@@ -270,45 +273,45 @@ public class BlockedArea : NetworkSceneTool
         else
             return false;
     }
-    
+
     public bool CheckButtonPositionExist()
     {
         return buttonPosition == null ? true : false;
     }
-    
+
     public bool CheckButtonOpenSprite()
     {
         return buttonPosition == null ? true : false;
     }
-    
+
     public bool CheckButtonCloseSprite()
     {
         return buttonCloseImage == null ? true : false;
     }
-    
+
     public bool CheckBoxedAreaSpawner()
     {
         return BoxedRoomAreaSpawner == null ? true : false;
     }
-    
+
     public bool CheckWallsExist()
     {
         return RoomArea.Count == 0 && RoomWalls.Count == 0 ? true : false;
     }
-    
+
     public bool CheckIfHasAName()
     {
         return name.Length == 0 ? true : false;
     }
-#endregion
+    #endregion
 }
 
 [Flags]
 public enum EventTypeBitmask
 {
     AdminQuizGame = 1 << 1,
-    EventBasedOnAreaName= 1 << 2,
-    CloseAllRoom= 1 << 3,
+    EventBasedOnAreaName = 1 << 2,
+    CloseAllRoom = 1 << 3,
     All = AdminQuizGame | EventBasedOnAreaName | CloseAllRoom
 }
 
