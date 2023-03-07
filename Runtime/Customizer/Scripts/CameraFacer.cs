@@ -48,6 +48,8 @@ namespace RLTY.UX
 
             if (!Camera.main)
                 JLogBase.Log("No mainCamera present in the scene, facing won't work until there's one", this);
+            else
+                mainCamera = Camera.main;
         }
 
         void Update()
@@ -60,6 +62,11 @@ namespace RLTY.UX
 
                 if (currentDistance < activationDistance && timer > updateFrequency)
                     StartCoroutine(LerpToPointAtMainCamera());
+            }
+            else
+            {
+                if (Camera.main)
+                    mainCamera = Camera.main;
             }
         }
 
