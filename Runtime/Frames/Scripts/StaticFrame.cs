@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
@@ -12,7 +13,7 @@ using UnityEditor;
 
 public class StaticFrame : SceneTool
 {
-    [Title("Settings")]
+    [TitleGroup("Settings")]
     public string ID;
     public enum StaticFrameTypeEnum
     {
@@ -21,7 +22,7 @@ public class StaticFrame : SceneTool
     }
     public StaticFrameTypeEnum Type = StaticFrameTypeEnum.StaticFramePublic;
     
-    [Title("Size")]
+    [TitleGroup("Size")]
     public Vector2Int ScreenSize = new Vector2Int(1920, 1080);
     [PropertyRange(1,10)]
     public float Scale = 1;
@@ -38,6 +39,7 @@ public class StaticFrame : SceneTool
         ID = ID.Replace(" ", "_");
     }
 
+    [TitleGroup("Size", indent:false)]
     [Button]
     private void FlipXY()
     {
@@ -126,6 +128,20 @@ public class StaticFrame : SceneTool
         }
 
         return transforms;
+    }
+
+    
+    
+    
+
+    [TitleGroup("Positioning")]
+    [PropertyRange(1,100)]
+    public float OffsetFromSurfaceInMillimeters = 1;
+    
+    [Button]
+    private void SlapOntoSurfaceBehind()
+    {
+        SlapOntoSurface.SlapThisOntoSurface(transform, OffsetFromSurfaceInMillimeters);
     }
     
 #endif

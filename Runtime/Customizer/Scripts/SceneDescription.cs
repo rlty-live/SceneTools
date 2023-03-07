@@ -36,6 +36,8 @@ namespace RLTY.Customisation
         public string staticFramesAddress;
         public string backendApiHost;
 
+        public string initialAvatar;
+
         public string ResolvedDnsName {  get { return string.IsNullOrEmpty(dnsName) ? "localhost" : dnsName; } }
 
         /// <summary>
