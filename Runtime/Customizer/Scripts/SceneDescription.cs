@@ -36,6 +36,8 @@ namespace RLTY.Customisation
         public string staticFramesAddress;
         public string backendApiHost;
 
+        public AvatarData initialAvatar;
+
         public string ResolvedDnsName {  get { return string.IsNullOrEmpty(dnsName) ? "localhost" : dnsName; } }
 
         /// <summary>
@@ -138,6 +140,15 @@ namespace RLTY.Customisation
             public string token;
             public uint id;
             public string channelName;
+        }
+
+        [System.Serializable]
+        public class AvatarData
+        {
+            public string id;
+            public string type;
+            public string skin;
+            public bool customReadyPlayerMe = false;
         }
     }
 

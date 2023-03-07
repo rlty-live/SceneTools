@@ -40,5 +40,16 @@ public class SocialWall : SceneTool
         Gizmos.color = color;
         Gizmos.DrawCube(Vector3.zero, new Vector3(screenSize.x, screenSize.y, 0.0001f));
     }
+    
+    [TitleGroup("Positioning")]
+    [PropertyRange(1,100)]
+    public float OffsetFromSurfaceInMillimeters = 1;
+    
+    [Button]
+    private void SlapOntoSurfaceBehind()
+    {
+        SlapOntoSurface.SlapThisOntoSurface(transform, OffsetFromSurfaceInMillimeters);
+    }
+    
     #endif
 }
