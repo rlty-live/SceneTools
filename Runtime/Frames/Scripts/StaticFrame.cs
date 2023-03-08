@@ -23,9 +23,17 @@ public class StaticFrame : SceneTool
     public StaticFrameTypeEnum Type = StaticFrameTypeEnum.StaticFramePublic;
     
     [TitleGroup("Size")]
+    [ReadOnly]
     public Vector2Int ScreenSize = new Vector2Int(1920, 1080);
     [PropertyRange(1,10)]
     public float Scale = 1;
+    [PropertyRange(1,10)]
+    public float Width = 1;
+    [PropertyRange(1,10)]
+    public float Height = 1;
+
+    [HideInInspector][ReadOnly]
+    public int BaselineSize = 1080;
 
 #if UNITY_EDITOR
     private void Reset()
@@ -37,14 +45,80 @@ public class StaticFrame : SceneTool
     private void OnValidate()
     {
         ID = ID.Replace(" ", "_");
+        SetSize();
     }
 
     [TitleGroup("Size", indent:false)]
     [Button]
     private void FlipXY()
     {
-        Vector2Int newVector2 = new Vector2Int(ScreenSize.y, ScreenSize.x);
-        ScreenSize = newVector2;
+        float height = Width;
+        float width = Height;
+        Height = height;
+        Width = width;
+        SetSize();
+    }
+
+    [Button]
+    private void SetTo16_9()
+    {
+        Width = 16f/9f * Height;
+        SetSize();
+    }
+    
+    [Button]
+    private void SetToSquare()
+    {
+        Width = Height;
+        SetSize();
+    }
+    
+    [Button]
+    private void SetToAxPortrait()
+    {
+        Width = 841f/1189f * Height;
+        SetSize();
+    }
+
+    [Button]
+    private void SetToAxLandscape()
+    {
+        Width = 1189f/841f * Height;
+        SetSize();
+    }
+    
+    private void SetSize()
+    {
+        if (Width < 1)
+        {
+            float factor = 1 / Width *2;
+            Width = Width * factor;
+            Height = Height * factor;
+        }
+        
+        if (Height < 1)
+        {
+            float factor = 1 / Height;
+            Width = Width * factor;
+            Height = Height * factor;
+        }
+        
+        
+        int widthInPixels = BaselineSize;
+        int heightInPixels = BaselineSize;
+        
+        if (Height >= Width)
+        {
+            heightInPixels = (int)(BaselineSize * Height /Width);
+        }
+        else
+        {
+            widthInPixels = (int)(BaselineSize * Width / Height);
+        }
+
+        
+        
+        ScreenSize = new Vector2Int(widthInPixels, heightInPixels);
     }
     
     private Color32 _FrameBaseColor = Color.blue;
@@ -70,7 +144,7 @@ public class StaticFrame : SceneTool
 
     void OnDrawGizmos()
     {
-        Vector2 screenSize = new Vector2(ScreenSize.x, ScreenSize.y) / ScreenSize.y * Scale;
+        Vector2 screenSize = new Vector2(Width, Height) * Scale;
 
         Color32 gizmoColor = GetGizmoColor();
         gizmoColor.a = 255;
@@ -105,7 +179,6 @@ public class StaticFrame : SceneTool
 
     private void OnDrawGizmosSelected()
     {
-        
         List<Transform> framesWithSameID = GeteveryFrameWithSameID();
 
         foreach (var otherFrameTransform in framesWithSameID)
@@ -129,7 +202,7 @@ public class StaticFrame : SceneTool
 
         return transforms;
     }
-
+    
     
     
     
