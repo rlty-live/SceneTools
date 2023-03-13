@@ -14,7 +14,6 @@ public abstract class RLTYMonoBehaviour : RLTYMonoBehaviourBase
     public virtual void OnDestroy()
     {
         EventHandlerUnRegister();
-        this.transform.position = Vector3.zero;
     }
 }
 
