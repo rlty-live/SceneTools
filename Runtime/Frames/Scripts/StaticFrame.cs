@@ -19,7 +19,6 @@ public class StaticFrame : SceneTool
     {
         StaticFramePublic,
         StaticFrameReservedToAdmins,
-        Branding,
     }
     public StaticFrameTypeEnum Type = StaticFrameTypeEnum.StaticFramePublic;
     
@@ -124,7 +123,6 @@ public class StaticFrame : SceneTool
     
     private Color32 _FrameBaseColor = Color.blue;
     private Color32 _AdminColor = new Color(0.1f, 0.5f, 1);
-    private Color32 _BrandingColor = new Color(0.1f, 0.9f, 0.1f);
 
     private Color32 GetGizmoColor()
     {
@@ -136,9 +134,6 @@ public class StaticFrame : SceneTool
                 break;
             case StaticFrameTypeEnum.StaticFrameReservedToAdmins:
                 color = _AdminColor;
-                break;
-            case  StaticFrameTypeEnum.Branding:
-                color = _BrandingColor;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
