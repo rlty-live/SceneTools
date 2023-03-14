@@ -11,7 +11,10 @@ public abstract class RLTYMonoBehaviour : RLTYMonoBehaviourBase
     public abstract void EventHandlerUnRegister();
 
     public virtual void Start() => EventHandlerRegister();
-    public virtual void OnDestroy() => EventHandlerUnRegister();
+    public virtual void OnDestroy()
+    {
+        EventHandlerUnRegister();
+    }
 }
 
 public abstract class RLTYMonoBehaviourBase : JMonoBehaviour

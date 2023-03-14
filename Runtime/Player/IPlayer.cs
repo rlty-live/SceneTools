@@ -63,4 +63,3 @@ public interface IPlayer
     /// <param name="verticalVelocity"></param>
     void SetVerticalVelocity(float verticalVelocity);
 }
-
