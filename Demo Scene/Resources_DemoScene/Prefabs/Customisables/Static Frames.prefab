@@ -471,7 +471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
@@ -561,7 +561,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
@@ -595,7 +595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2520958015069854136, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -35.51
+      value: -35.04
       objectReference: {fileID: 0}
     - target: {fileID: 2520958015069854136, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: m_LocalPosition.y
@@ -603,7 +603,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2520958015069854136, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.18700027
+      value: -0.19
       objectReference: {fileID: 0}
     - target: {fileID: 2520958015069854136, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: m_LocalRotation.w
@@ -655,7 +655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b16847493faeecd47894a4de87f38a19, type: 3}
@@ -815,7 +815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
@@ -905,7 +905,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
@@ -995,7 +995,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
@@ -1085,7 +1085,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
@@ -1175,7 +1175,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
@@ -1265,7 +1265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.x
-      value: 1920
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5041611036652327739, guid: b16847493faeecd47894a4de87f38a19, type: 3}
       propertyPath: ScreenSize.y
