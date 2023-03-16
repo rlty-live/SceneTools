@@ -168,6 +168,7 @@ namespace RLTY.Customisation
         DonationBox,
         Web3Transaction,
         TypeForm,
+        Iframe,
         Invalid
     }
 
@@ -209,6 +210,7 @@ namespace RLTY.Customisation
                     _allProcessors[CustomisableType.DonationBox] = new ProcessorDefinition(typeof(DonationBoxProcessor), "walletId string, empty string will hide object in scene");
                     _allProcessors[CustomisableType.Web3Transaction] = new ProcessorDefinition(typeof(Web3TransactionProcessor), "string containing smartContractAddress and activeChainId, separated by a comma, empty string will hide object in scene");
                     _allProcessors[CustomisableType.TypeForm] = new ProcessorDefinition(typeof(TypeFormProcessor), "typeFormId string, empty string will hide object in scene");
+                    _allProcessors[CustomisableType.Iframe] =  new ProcessorDefinition(typeof(IframeProcessor), "URL to iframe");
                 }
                 return _allProcessors;
             }

@@ -69,6 +69,9 @@ namespace RLTY.SessionInfo
 
         public static event Action<string> OnOpenTypeForm;
         public static void OpenTypeForm(string typeformId) => OnOpenTypeForm?.Invoke(typeformId);
+        
+        public static event Action<string> OnOpenIframe;
+        public static void OpenIframe(string iframeURL) => OnOpenIframe?.Invoke(iframeURL);
 
 
 
