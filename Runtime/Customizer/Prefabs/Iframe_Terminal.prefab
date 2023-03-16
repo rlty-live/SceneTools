@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 2857148779212561789}
   - component: {fileID: 8354252433706771844}
   - component: {fileID: 6233597423670932813}
-  - component: {fileID: 203483357337267071}
+  - component: {fileID: 3606553317114908352}
   m_Layer: 0
   m_Name: Iframe_Terminal
   m_TagString: Untagged
@@ -334,8 +334,8 @@ MonoBehaviour:
   _keyValue:
     key: 
     value: 
-  processor: {fileID: 203483357337267071}
-  target: {fileID: 203483357337267071}
+  processor: {fileID: 3606553317114908352}
+  target: {fileID: 3606553317114908352}
   showGizmo: 0
   gizmoOffset: {x: 0, y: 1, z: -1}
 --- !u!95 &6233597423670932813
@@ -358,7 +358,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &203483357337267071
+--- !u!114 &3606553317114908352
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -367,7 +367,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5135966742812923653}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bbedafbfde46c94fbe2f3e85b2f379f, type: 3}
+  m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
   showUtilities: 0
