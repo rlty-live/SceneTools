@@ -41,7 +41,15 @@ public interface IPlayer
     string Username { get; set; }
     string SkinDesc { get; set; }
 
-    event Action<bool> OnTalkChanged;
+    /// <summary>
+    /// -1=no mic
+    /// 0= muted
+    /// 1= silent
+    /// 2 = talking
+    /// </summary>
+    event Action<int> OnTalkChanged;
+
+    int IsTalking { get; set; }
 
     event Action<string> OnNameChanged;
 
