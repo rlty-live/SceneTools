@@ -7,9 +7,9 @@ public class SetLayer : MonoBehaviour
 
     [SerializeField]
     private LayerMask targetLayer;
-    int invokeIndex = 0;
+    // int invokeIndex = 0;
 
-    /* removed by François
+    /* removed by Franï¿½ois
      * why do we need a component to set an object's layer ?
      * this causes garbage in the error log
     private void Start()

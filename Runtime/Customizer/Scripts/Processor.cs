@@ -14,7 +14,7 @@ namespace RLTY.Customisation
 
         public virtual void Customize(KeyValueBase keyValue)
         {
-            JLog("Base class on processor");
+            JLogBase.Log("Got " + keyValue.value, this);
         }
 
         protected virtual void Awake()

@@ -134,14 +134,10 @@ namespace RLTY.Customisation
                 commentary = indexStr + labelGroupStr + sectionStr + groupStr + displayCommentary;
             }
         }
-
-
         public void GetTechnicalInfo()
         {
             //no processor-specific code here, please call a method on the processor instead
         }
-
-
 
         public void OnValidate()
         {
@@ -209,21 +205,21 @@ namespace RLTY.Customisation
 
             if (processor)
             {
-                if (CustomisableUtility.Processors.ContainsKey(type) && CustomisableUtility.Processors[type].type == processor.GetType())
-                    ValidProcessorDebugLog(true);
-                else
+                if (!CustomisableUtility.Processors.ContainsKey(type) |
+                    CustomisableUtility.Processors[type].type != processor.GetType())
                 {
+                    JLogWarning("No Processor found in children, added " + processor + " automatically, please set it up.");
+                    
                     if (!Application.isPlaying)
                         DestroyProcessor(processor);
                     processor = null;
                 }
-
             }
 
             if (processor == null && CustomisableUtility.Processors.ContainsKey(type))
             {
                 processor = (Processor)gameObject.AddComponent(CustomisableUtility.Processors[type].type);
-                ValidProcessorDebugLog(false);
+                JLogWarning("No Processor found in children, added " + processor + " automatically, please set it up.");
             }
 
             if (processor)
@@ -242,35 +238,6 @@ namespace RLTY.Customisation
             if (!PrefabUtility.IsPartOfPrefabAsset(this))
                 DestroyImmediate(_processor);
 #endif
-        }
-
-        [ExecuteInEditMode]
-        private string ValidProcessorDebugLog(bool valid)
-        {
-            if (debug)
-            {
-                if (valid)
-                {
-#if UNITY_EDITOR
-                    if (!PrefabUtility.IsPartOfPrefabAsset(this) && this.gameObject.activeInHierarchy)
-                        StartCoroutine(TemporaryBoolSwitch(3));
-#endif
-                    return "Processor is present and compatible";
-                }
-
-                else
-                {
-                    JLogWarning("No Processor found in children, added " + processor + " automatically, please set it up.");
-#if UNITY_EDITOR
-                    if (!PrefabUtility.IsPartOfPrefabAsset(this) && this.gameObject.activeInHierarchy)
-                        StartCoroutine(TemporaryBoolSwitch(3));
-#endif
-                    return "No Processor found in children, added one automatically, please set it up.";
-                }
-            }
-
-            else
-                return string.Empty;
         }
 
         #endregion

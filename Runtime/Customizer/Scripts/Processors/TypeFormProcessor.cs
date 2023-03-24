@@ -15,8 +15,7 @@ namespace RLTY.Customisation
             }
             _typeformId = keyValue.value;
         }
-
-        [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
+        
         [SerializeField] private string _typeformId = "1";
 
         public void OpenTypeForm()

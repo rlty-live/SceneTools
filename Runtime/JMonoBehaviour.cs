@@ -92,11 +92,11 @@ public static class JLogBase
 
     public static void LogError(string message, Component c)
     {
-        Debug.LogError("[" + c.GetType().ToString() + ":" + c.gameObject.name + "] " + message);
+        JLogBase.LogError("[" + c.GetType().ToString() + ":" + c.gameObject.name + "] " + message, c);
     }
     public static void LogError(string message, Type t)
     {
-        Debug.LogError("[" + t.ToString() + "] " + message);
+        JLogBase.LogError("[" + t.ToString() + "] " + message, t);
     }
 
     private static string GetLogHeader(Component c)
