@@ -33,12 +33,16 @@ namespace RLTY.Customisation
 
             try
             {
+                RLTYLog("key value = " + keyValue.value, this, LogType.Log);
+
                 formatedKeyValue = keyValue.value.Replace(@"\", "");
-                
+
+                RLTYLog("formatted key value = " + formatedKeyValue, this, LogType.Log);
+
                 data = new NFTData();
                 data = DeserializeJson(formatedKeyValue);
 
-                JLogBase.Log("Deserialized =" + data.type + ", " + data.address + ", " + data.tokenid /*+ data.image*/, this);
+                RLTYLog("Deserialized =" + data.type + ", " + data.address + ", " + data.tokenid /*+ data.image*/, this, LogType.Log);
 
                 if (!string.IsNullOrEmpty(data.image))
                 {
@@ -52,7 +56,7 @@ namespace RLTY.Customisation
 
             catch (System.Exception e)
             {
-                JLogBase.LogError("Invalid Web3 data on key=" + keyValue.key + " value=" + keyValue.value + " (" + e.ToString() + ")", this);
+                JLogError("Invalid Web3 data on key=" + keyValue.key + " value=" + keyValue.value);
                 gameObject.SetActive(false);
             }
         }
