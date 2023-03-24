@@ -46,7 +46,7 @@ namespace RLTY.Customisation
         public override void Customize(KeyValueBase kvo)
         {
             videoURL = kvo.value;
-            Debug.Log("Got " + kvo.value + " from sceneDescription", this);
+            JLog("Got " + kvo.value + " from sceneDescription");
         }
 
         public void FindTriggerZone()
@@ -54,7 +54,7 @@ namespace RLTY.Customisation
             if (!triggerZone && GetComponentInChildren<TriggerZone>())
                 triggerZone = GetComponentInChildren<TriggerZone>();
             else
-                JLogBase.LogError("No Trigger zone associated, and none can be found in children, the associated video will never start", this);
+                JLogError("No Trigger zone associated, and none can be found in children, the associated video will never start");
         }
     }
 }
