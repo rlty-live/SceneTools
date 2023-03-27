@@ -15,17 +15,23 @@ public class JMonoBehaviour : MonoBehaviour
     /// <param name="message"></param>
     protected void JLog(string message)
     {
+#if !UNITY_EDITOR
         JLogBase.Log(message, this);
+#endif
     }
 
     protected void JLogWarning(string message)
     {
+#if !UNITY_EDITOR
         JLogBase.LogWarning(message, this);
+#endif
     }
 
     protected void JLogError(string message)
     {
+#if !UNITY_EDITOR
         JLogBase.LogError(message, this);
+#endif
     }
 }
 
