@@ -1945,7 +1945,7 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  sceneToolsVersion: 2.0.7
+  sceneToolsVersion: 2.0.5
   groupLabel: []
   groups: []
   sections: []
@@ -3366,7 +3366,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348418, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1830119373516348418, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4547,10 +4547,6 @@ PrefabInstance:
     - target: {fileID: 1841054081478090313, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: ID
       value: frame-L1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1988077382604999020, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
-      propertyPath: m_RootOrder
-      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2237691238683962393, guid: ecffcb6e22de3c24fad50a717c7c8c1c, type: 3}
       propertyPath: section
@@ -6490,7 +6486,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7878000666241243249, guid: 95b860b7574838d409fcc0b6a93b5fa4, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7878000666241243249, guid: 95b860b7574838d409fcc0b6a93b5fa4, type: 3}
       propertyPath: m_LocalPosition.x
