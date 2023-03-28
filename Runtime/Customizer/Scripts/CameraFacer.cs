@@ -76,7 +76,7 @@ namespace RLTY.UX
         {
             timer = 0;
             float elapsedTime = 0;
-            JLogBase.Log("Started facing main camera at " + pointer.transform.position, this);
+            //JLogBase.Log("Started facing main camera at " + pointer.transform.position, this);
 
             Vector3 startPosition = mainCamera.transform.position;
             pointer.LookAt(new Vector3(startPosition.x, rectTransform.position.y, startPosition.z));
