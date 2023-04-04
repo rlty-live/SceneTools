@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
@@ -46,6 +47,7 @@ namespace RLTY.Customisation
         public override void Customize(KeyValueBase kvo)
         {
             videoURL = kvo.value;
+            if(String.IsNullOrEmpty(videoURL)) JLogError("videoURL is null or empty for " + this);
             JLog("Got " + kvo.value + " from sceneDescription");
         }
 
