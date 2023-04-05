@@ -13,9 +13,12 @@ namespace RLTY.Customisation.Testing
         public int ClientId => 0;
 
         public int IsTalking { get; set; }
-        public bool IsAdmin { get => false; set{ } }
+        public bool Sync_IsAdmin { get => false; set{ } }
         public uint AgoraUserId { get => 0; set { } }
-        public bool IsVoiceBoosted { get; set; }
+        public bool Sync_IsVoiceBoosted { get; set; }
+        public bool Sync_IsServerMuted { get; set; }
+        public bool Sync_IsCrossServerMuted { get; set; }
+        public bool IsLocalyMuted { get; set; }
         public string Username { get => "TestPlayer"; set { } }
         public string SkinDesc { get => null; set { } }
 

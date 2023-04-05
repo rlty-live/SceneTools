@@ -33,10 +33,16 @@ public interface IPlayer
 
     int ClientId { get; }
 
-    bool IsAdmin { get; set; }
+    bool Sync_IsAdmin { get; set; }
     uint AgoraUserId { get; set; }
     
-    bool IsVoiceBoosted {get;set;}
+    bool Sync_IsVoiceBoosted {get;set;}
+    
+    bool Sync_IsServerMuted {get;set;}
+    
+    bool Sync_IsCrossServerMuted {get;set;}
+    
+    bool IsLocalyMuted { get; set; }
 
     string Username { get; set; }
     string SkinDesc { get; set; }

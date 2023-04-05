@@ -89,6 +89,15 @@ namespace RLTY.SessionInfo
         
         public static event Action<string> OnChangeCurrentUrl;
         public static void ChangeCurrentUrl(string url) => OnChangeCurrentUrl?.Invoke(url);
+        
+        public static event Action<string> OnSeeUserProfileInteraction;
+        public static void SeeUserProfileInteraction(string playerSessionId) => OnSeeUserProfileInteraction?.Invoke(playerSessionId);
+        public static event Action<string> OnBanUserInteraction;
+        public static void BanUserInteraction(string playerSessionId) => OnBanUserInteraction?.Invoke(playerSessionId);
+        public static event Action<string> OnChatWithUserInteraction;
+        public static void ChatWithUserInteraction(string playerSessionId) => OnChatWithUserInteraction?.Invoke(playerSessionId);
+        public static event Action<string> OnReportUserInteraction;
+        public static void ReportUserInteraction(string playerSessionId) => OnReportUserInteraction?.Invoke(playerSessionId);
 
     }
 
