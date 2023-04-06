@@ -63,23 +63,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  deactivable: 1
   type: 9
   displayKey: DonationBox (1)
   key: DonationBox_(1)
   useGameobjectName: 1
+  section: 
   group: 
+  labelGroup: 
+  manualDescription: 1
+  displayCommentary: 
   commentary: 
   technicalInfo: 
+  _keyValue:
+    key: 
+    value: 
   processor: {fileID: 8544511677359112601}
   target: {fileID: 8544511677359112601}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
-  _instanceId: 245806
 --- !u!114 &8544511677359112603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63ec6ce8dd71cf4184ec726ac17c873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
@@ -129,7 +133,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf1f4134c09ae540af686b3db94ee73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
@@ -144,8 +147,9 @@ Animation:
   m_GameObject: {fileID: 8544511677359112598}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: fa7b62f40392e2b4cb7262f3dbcb7fc7, type: 2}
-  m_Animations: []
+  m_Animation: {fileID: 7400000, guid: a69fe9e620d12994194ebe96a4585fe3, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: a69fe9e620d12994194ebe96a4585fe3, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0

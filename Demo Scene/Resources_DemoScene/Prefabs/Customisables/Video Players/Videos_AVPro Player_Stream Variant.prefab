@@ -79,6 +79,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -10.07
       objectReference: {fileID: 0}
+    - target: {fileID: 4274722677001216140, guid: 082114f7c1181aa449f7f4327d338bf6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4788890291358676500, guid: 082114f7c1181aa449f7f4327d338bf6, type: 3}
       propertyPath: key
       value: AVPro_Stream
