@@ -19,18 +19,17 @@ namespace RLTY.Customisation
 
         public SceneManifest(List<SceneAsset> scenes)
         {
-            List<Customisable> list = new List<Customisable>();
             foreach (SceneAsset sceneAsset in scenes)
             {
                 string path = AssetDatabase.GetAssetPath(sceneAsset);
                 EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
-                list.AddRange(GameObject.FindObjectsOfType<Customisable>());
-            }
-            foreach (Customisable customisable in list)
-            {
-                if (customisable.gameObject.activeInHierarchy)
+                Customisable[] customisables = GameObject.FindObjectsOfType<Customisable>();
+                foreach (Customisable customisable in customisables)
                 {
-                    Populate(customisable.type, customisable.key, customisable.commentary);
+                    if (customisable.gameObject.activeInHierarchy)
+                    {
+                        Populate(customisable.type, customisable.key, customisable.commentary);
+                    }
                 }
             }
         }
