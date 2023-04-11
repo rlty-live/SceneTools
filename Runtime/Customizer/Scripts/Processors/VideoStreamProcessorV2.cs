@@ -51,6 +51,8 @@ namespace RLTY.Customisation
             JLog("Got " + kvo.value + " from sceneDescription");
         }
 
+        
+
         public void FindTriggerZone()
         {
             if (!triggerZone && GetComponentInChildren<TriggerZone>())
