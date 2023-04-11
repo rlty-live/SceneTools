@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9087892890928217290}
   - component: {fileID: 1097224739845772538}
   - component: {fileID: 698815228367053364}
+  - component: {fileID: 454312773884127655}
   m_Layer: 0
   m_Name: IFrame 1
   m_TagString: Untagged
@@ -86,10 +87,26 @@ MonoBehaviour:
   _keyValue:
     key: 
     value: 
-  processor: {fileID: 0}
-  target: {fileID: 0}
+  processor: {fileID: 454312773884127655}
+  target: {fileID: 454312773884127655}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
+--- !u!114 &454312773884127655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2233382205866948274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showUtilities: 0
+  correctSetup: 0
+  debug: 1
+  _IframeURL: https://www.rlty.live
 --- !u!1 &6825898023091572191
 GameObject:
   m_ObjectHideFlags: 0
