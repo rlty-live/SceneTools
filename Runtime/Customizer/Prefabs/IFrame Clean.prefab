@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7434318025814823139}
   - component: {fileID: 3709529191102212122}
   - component: {fileID: 1587675696059922643}
-  - component: {fileID: 4944967278861941839}
+  - component: {fileID: 130549183333015395}
   m_Layer: 0
   m_Name: IFrame Clean
   m_TagString: Untagged
@@ -68,8 +68,8 @@ MonoBehaviour:
   _keyValue:
     key: 
     value: 
-  processor: {fileID: 4944967278861941839}
-  target: {fileID: 4944967278861941839}
+  processor: {fileID: 130549183333015395}
+  target: {fileID: 130549183333015395}
   showGizmo: 0
   gizmoOffset: {x: 0, y: 1, z: -1}
 --- !u!95 &1587675696059922643
@@ -92,7 +92,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4944967278861941839
+--- !u!114 &130549183333015395
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 561894408686639771}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bbedafbfde46c94fbe2f3e85b2f379f, type: 3}
+  m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
   showUtilities: 0
@@ -561,7 +561,7 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4944967278861941839}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RLTY.Customisation.IframeProcessor, rlty.scenetools.runtime
         m_MethodName: OpenIframe
         m_Mode: 1
