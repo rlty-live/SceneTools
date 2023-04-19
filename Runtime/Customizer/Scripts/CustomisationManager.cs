@@ -205,7 +205,7 @@ namespace RLTY.Customisation
                 }
 
             if (!found)
-                JLogError("No customisable found for key=" + k.key + " type=" + type);
+                JLogWarning("No customisable found for key=" + k.key + " type=" + type);
         }
 
         private void DeactivateUnCustomized()
