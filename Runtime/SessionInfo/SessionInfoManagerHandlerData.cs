@@ -98,6 +98,24 @@ namespace RLTY.SessionInfo
         public static void ChatWithUserInteraction(string playerSessionId) => OnChatWithUserInteraction?.Invoke(playerSessionId);
         public static event Action<string> OnReportUserInteraction;
         public static void ReportUserInteraction(string playerSessionId) => OnReportUserInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnKickUserInteraction;
+        public static void KickUserInteraction(string playerSessionId) => OnKickUserInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnResetUserInteraction;
+        public static void ResetUserInteraction(string playerSessionId) => OnResetUserInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnGrowUserInteraction;
+        public static void GrowUserInteraction(string playerSessionId) => OnGrowUserInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnUnGrowUserInteraction;
+        public static void UnGrowUserInteraction(string playerSessionId) => OnUnGrowUserInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnLocalMuteUserInteraction;
+        public static void LocalMuteUserInteraction(string playerSessionId) => OnLocalMuteUserInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnServerMuteUserInteraction;
+        public static void ServerMuteUserInteraction(string playerSessionId) => OnServerMuteUserInteraction?.Invoke(playerSessionId);
 
     }
 
