@@ -75,18 +75,25 @@ namespace Judiva.Metaverse.Interactions
         private float _GizmoRadius = 0.8f;
         private void OnDrawGizmos()
         {
+            Color defaultColor = Color.cyan;
+            if(connected == null) defaultColor = Color.red;
             
-            Gizmos.color = Color.cyan;
+            Gizmos.color = defaultColor;
             Matrix4x4 DefaultMatrix = Gizmos.matrix;
             Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(1, 0.1f, 1));
             Gizmos.DrawSphere(Vector3.zero, _GizmoRadius);
+            
             Gizmos.color = new Color (1,0.2f,0.8f);
+            
             Gizmos.DrawWireSphere(new Vector3(0,0.1f,0),_GizmoRadius * 1.0f);
-            Gizmos.color = Color.cyan;
+            Gizmos.color = defaultColor;
             Gizmos.DrawWireSphere(new Vector3(0,0.1f,0),_GizmoRadius * 1.2f);
             Gizmos.matrix = DefaultMatrix;
             
+            Gizmos.DrawLine(transform.position+ transform.forward * _GizmoRadius * 1.2f, transform.position + transform.forward * 3);
+            
             if(connected) Handles.Label(transform.position + new Vector3(0,2,0), "To "+ connected.name);
+            else Handles.Label(transform.position + new Vector3(0, 2, 0), "Not connected");
         }
 
         private void OnDrawGizmosSelected()
