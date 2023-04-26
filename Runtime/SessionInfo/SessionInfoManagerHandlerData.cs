@@ -116,6 +116,9 @@ namespace RLTY.SessionInfo
         
         public static event Action<string> OnServerMuteUserInteraction;
         public static void ServerMuteUserInteraction(string playerSessionId) => OnServerMuteUserInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnBoostUserVoiceInteraction;
+        public static void BoostUserVoiceInteraction(string playerSessionId) => OnBoostUserVoiceInteraction?.Invoke(playerSessionId);
 
     }
 
