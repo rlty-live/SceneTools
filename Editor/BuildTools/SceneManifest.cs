@@ -60,7 +60,7 @@ namespace RLTY.Customisation
             return data;
         }
 
-        [MenuItem("RLTY/DebugSceneManifest")]
+        [MenuItem("RLTY/DebugSceneManifest")]//
         public static void DebugSceneManifest()
         {
             Customisable[] fullList = GameObject.FindObjectsOfType<Customisable>();

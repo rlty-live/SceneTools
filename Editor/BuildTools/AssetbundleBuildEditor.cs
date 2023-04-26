@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Build.Reporting;
+using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
 using System;
 using System.Collections;
-using ICSharpCode.SharpZipLib.Zip;
 using Unity.EditorCoroutines.Editor;
 using System.Collections.Generic;
 using System.Diagnostics;
 using RLTY.Customisation;
+using UnityEditor.SceneManagement;
+using Newtonsoft.Json;
 
 public class AssetbundleBuildEditor : EditorWindow
 {
@@ -192,11 +195,32 @@ public class AssetbundleBuildEditor : EditorWindow
         foreach (var environment in _setup.environmentList)
             if (environment.rebuild)
             {
-                SceneManifest manifest = new SceneManifest(environment.scenes);
-                if (!Directory.Exists(GetManifestPath())) {
-                    Directory.CreateDirectory(GetManifestPath());
+                List<Customisable> list = new List<Customisable>();
+                foreach (SceneAsset sceneAsset in environment.scenes)
+                {
+                    string path = AssetDatabase.GetAssetPath(sceneAsset);
+                    EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+                    list.AddRange(FindObjectsOfType<Customisable>());
                 }
-                File.WriteAllText("Assets/" + manifest + ".json", manifest.ToJson());
+                SceneManifest manifest = new SceneManifest();
+                foreach (Customisable customisable in list)
+                {
+                    if (customisable.gameObject.activeInHierarchy)
+                        manifest.Populate(customisable.type, customisable.key, customisable.commentary);
+                }
+
+                string data = JsonConvert.SerializeObject(manifest, Formatting.Indented);
+                if (!Directory.Exists(GetManifestPath()))
+                    Directory.CreateDirectory(GetManifestPath());
+
+                //File.WriteAllText(GetManifestPath() + "/" + environment.id + "_manifest.json", data);
+                //File.WriteAllText(GetManifestPath() + "/"+ environment.id + "_static_frames.json", StaticFramesManifest.GetStaticFramesManifest());
+
+                data = data.Remove(data.Length - 1, 1);
+
+                File.WriteAllText(
+                    "Assets/" + manifest + ".Json",
+                    data + ",\"static_frames\":" + StaticFramesManifest.GetStaticFramesManifest() + "}");
             }
 
         yield return null;
