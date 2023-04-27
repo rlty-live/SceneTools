@@ -87,7 +87,7 @@ namespace RLTY.Customisation
                 if (!TryGetComponent(out DecalProjector proj))
                 {
                     if (debug)
-                        Debug.LogWarning("No Renderer or DecalProjector found in children" + commonWarning, this);
+                       JLogBase.LogWarning("No Renderer or DecalProjector found in children" + commonWarning, this);
                 }
                 else
                     target = proj;
@@ -101,7 +101,7 @@ namespace RLTY.Customisation
 
             if (propertiesToModify == null || propertiesToModify.Count == 0)
             {
-                JLogError("No properties to modify");
+                JLogBase.LogWarning("No properties to modify", this);
                 return;
             }
 
@@ -110,24 +110,18 @@ namespace RLTY.Customisation
                 case CustomisableType.Texture:
                     Texture t = keyValue.data as Texture;
                     if (t != null)
-                    {
-                        Debug.Log("Material Customisation Texture 01", this);
                         SwapTextures(t);
-                    }
                     else
-                        JLogError("Couldn't process texture: " + keyValue);
+                        JLogBase.LogError("Couldn't process texture: " + keyValue, this);
                     break;
                 case CustomisableType.Color:
                     if (CustomisableUtility.TryParseColor(keyValue, out Color color))
-                    {
-                        Debug.Log("Material Customisation Color 01", this);
                         SwapColors(color);
-                    }
                     else
-                        JLogError("Couldn't parse color: " + keyValue);
+                        JLogBase.LogError("Couldn't parse color: " + keyValue, this);
                     break;
                 default:
-                    JLogError("Unhandled type " + keyValue.Type);
+                    JLogBase.LogError("Unhandled type " + keyValue.Type, this);
                     break;
             }
         }
@@ -150,21 +144,16 @@ namespace RLTY.Customisation
         #region Runtime Logic
         public void SwapTextures(Texture tex)
         {
-            Debug.Log("Material Customisation Texture 02" + tex.name, this);
-
             if (modifyAllInstances)
             {
-                Debug.Log("shared Material Customisation Texture", this);
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
                     if (property.mat && !modifiedProperties.Contains(property))
                     {
                         property.mat.SetTexture(property.propertyName, tex);
                         modifiedProperties.Add(property);
-                        JLog("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex);
+                        //JLogBase.Log("Switched " + property.mat + "shared material property " + property.propertyName + " texture to " + tex, this);
                     }
-                    else
-                        JLog("Either property has already been modified or material is missing");
                 }
             }
 
@@ -173,7 +162,6 @@ namespace RLTY.Customisation
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
-                Debug.Log("Instanced Material Customisation Texture 02b", this);
 
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
@@ -183,11 +171,11 @@ namespace RLTY.Customisation
                             if (mat.name.Contains(property.mat.name))
                             {
                                 mat.SetTexture(property.propertyName, tex);
-                                JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex);
+                                //JLogBase.Log("Switched " + property.mat + "instanced material property " + property.propertyName + " texture to " + tex, this);
                             }
                         }
                     else
-                        JLog("Missing material in for " + property);
+                        JLogBase.LogWarning("Missing material in for " + property, this);
                 }
             }
 
@@ -199,45 +187,39 @@ namespace RLTY.Customisation
         {
             if (modifyAllInstances)
             {
-                Debug.Log("Material Customisation Color 02a", this);
-
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
                     if (!modifiedProperties.Contains(property) && property.mat)
                     {
                         property.mat.SetColor(property.propertyName, color);
                         modifiedProperties.Add(property);
-                        JLog("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color);
+                        //JLogBase.Log("Switched " + property.mat + "shared material property " + property.propertyName + " color to " + color, this);
                     }
                     else
                     {
-                        JLog("Either property has already been modified or material is missing");
+                        JLogBase.Log("Either property has already been modified or material is missing", this);
                     }
                 }
             }
             else
             {
                 GetComponent<Renderer>().GetMaterials(materialInstances);
-                Debug.Log("Material Customisation Color 02b for" + color.ToString(), this);
-
+                
                 foreach (ModifiableProperty property in propertiesToModify)
                 {
-                    Debug.Log("Material Customisation Color 02b2 " + property.propertyName, this);
                     if(property.mat)
                         foreach (Material mat in materialInstances)
                         {
-                            Debug.Log("Material Customisation Color 02b3 " + mat.name, this);
-
                             if (mat.name.Contains(property.mat.name))
                             {
                                 mat.SetColor(property.propertyName, color);
-                                JLog("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color);
+                                //JLogBase.Log("Switched " + property.mat + "instanced material property " + property.propertyName + " color to " + color, this);
                             }
                             else
-                                JLog(property.propertyName + " is not featured in " + mat.name);
+                                JLogBase.Log(property.propertyName + " is not featured in " + mat.name, this);
                         }
                     else
-                        JLog("Either property has already been modified or material is missing");
+                        JLogBase.Log("Either property has already been modified or material is missing", this);
                 }
             }
         }

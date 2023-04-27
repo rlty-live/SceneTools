@@ -136,7 +136,8 @@ public class StaticFrame : SceneTool
                 color = _AdminColor;
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                break;
+                //throw new ArgumentOutOfRangeException();
         }
 
         return color;

@@ -29,7 +29,7 @@ public class JLogFilter : ScriptableObject
         
         foreach (Entry e in filters)
         foreach (TextAsset t in e.scriptsList)
-            if (inString.Contains(t.name))
+            if (t && inString.Contains(t.name))
             {
                 color  = ColorUtility.ToHtmlStringRGB(e.color);
                 return e.log;

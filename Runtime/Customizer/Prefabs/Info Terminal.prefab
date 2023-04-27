@@ -428,7 +428,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 48f5e8f35dd375949bc1be3c66e64181, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0ba9ba1060676f54eb3be7107be9de7b, type: 2}
+      objectReference: {fileID: 2100000, guid: 99f4c971553181142bc3b45e7777ffa6, type: 2}
     - target: {fileID: 919132149155446097, guid: 48f5e8f35dd375949bc1be3c66e64181, type: 3}
       propertyPath: m_Name
       value: borne (1)
@@ -573,6 +573,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5709210726516685697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432728795621419813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130598d01b72bf54e94d4d1c9ead448f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _usedCollider: {fileID: 194261666}
+  _targetParentClass: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
+  _customisableType: 11
 --- !u!4 &1777166564920701343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 48f5e8f35dd375949bc1be3c66e64181, type: 3}

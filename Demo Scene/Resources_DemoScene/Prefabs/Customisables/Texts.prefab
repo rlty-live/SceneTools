@@ -156,7 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15631a5ef5e10841b9f7ec4af7732c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
@@ -182,23 +181,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  deactivable: 1
   type: 6
   displayKey: Paragraph
   key: Paragraph
   useGameobjectName: 0
+  section: 
   group: 
+  labelGroup: 
+  manualDescription: 1
+  displayCommentary: 
   commentary: 
   technicalInfo: 
+  _keyValue:
+    key: 
+    value: 
   processor: {fileID: 4123845494160906476}
   target: {fileID: 43679430}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
-  _instanceId: 0
 --- !u!1 &177465122
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,7 +530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15631a5ef5e10841b9f7ec4af7732c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
@@ -552,23 +555,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  deactivable: 1
   type: 6
   displayKey: Title
   key: Title
   useGameobjectName: 0
+  section: 
   group: 
+  labelGroup: 
+  manualDescription: 1
+  displayCommentary: 
   commentary: 
   technicalInfo: 
+  _keyValue:
+    key: 
+    value: 
   processor: {fileID: 4123845494160906480}
   target: {fileID: 593149498}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
-  _instanceId: 0
 --- !u!1 &1064400033
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,7 +770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15631a5ef5e10841b9f7ec4af7732c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
@@ -788,23 +795,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  deactivable: 1
   type: 6
   displayKey: Paragraph
   key: Paragraph
   useGameobjectName: 0
+  section: 
   group: 
+  labelGroup: 
+  manualDescription: 1
+  displayCommentary: 
   commentary: 
   technicalInfo: 
+  _keyValue:
+    key: 
+    value: 
   processor: {fileID: 4123845494160906478}
   target: {fileID: 1064400035}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
-  _instanceId: 0
 --- !u!1 &1105775866
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,7 +895,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c1cda22111a994892bd3d29d66b2e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 1
   correctSetup: 0
   debug: 1
@@ -1037,7 +1048,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15631a5ef5e10841b9f7ec4af7732c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
@@ -1063,23 +1073,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  IsDeactivable: 0
+  deactivable: 1
   type: 6
   displayKey: Title
   key: Title
   useGameobjectName: 0
+  section: 
   group: 
+  labelGroup: 
+  manualDescription: 1
+  displayCommentary: 
   commentary: 
   technicalInfo: 
+  _keyValue:
+    key: 
+    value: 
   processor: {fileID: 1696878954}
   target: {fileID: 1544153352}
   showGizmo: 0
   gizmoOffset: {x: 1, y: 0, z: 0}
-  _instanceId: 0
 --- !u!1 &2108899099
 GameObject:
   m_ObjectHideFlags: 0
