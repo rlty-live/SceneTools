@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
@@ -46,15 +47,18 @@ namespace RLTY.Customisation
         public override void Customize(KeyValueBase kvo)
         {
             videoURL = kvo.value;
-            Debug.Log("Got " + kvo.value + " from sceneDescription", this);
+            if(String.IsNullOrEmpty(videoURL)) JLogError("videoURL is null or empty for " + this);
+            JLog("Got " + kvo.value + " from sceneDescription");
         }
+
+        
 
         public void FindTriggerZone()
         {
             if (!triggerZone && GetComponentInChildren<TriggerZone>())
                 triggerZone = GetComponentInChildren<TriggerZone>();
             else
-                JLogBase.LogError("No Trigger zone associated, and none can be found in children, the associated video will never start", this);
+                JLogError("No Trigger zone associated, and none can be found in children, the associated video will never start");
         }
     }
 }

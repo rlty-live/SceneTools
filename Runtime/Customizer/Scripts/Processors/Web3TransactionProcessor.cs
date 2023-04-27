@@ -17,6 +17,8 @@ namespace RLTY.Customisation
         public Renderer image;
         public Renderer backFaceImage;
 
+        public bool validWeb3Data;
+
         public static NFTData DeserializeJson(string json)
         {
             return JsonConvert.DeserializeObject<NFTData>(json);
@@ -25,25 +27,13 @@ namespace RLTY.Customisation
 
         public override void Customize(KeyValueBase keyValue)
         {
-            if (string.IsNullOrEmpty(keyValue.value))
-            {
-                gameObject.SetActive(false);
-                return;
-            }
-
             try
             {
-                RLTYLog("key value = " + keyValue.value, this, LogType.Log);
-
                 formatedKeyValue = keyValue.value.Replace(@"\", "");
-
-                RLTYLog("formatted key value = " + formatedKeyValue, this, LogType.Log);
 
                 data = new NFTData();
                 data = DeserializeJson(formatedKeyValue);
-
-                RLTYLog("Deserialized =" + data.type + ", " + data.address + ", " + data.tokenid /*+ data.image*/, this, LogType.Log);
-
+                
                 if (!string.IsNullOrEmpty(data.image))
                 {
                     if (image.material)
@@ -56,15 +46,15 @@ namespace RLTY.Customisation
 
             catch (System.Exception e)
             {
-                JLogError("Invalid Web3 data on key=" + keyValue.key + " value=" + keyValue.value);
-                gameObject.SetActive(false);
+                gameObject.GetComponent<Customisable>()._keyValue = null;
+                JLogBase.LogError("Invalid Web3 data on key=" + keyValue.key + " value=" + keyValue.value, this);
             }
         }
 
         public void Web3Transaction()
         {
             SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(data));
-            RLTYLog("Web3: " + JsonConvert.SerializeObject(data), this, LogType.Log);
+            JLogBase.Log("Web3: " + JsonConvert.SerializeObject(data), this);
         }
 
         //USE THIS TO ACTIVATE TRANSACTION ON COLLISION

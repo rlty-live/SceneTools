@@ -10,41 +10,35 @@ using UnityEditor;
 
 namespace RLTY.Customisation
 {
-#if UNITY_EDITOR
     [HideMonoScript]
-    [CanEditMultipleObjects]
     [HelpURL("https://www.youtube.com/watch?v=xvFZjo5PgG0")]
     [AddComponentMenu("RLTY/Customisable/Customisable")]
     [DisallowMultipleComponent]
-#endif
-    public class Customisable : RLTYMonoBehaviour
+    public class Customisable : RLTYMonoBehaviourBase
     {
         #region Global variables
 
         [Title("Configuration")]
-        [InfoBox("If you want to copy this gameobject just give it the same name and it will be customized the same way")]
+        [InfoBox(
+            "If you want to copy this gameobject just give it the same name and it will be customized the same way")]
         public bool deactivable = true;
 
-        [LabelWidth(40), Space(5)]
-        public CustomisableType type;
+        [LabelWidth(40), Space(5)] public CustomisableType type;
 
-        [HorizontalGroup("IDs"), LabelText("Key"), LabelWidth(40)]
-        [SerializeField]
+        [HorizontalGroup("IDs"), LabelText("Key"), LabelWidth(40)] [SerializeField]
         public string displayKey;
+
         [ReadOnly, ShowIf("showUtilities", true), LabelText("realKey")]
         public string key;
-        [SerializeField]
-        [HorizontalGroup("IDs", 10, 0)]
-        [ShowIf("showUtilities", true)]
+
+        [SerializeField] [HorizontalGroup("IDs", 10, 0)] [ShowIf("showUtilities", true)]
         private bool useGameobjectName;
 
-        [Title("Organization")]
-        [SerializeField]
+        [Title("Organization")] [SerializeField]
         private static List<string> sections = new List<string>();
-        [SerializeField]
-        private static List<string> groups = new List<string>();
-        [SerializeField]
-        private static List<string> labelGroups = new List<string>();
+
+        [SerializeField] private static List<string> groups = new List<string>();
+        [SerializeField] private static List<string> labelGroups = new List<string>();
 
         const int labelWidth = 80;
 
@@ -52,51 +46,61 @@ namespace RLTY.Customisation
         [Tooltip("Customisables in the same section appear in a panel named 'Section'")]
         [LabelWidth(labelWidth)]
         public string section;
+
         [ValueDropdown("GetGroups")]
         [Tooltip("Grouped customisable appear in the same bloc, without labels")]
         [LabelWidth(labelWidth)]
         public string group;
-        [ValueDropdown("GetLabelGroups")]
-        [Tooltip("To be added")]
-        [LabelWidth(labelWidth)]
+
+        [ValueDropdown("GetLabelGroups")] [Tooltip("To be added")] [LabelWidth(labelWidth)]
         public string labelGroup;
 
         [Title("Description")]
         [SerializeField, ShowIf("showUtilities")]
-        [Tooltip("Set this to true if you haven't already added your groupind and sectionning")]
+        [Tooltip("Set this to true if you haven't already added your grouping and sectioning")]
         private bool manualDescription = true;
-        [TextArea, LabelText("Commentary")]
-        public string displayCommentary;
+
+        [TextArea, LabelText("Commentary")] public string displayCommentary;
+
         [TextArea, ReadOnly, ShowIf("showUtilities", true), LabelText("Real Commentary")]
         public string commentary;
 
-        [SerializeField, ReadOnly]
-        string technicalInfo;
+        [SerializeField, ReadOnly] string technicalInfo;
 
         [SerializeField, ReadOnly, ShowIf("showUtilities")]
-        private KeyValueBase _keyValue;
+        public KeyValueBase _keyValue;
 
-        [Title("Setup")]
-        [ShowIf("showUtilities", true), ReadOnly]
+        [Title("Setup")] [ShowIf("showUtilities", true), ReadOnly]
         public Processor processor;
 
         [SerializeField] private Component target;
-
         private static CustomisationManager customizer;
+        private static bool checkingCustomisationManager = false;
 
-        [Title("Handles")]
-        [SerializeField]
-        [ShowIf("showUtilities", true)]
+        [Title("Handles")] [SerializeField] [ShowIf("showUtilities", true)]
         private bool showGizmo = false;
-        [ShowIf("showUtilities", true)]
-        public Vector3 gizmoOffset = new Vector3(1, 0, 0);
+
+        [ShowIf("showUtilities", true)] public Vector3 gizmoOffset = new Vector3(1, 0, 0);
+
         #endregion
 
         #region EditorOnly Logic
+
 #if UNITY_EDITOR
-        public IEnumerable<string> GetGroups() { return groups; }
-        public IEnumerable<string> GetSections() { return sections; }
-        public IEnumerable<string> GetLabelGroups() { return labelGroups; }
+        public IEnumerable<string> GetGroups()
+        {
+            return groups;
+        }
+
+        public IEnumerable<string> GetSections()
+        {
+            return sections;
+        }
+
+        public IEnumerable<string> GetLabelGroups()
+        {
+            return labelGroups;
+        }
 
         public void UpdateCustomisableOrganisation()
         {
@@ -119,6 +123,7 @@ namespace RLTY.Customisation
             if (!key.IsNullOrWhitespace())
                 key = key.Replace(" ", "_");
         }
+
         public void UpdateCommentary()
         {
             if (!manualDescription && !displayCommentary.IsNullOrWhitespace())
@@ -135,41 +140,39 @@ namespace RLTY.Customisation
             }
         }
 
-
         public void GetTechnicalInfo()
         {
             //no processor-specific code here, please call a method on the processor instead
         }
 
-
+        public static void CheckCustomisationManager()
+        {
+            //Create a second CustomisationManager, change associated events
+            // checkingCustomisationManager = true;
+            // customizer = FindObjectOfType<CustomisationManager>();
+            //
+            // if (!customizer)
+            // {
+            //     GameObject customisationManager;
+            //     customisationManager = new GameObject("Customisation Manager", typeof(CustomisationManager));
+            //     customizer = customisationManager.GetComponent<CustomisationManager>();
+            //
+            //     JLogBase.Log("No CustomisationManager present in the scene, added one.", customizer);
+            // }
+        }
 
         public void OnValidate()
         {
-            if (!customizer)
-            {
-                GameObject customisationManger;
-
-                if (!FindObjectOfType<CustomisationManager>())
-                {
-                    customisationManger = new GameObject("Customisation Manager", typeof(CustomisationManager));
-                    customizer = customisationManger.GetComponent<CustomisationManager>();
-                }
-
-                else
-                    customizer = FindObjectOfType<CustomisationManager>();
-
-                customisationManger = null;
-            }
-
+            if (!checkingCustomisationManager)
+                CheckCustomisationManager();
+            
             UpdateKey();
-
             UpdateCustomisableOrganisation();
 
             if (!manualDescription)
                 UpdateCommentary();
 
             CheckForProcessor();
-
             GetTechnicalInfo();
         }
 
@@ -187,9 +190,11 @@ namespace RLTY.Customisation
             }
         }
 #endif
+
         #endregion
 
         #region Common Logic
+
         public override void CheckSetup()
         {
             base.CheckSetup();
@@ -209,7 +214,8 @@ namespace RLTY.Customisation
 
             if (processor)
             {
-                if (CustomisableUtility.Processors.ContainsKey(type) && CustomisableUtility.Processors[type].type == processor.GetType())
+                if (CustomisableUtility.Processors.ContainsKey(type) &&
+                    CustomisableUtility.Processors[type].type == processor.GetType())
                     ValidProcessorDebugLog(true);
                 else
                 {
@@ -217,7 +223,6 @@ namespace RLTY.Customisation
                         DestroyProcessor(processor);
                     processor = null;
                 }
-
             }
 
             if (processor == null && CustomisableUtility.Processors.ContainsKey(type))
@@ -260,7 +265,8 @@ namespace RLTY.Customisation
 
                 else
                 {
-                    JLogWarning("No Processor found in children, added " + processor + " automatically, please set it up.");
+                    JLogWarning("No Processor found in children, added " + processor +
+                                " automatically, please set it up.");
 #if UNITY_EDITOR
                     if (!PrefabUtility.IsPartOfPrefabAsset(this) && this.gameObject.activeInHierarchy)
                         StartCoroutine(TemporaryBoolSwitch(3));
@@ -276,58 +282,38 @@ namespace RLTY.Customisation
         #endregion
 
         #region Runtime Logic
+
         //Replace all Customize Method with a KeyValueBaseType Parameter and Make KeyValueObject Inherit from KeyValueBase
         public void Customize(KeyValueBase _KeyValueBase)
         {
             CheckSetup();
+
             _keyValue = _KeyValueBase;
             if (!processor)
             {
-                JLog("Missing processor on Customisable please check setup");
+                JLogBase.Log("Missing processor on Customisable please check setup", this);
             }
 
             else
             {
                 if (target == null)
                 {
-                    JLogError("Target is null on customisable " + processor.name);
+                    JLogBase.LogError("Target is null on customisable " + processor.name, this);
                     return;
                 }
-                JLog("Using processor " + processor.GetType());
+
+                //JLogBase.Log("Using processor " + processor.GetType(), this);
                 processor.Customize(_keyValue);
             }
         }
 
-        public void DeactivateGameobjectIfIntact()
-        {
-            if (deactivable == true)
-            {
-                if (_keyValue == null || _keyValue.value.IsNullOrWhitespace())
-                {
-                    gameObject.SetActive(false);
-                    JLog("No customisation asked for this customisable, deactivating Gameobject");
-                }
-            }
-        }
-
         #region Observer Pattern
-
-        public override void EventHandlerRegister()
-        {
-            CustomisationManagerHandlerData.OnSceneCustomized += DeactivateGameobjectIfIntact;
-        }
-
-        public override void EventHandlerUnRegister()
-        {
-            CustomisationManagerHandlerData.OnSceneCustomized -= DeactivateGameobjectIfIntact;
-        }
 
         #endregion
 
         #endregion
     }
 }
-
 
 
 //Keep for after OdinRemoval

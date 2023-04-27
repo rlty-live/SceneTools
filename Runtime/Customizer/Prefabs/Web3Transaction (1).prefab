@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 3007923517414979688}
   - component: {fileID: 1414182882541179746}
   - component: {fileID: 1705334672367358244}
+  - component: {fileID: 2379140337576674608}
   m_Layer: 9
   m_Name: Sign
   m_TagString: Untagged
@@ -248,6 +249,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2379140337576674608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555660882467993696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130598d01b72bf54e94d4d1c9ead448f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _usedCollider: {fileID: 1414182882541179746}
+  _targetParentClass: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
+  _customisableType: 10
 --- !u!1 &6929673399487655051
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,11 +337,8 @@ MonoBehaviour:
   key: Web3Transaction_(1)
   useGameobjectName: 1
   section: 
-  newSection: 
   group: 
-  newGroup: 
   labelGroup: 
-  newLabelGroup: 
   manualDescription: 1
   displayCommentary: 
   commentary: 
@@ -390,6 +403,7 @@ MonoBehaviour:
   debug: 1
   image: {fileID: 2964491336432834308}
   backFaceImage: {fileID: 2841885566193683842}
+  validWeb3Data: 0
 --- !u!95 &574607409235118689
 Animator:
   serializedVersion: 4
