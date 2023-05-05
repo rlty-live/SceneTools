@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RLTY.Metaverse.Interactions
+namespace Judiva.Metaverse.Interactions
 {
     [RequireComponent(typeof(TriggerZone))]
     public class VisioTrigger : MonoBehaviour

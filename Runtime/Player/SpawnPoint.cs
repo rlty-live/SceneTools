@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RLTY.Metaverse.Interactions
+namespace Judiva.Metaverse.Interactions
 {
     public class SpawnPoint : MonoBehaviour
     {

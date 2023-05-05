@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RLTY.Metaverse.Interactions
+namespace Judiva.Metaverse.Interactions
 {
 
     

@@ -1,5 +1,5 @@
 using UnityEngine;
-using RLTY.Metaverse.Interactions;
+using Judiva.Metaverse.Interactions;
 using RLTY.SessionInfo;
 
 namespace RLTY.Customisation
