@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using Sirenix.OdinInspector;
 using System.Linq;
 
-namespace Judiva.Metaverse.Interactions
+namespace RLTY.Metaverse.Interactions
 {
 #if UNITY_EDITOR
     [AddComponentMenu("RLTY/Interaction/Trigger Zone"), HideMonoScript]

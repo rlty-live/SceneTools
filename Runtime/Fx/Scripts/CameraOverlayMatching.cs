@@ -1,7 +1,7 @@
 using UnityEngine;
 using RLTY.Boot;
 
-namespace Judiva.Metaverse
+namespace RLTY.Metaverse
 {
     [ExecuteAlways]
     public class CameraOverlayMatching : MonoBehaviour

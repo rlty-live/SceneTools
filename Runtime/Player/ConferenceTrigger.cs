@@ -1,7 +1,7 @@
 using UnityEngine;
 using RLTY.SessionInfo;
 
-namespace Judiva.Metaverse.Interactions
+namespace RLTY.Metaverse.Interactions
 {
     [RequireComponent(typeof(TriggerZone))]
     public class ConferenceTrigger : MonoBehaviour

@@ -220,9 +220,9 @@ public class FullScreenCustom : MonoBehaviour
         _blendCamera.OnBlendFinish += _blendCamera.Reset;
 
         _fullScreenFade.Fade(() => { CreateCamera(); }, () => OnFadeFinish?.Invoke(), true);
-        
-        // if (Judiva.Metaverse.Player.Me && Judiva.Metaverse.Player.Me.PlayerController)
-        //     Judiva.Metaverse.Player.Me.PlayerController.enabled = false;
+
+        // if (RLTY.Metaverse.Player.Me && RLTY.Metaverse.Player.Me.PlayerController)
+        //     RLTY.Metaverse.Player.Me.PlayerController.enabled = false;
 
         if (AllPlayers.List.Count > 0)
         {
@@ -255,8 +255,8 @@ public class FullScreenCustom : MonoBehaviour
         }, () => OnFadeFinish?.Invoke(), true);
 
 
-        // if (Judiva.Metaverse.Player.Me && Judiva.Metaverse.Player.Me.PlayerController)
-        //     Judiva.Metaverse.Player.Me.PlayerController.enabled = true;
+        // if (RLTY.Metaverse.Player.Me && RLTY.Metaverse.Player.Me.PlayerController)
+        //     RLTY.Metaverse.Player.Me.PlayerController.enabled = true;
 
         if (AllPlayers.List.Count > 0)
         {

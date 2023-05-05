@@ -4,7 +4,7 @@ using UnityEngine.AI;
 #if FISHNET_SUPPORT
 using FishNet.Component.Animating;
 #endif
-using Judiva.Metaverse.Interactions;
+using RLTY.Metaverse.Interactions;
 using RLTY.UI;
 
 #if UNITY_EDITOR

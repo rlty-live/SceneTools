@@ -1,5 +1,5 @@
 using UnityEngine;
-using Judiva.Metaverse.Interactions;
+using RLTY.Metaverse.Interactions;
 using RLTY.SessionInfo;
 using Newtonsoft.Json;
 using System;
