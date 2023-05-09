@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Judiva.Metaverse.Interactions
+namespace RLTY.Metaverse.Interactions
 {
     /// <summary>
     /// Use this to show/hide a part of the scene based on a trigger zone

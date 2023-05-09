@@ -1,4 +1,4 @@
-using Judiva.Metaverse.Interactions;
+using RLTY.Metaverse.Interactions;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
