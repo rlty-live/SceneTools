@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 using System.Collections;
-using RLTY.Metaverse.Interactions;
+using Judiva.Metaverse.Interactions;
 
 #if UNITY_EDITOR
 using UnityEditor;

@@ -5,7 +5,7 @@ using System;
 using UnityEditor;
 #endif
 
-namespace RLTY.Metaverse.Interactions
+namespace Judiva.Metaverse.Interactions
 {
     public class Teleporter : SceneTool
     {

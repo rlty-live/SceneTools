@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using TMPro;
 
-namespace RLTY.Metaverse.Interactions
+namespace Judiva.Metaverse.Interactions
 {
     public class TeleporterTriggerTestFramework : MonoBehaviour
     {

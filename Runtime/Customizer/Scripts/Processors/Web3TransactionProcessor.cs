@@ -1,8 +1,9 @@
 using UnityEngine;
-using RLTY.Metaverse.Interactions;
+using Judiva.Metaverse.Interactions;
 using RLTY.SessionInfo;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 namespace RLTY.Customisation
 {
