@@ -1,3 +1,4 @@
+//#define SIMULATEASSETBUNDLECREATION
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -15,6 +16,7 @@ public class AssetbundleBuildEditor : EditorWindow
     private static string tmpDirectoryName = "RLTYTmp2";
 
     private static List<PlayerTarget> _assetbundleTargets = new List<PlayerTarget>();
+    private static List<string> _pathsToDelete = new List<string>();
 
     #region Helpers
 
@@ -34,9 +36,13 @@ public class AssetbundleBuildEditor : EditorWindow
                     case BuildTarget.WebGL:
                         return "WebGL";
                     case BuildTarget.StandaloneWindows64:
-                        return "Win " + (headless ? "Headless " : "") + Label;
+                        return "Windows " + (headless ? "Headless " : "") + Label;
                     case BuildTarget.StandaloneLinux64:
                         return "Linux " + (headless ? "Headless " : "") + Label;
+                    case BuildTarget.iOS:
+                        return "iOS " + (headless ? "Headless " : "") + Label;
+                    case BuildTarget.Android:
+                        return "Android " + (headless ? "Headless " : "") + Label;
                 }
                 return "unnamed";
             }
@@ -51,26 +57,59 @@ public class AssetbundleBuildEditor : EditorWindow
         }
     }
 
-    private static string GetAssetBundlePath(BuildTarget target, StandaloneBuildSubtarget subTarget)
+    private static string GetAssetBundlePath(string environmentid, BuildTarget target, StandaloneBuildSubtarget subTarget)
     {
         if (target == BuildTarget.WebGL)
-            return GetWebGLAssetBundlePath();
-        return _setup.StreamingAssetsLocalPath + "/" + target + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
+            return GetWebGLAssetBundlePath(environmentid);
+        else if (target == BuildTarget.iOS)
+            return GetiOSAssetBundlePath(environmentid);
+        else if (target == BuildTarget.Android)
+            return GetAndroidAssetBundlePath(environmentid);
+        else if (target == BuildTarget.StandaloneWindows64)
+            return GetWindowsAssetBundlePath(environmentid, subTarget);
+        else if (target == BuildTarget.StandaloneLinux64)
+            return GetLinuxAssetBundlePath(environmentid, subTarget);
+
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + target + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
     }
 
-    private static string GetManifestPath()
+    private static string FolderNameFromTargetPlatform(BuildTarget target)
     {
-        return _setup.StreamingAssetsLocalPath + "/Manifest";
+        if (target == BuildTarget.StandaloneWindows64)
+            return "Windows";
+        else if (target == BuildTarget.StandaloneLinux64)
+            return "Linux";
+        return target.ToString();
     }
 
-    private static string GetWebGLAssetBundlePath()
+    private static string GetManifestFilePath(string environement)
     {
-        return _setup.StreamingAssetsLocalPath + "/" + BuildTarget.WebGL;
+        return _setup.StreamingAssetsLocalPath + "/" + environement + "/" + "manifest.json";
     }
 
-    private static string GetLinuxAssetBundlePath()
+    private static string GetWebGLAssetBundlePath(string environmentid)
     {
-        return _setup.StreamingAssetsLocalPath + "/" + BuildTarget.StandaloneLinux64 + "/" + "Server";
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid  + "/" + BuildTarget.WebGL;
+    }
+
+    private static string GetAndroidAssetBundlePath(string environmentid)
+    {
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.Android;
+    }
+
+    private static string GetiOSAssetBundlePath(string environmentid)
+    {
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.iOS;
+    }
+
+    private static string GetLinuxAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
+    {
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.StandaloneLinux64 + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
+    }
+
+    private static string GetWindowsAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
+    {
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + "Windows" + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
     }
 
     private static void FindSetup()
@@ -115,41 +154,50 @@ public class AssetbundleBuildEditor : EditorWindow
         if (_assetbundleTargets.Count == 0)
         {
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = true, headless = true });
-            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneLinux64, server = true, headless = true });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = false, headless = false });
+            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneLinux64, server = true, headless = true });
+            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneLinux64, server = false, headless = true });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.WebGL, server = false, headless = false });
+            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.iOS, server = false, headless = false });
+            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.Android, server = false, headless = false });
         }
 
         FindSetup();
-        _setup = (AssetbundleBuildSetup)EditorGUILayout.ObjectField("Setup", _setup, typeof(AssetbundleBuildSetup));
+        _setup = (AssetbundleBuildSetup)EditorGUILayout.ObjectField("Setup", _setup, typeof(AssetbundleBuildSetup), false);
         for (int i = 0; i < _assetbundleTargets.Count; i++)
             _assetbundleTargets[i].build = GUILayout.Toggle(_assetbundleTargets[i].build, _assetbundleTargets[i].Name);
 
-        if (float.TryParse(Application.version, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float value))
+        if (GUILayout.Button("Build AssetBundles and S3 publication ZIP file(s)"))
         {
-            if (GUILayout.Button("Build AssetBundles"))
-            {
-                List<PlayerTarget> list = new List<PlayerTarget>();
-                for (int i = 0; i < _assetbundleTargets.Count; i++)
-                    if (_assetbundleTargets[i].build)
-                        list.Add(_assetbundleTargets[i]);
-                EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
-            }
-
-
-            GUILayout.Space(40);
+            List<PlayerTarget> list = new List<PlayerTarget>();
+            _pathsToDelete.Clear();
+            for (int i = 0; i < _assetbundleTargets.Count; i++)
+                if (_assetbundleTargets[i].build)
+                    list.Add(_assetbundleTargets[i]);
+            EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
         }
-        else
-            GUILayout.Label("Incorrect version syntax, must be 'X.Y'");
-        PlayerSettings.bundleVersion = EditorGUILayout.TextField("Version", Application.version);
-        if (GUILayout.Button("Prepare Publishing"))
-            PreparePublishToS3();
     }
 
     #region Assetbundles
 
+    private static void DeleteTempFolders()
+    {
+        foreach (var pathtodelete in _pathsToDelete)
+        {
+            try
+            {
+                Directory.Delete(pathtodelete, true);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError(e.Message);
+            }
+        }
+    }
+
     IEnumerator PerformBuildAssetBundles(List<PlayerTarget> targetsToBuild)
     {
+        PlayerSettings.bundleVersion = Application.version;
         _setup.PrepareForBuild();
 
         string tmp = Application.dataPath;
@@ -164,110 +212,146 @@ public class AssetbundleBuildEditor : EditorWindow
         BuildTarget originalTarget = EditorUserBuildSettings.activeBuildTarget;
         StandaloneBuildSubtarget originalSubTarget = EditorUserBuildSettings.standaloneBuildSubtarget;
 
-        // build each target
-        for (int targetIndex = 0; targetIndex < targetsToBuild.Count; ++targetIndex)
+        foreach (var environment in _setup.environmentList)
         {
-            var buildTarget = targetsToBuild[targetIndex];
+            //delete environement folder
+            string envfolder = _setup.StreamingAssetsLocalPath + "/" + environment.id;
+            if (Directory.Exists(envfolder))
+            {
+                Directory.Delete(envfolder, true);
+                Directory.CreateDirectory(envfolder);
+            }
+            // build each target
+            for (int targetIndex = 0; targetIndex < targetsToBuild.Count; ++targetIndex)
+            {
+                var buildTarget = targetsToBuild[targetIndex];
 
-            Progress.Report(buildAllProgressID, targetIndex + 1, targetsToBuild.Count);
-            int buildTaskProgressID = Progress.Start($"Build {buildTarget.ToString()}", null, Progress.Options.Sticky, buildAllProgressID);
-            yield return new EditorWaitForSeconds(0.5f);
+                Progress.Report(buildAllProgressID, targetIndex + 1, targetsToBuild.Count);
+                int buildTaskProgressID = Progress.Start($"Build {buildTarget.Name}", null, Progress.Options.Sticky, buildAllProgressID);
 
-            // perform the build
-            BuildAssetBundlesForTarget(tmpDirectory, buildTarget.target, buildTarget.headless ? StandaloneBuildSubtarget.Server : StandaloneBuildSubtarget.Player);
-
-            Progress.Finish(buildTaskProgressID, Progress.Status.Succeeded);
-            yield return new EditorWaitForSeconds(0.5f);
+                // perform the build
+                BuildAssetBundlesForTarget(environment.id, tmpDirectory, buildTarget.target, buildTarget.server ? StandaloneBuildSubtarget.Server : StandaloneBuildSubtarget.Player);
+#if SIMULATEASSETBUNDLECREATION
+                yield return new EditorWaitForSeconds(4.5f);
+#endif
+                Progress.Finish(buildTaskProgressID, Progress.Status.Succeeded);
+            }
         }
 
-        Progress.Finish(buildAllProgressID, Progress.Status.Succeeded);
+        //build manifests
+        foreach (var environment in _setup.environmentList)
+        {
+            string environementmanifestfile = null;
+            if (environment.rebuild)
+            {
+                SceneManifest manifest = new SceneManifest(environment.scenes);
+                environementmanifestfile = GetManifestFilePath(environment.id);
+                string environementmanifestfilepath = Path.GetDirectoryName(environementmanifestfile);
+                if (!Directory.Exists(environementmanifestfilepath))
+                {
+                    Directory.CreateDirectory(environementmanifestfilepath);
+                }
+                File.WriteAllText(environementmanifestfile, manifest.ToJson());
+            }
+            PreparePublishToS3(environment.id, environment.rebuild, environementmanifestfile);
+        }
+
         UnityEngine.Debug.Log("Assetbundle build time=" + (DateTime.Now.Subtract(startTime).TotalSeconds));
 
         if (EditorUserBuildSettings.activeBuildTarget != originalTarget || EditorUserBuildSettings.standaloneBuildSubtarget != originalSubTarget)
         {
             EditorUserBuildSettings.SwitchActiveBuildTargetAsync(GetTargetGroupForTarget(originalTarget), originalTarget);
         }
-
-        //build manifests
-        foreach (var environment in _setup.environmentList)
-            if (environment.rebuild)
-            {
-                SceneManifest manifest = new SceneManifest(environment.scenes);
-                if (!Directory.Exists(GetManifestPath())) {
-                    Directory.CreateDirectory(GetManifestPath());
-                }
-                File.WriteAllText("Assets/" + manifest + ".json", manifest.ToJson());
-            }
+        Progress.Finish(buildAllProgressID, Progress.Status.Succeeded);
 
         yield return null;
     }
 
-    private static void BuildAssetBundlesForTarget(string tmpDirectory, BuildTarget target, StandaloneBuildSubtarget subTarget)
+    private static void BuildAssetBundlesForTarget(string environmentid, string tmpDirectory, BuildTarget target, StandaloneBuildSubtarget subTarget)
     {
         if (Directory.Exists(tmpDirectory))
             Directory.Delete(tmpDirectory, true);
         if (!Directory.Exists(tmpDirectory))
             Directory.CreateDirectory(tmpDirectory);
-        string path = tmpDirectory + "/" + target;
+        string path = tmpDirectory + "/" + environmentid + "/" + target;
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
         EditorUserBuildSettings.standaloneBuildSubtarget = subTarget;
+
+#if SIMULATEASSETBUNDLECREATION
+        File.WriteAllText(path + "/" + target.ToString() + ".txt", target.ToString());
+#else
         BuildPipeline.BuildAssetBundles(path,
                                 BuildAssetBundleOptions.None,
                                 target);
+#endif
 
         string[] filePaths = Directory.GetFiles(path);
-        string assetBundleDirectory = GetAssetBundlePath(target, target == BuildTarget.WebGL ? StandaloneBuildSubtarget.Player : subTarget);
+        string assetBundleDirectory = GetAssetBundlePath(environmentid, target, subTarget);
         if (!Directory.Exists(assetBundleDirectory))
             Directory.CreateDirectory(assetBundleDirectory);
         foreach (string file in filePaths)
         {
             string str = assetBundleDirectory + "/" + Path.GetFileName(file);
-            string tmp = file.Substring(path.Length);
-            if (tmp.Contains(tmpDirectoryName))
-                File.Delete(file);
-            else
-            {
-                if (File.Exists(str))
-                    File.Delete(str);
-                File.Move(file, str);
-            }
+            File.Move(file, str);
         }
         Directory.Delete(tmpDirectory, true);
     }
 
-    #endregion
+#endregion
 
-    private static void PreparePublishToS3()
+    private static void PreparePublishToS3(string environment, bool rebuildenvironment, string environementmanifestfile)
     {
         string path = _setup.PublishS3Path;
+        path = Path.GetFullPath(path, Path.Combine(Application.dataPath, "../"));
+        path = Path.GetFullPath(path);
         if (Directory.Exists(path))
             Directory.Delete(path, true);
         Directory.CreateDirectory(path);
 
-        string clientAssetPath = path + "/rlty-unity-assets/v" + Application.version + "/client";
-        string serverAssetPath = path + "/rlty-unity-assets/v" + Application.version + "/server";
+        string environmentpath = path + "/rlty-unity-assets/" + environment + "/v" + Application.version;
 
-        Directory.CreateDirectory(clientAssetPath);
-        Directory.CreateDirectory(serverAssetPath);
+        Directory.CreateDirectory(environmentpath);
 
         //copy client assetbundles
         UnityEngine.Debug.Log("Copying client assetbundles");
-        foreach (string file in Directory.GetFiles(GetWebGLAssetBundlePath()))
-        {
-            if (!file.Contains("manifest"))
-                File.Copy(file, clientAssetPath + "/" + Path.GetFileName(file));
-        }
 
-        //copy server assetbundles
+        UnityEngine.Debug.Log("Copying WebGL client assetbundles");
+        CopyToFinalDir(GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.WebGL, false);
+
+        UnityEngine.Debug.Log("Copying Android client assetbundles");
+        CopyToFinalDir(GetAndroidAssetBundlePath(environment), environmentpath, BuildTarget.Android, false);
+
+        UnityEngine.Debug.Log("Copying iOS client assetbundles");
+        CopyToFinalDir(GetiOSAssetBundlePath(environment), environmentpath, BuildTarget.iOS, false);
+
+        //copy linux server assetbundles
         UnityEngine.Debug.Log("Copying linux server assetbundles");
-        foreach (string file in Directory.GetFiles(GetLinuxAssetBundlePath()))
+        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneLinux64, true, StandaloneBuildSubtarget.Server);
+
+        //copy linux client assetbundles
+        UnityEngine.Debug.Log("Copying linux client assetbundles");
+        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneLinux64, true, StandaloneBuildSubtarget.Player);
+
+        //copy windows server assetbundles
+        UnityEngine.Debug.Log("Copying windows server assetbundles");
+        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneWindows64, true, StandaloneBuildSubtarget.Server);
+
+        //copy windows client assetbundles
+        UnityEngine.Debug.Log("Copying windows client assetbundles");
+        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneWindows64, true, StandaloneBuildSubtarget.Player);
+
+
+        //copy manifest
+        if (rebuildenvironment)
         {
-            if (!file.Contains("manifest"))
-                File.Copy(file, serverAssetPath + "/" + Path.GetFileName(file));
+            File.Copy(environementmanifestfile, environmentpath + "/" + Path.GetFileName(environementmanifestfile), true);
         }
 
-        path = Path.GetFullPath(path);
+        //Store everything in a Zip
+        StoreInZip(environmentpath);
+
+        path = Path.GetFullPath(path + "/rlty-unity-assets");
         UnityEngine.Debug.Log("open folder " + path);
         if (Directory.Exists(path))
         {
@@ -279,8 +363,50 @@ public class AssetbundleBuildEditor : EditorWindow
             Process.Start(startInfo);
         }
     }
-}
 
+    private static void CopyToFinalDir(string srcrdir, string assetPath, BuildTarget target, bool useSubTarget, StandaloneBuildSubtarget subTarget = StandaloneBuildSubtarget.Player)
+    {
+        if (!Directory.Exists(srcrdir))
+        {
+            return;
+        }
+        string platformdependentfolder = assetPath + "/" + FolderNameFromTargetPlatform(target);
+        if (useSubTarget)
+        {
+            platformdependentfolder += "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
+        }
+        if (!Directory.Exists(platformdependentfolder))
+        {
+            Directory.CreateDirectory(platformdependentfolder);
+        }
+
+        if (Directory.Exists(platformdependentfolder))
+        {
+            foreach (string file in Directory.GetFiles(srcrdir))
+            {
+                if (!file.Contains("manifest"))
+                    File.Copy(file, platformdependentfolder + "/" + Path.GetFileName(file));
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.LogError( platformdependentfolder + " destination publish folder could not be created");
+        }
+    }
+
+    private static void StoreInZip(string environmentPath)
+    {
+        string destzipfile = environmentPath + "/.." + "/rlty-unity-assets_v" + Application.version + ".zip";
+        FolderZipper.ZipUtil.ZipFiles(environmentPath, destzipfile, null);
+        UnityEngine.Debug.Log("Assets zipped to " + destzipfile);
+        _pathsToDelete.Add(Path.GetFullPath(environmentPath));
+    }
+
+    private void OnDisable()
+    {
+        DeleteTempFolders();
+    }
+}
 
 
 namespace FolderZipper
