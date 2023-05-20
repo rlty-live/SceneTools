@@ -113,7 +113,6 @@ GameObject:
   - component: {fileID: 157795140614520369}
   - component: {fileID: 157795140614520375}
   - component: {fileID: 2444393630730581558}
-  - component: {fileID: 5708502671976833570}
   - component: {fileID: 7947555954724674969}
   m_Layer: 5
   m_Name: AdminShareScreen_Button_Controller
@@ -206,25 +205,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd19a996aca43c64caa2bf5a7d5d9f9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5708502671976833570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 157795140614520372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 095e8dd0052b64e67a750d1fdc631fe4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isMultiChannelWant: 0
-  mRenderer: {fileID: 0}
-  mRawImage: {fileID: 7947555954724674969}
-  _enableFlipHorizontal: 0
-  _enableFlipVertical: 0
-  videoFps: 30
-  VideoSurfaceType: 1
 --- !u!114 &7947555954724674969
 MonoBehaviour:
   m_ObjectHideFlags: 0
