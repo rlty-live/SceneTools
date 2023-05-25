@@ -8,12 +8,22 @@ public static class AllPlayers
     public static Dictionary<int, IPlayer> List;
     public static event Action<IPlayer> OnPlayerJoined, OnPlayerLeft;
 
+    private static Dictionary<int, PlayerLocalData> _localDataCache = new Dictionary<int, PlayerLocalData>();
+    
     public static void NotifyPlayerJoined(IPlayer player, bool me=false)
     {
         JLogBase.Log("Creating player: " + player.ClientId, typeof(AllPlayers));
         if (me)
             Me = player;
         List[player.ClientId] = player;
+#if !UNITY_SERVER
+        if (_localDataCache.TryGetValue(player.ClientId, out PlayerLocalData data))
+        {
+            //restore player local data from cache
+            player.IsLocalyMuted = data.isLocalyMuted;
+            _localDataCache.Remove(player.ClientId);
+        }
+#endif
         OnPlayerJoined?.Invoke(player);
     }
 
@@ -21,10 +31,24 @@ public static class AllPlayers
     {
         JLogBase.Log("Destroying player: " + player.ClientId, typeof(AllPlayers));
         List.Remove(player.ClientId);
+#if !UNITY_SERVER
+        //store player local data in cache
+        PlayerLocalData data = new PlayerLocalData();
+        data.isLocalyMuted = player.IsLocalyMuted;
+        _localDataCache[player.ClientId] = data;
+#endif
         if (Me == player)
             Me = null;
         OnPlayerLeft?.Invoke(player);
     }
+}
+
+/// <summary>
+/// Use this class to store local data on players so they can be persistent even with the LOD system
+/// </summary>
+public class PlayerLocalData
+{
+    public bool isLocalyMuted;
 }
 
 public interface IPlayer
