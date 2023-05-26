@@ -38,11 +38,11 @@ namespace RLTY.SessionInfo
         public static void ServerReady() => OnServerReady?.Invoke();
 
 
-        public static event Action OnClientReady;
+        public static event Action OnClientIsAdminReady;
         public static void NotifyClientReady()
         {
             JLogBase.Log("Client ready", typeof(SessionInfoManagerHandlerData));
-            OnClientReady?.Invoke();
+            OnClientIsAdminReady?.Invoke();
         }
 
         public static event Action OnClientJoined;
@@ -78,6 +78,11 @@ namespace RLTY.SessionInfo
         public static event Action<string, Action<bool>> OnPlayerValidate;
 
         public static void ValidatePlayer(string playerSessionId, Action<bool> callback) => OnPlayerValidate?.Invoke(playerSessionId, callback);
+
+        public static event Action<string, Action<bool>> OnCheckIsAdmin;
+
+        public static void CheckPlayerIsAdmin(string playerSessionId, Action<bool> callback) => OnCheckIsAdmin?.Invoke(playerSessionId, callback);
+
 
         public static event Action<string, Action<bool>> OnPlayerDisconnect;
 

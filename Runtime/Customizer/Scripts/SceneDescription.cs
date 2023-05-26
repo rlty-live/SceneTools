@@ -25,6 +25,7 @@ namespace RLTY.Customisation
         /// Explicit URL of the assetbundle, as the web overlay puts "client" in assetbundleClient, god knows why
         /// </summary>
         public string assetbundleClientUrl = "";
+        public AssetBundleClientUrl assetBundleClientUrls;
         public string eventSlug;
         public string eventSession;
         public string clientVersion;
@@ -150,6 +151,16 @@ namespace RLTY.Customisation
             public string skin;
             public bool customReadyPlayerMe = false;
         }
+    }
+    
+    
+    [Serializable]
+    public class AssetBundleClientUrl
+    {
+        public string Windows;
+        public string WebGL;
+        public string Android;
+        public string IOS;
     }
 
     #region Processor declaration
