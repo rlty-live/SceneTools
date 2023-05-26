@@ -19,6 +19,7 @@ public class StaticFrame : SceneTool
     {
         StaticFramePublic,
         StaticFrameReservedToAdmins,
+        StaticFrameBranding
     }
     public StaticFrameTypeEnum Type = StaticFrameTypeEnum.StaticFramePublic;
     

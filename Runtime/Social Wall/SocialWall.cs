@@ -9,10 +9,16 @@ public class SocialWall : SceneTool
     public float Scale = 1;
     [PropertyRange(2,10)]
     public float Lenght = 2;
+    [PropertyRange(1,10)]
+    public float Height = 1;
+    [PropertyRange(10,50)]
+    public int MaxMediasDisplayed = 10;
+
+    public bool TransparentBackground = false;
 
     public Vector2 GetScreenSize()
     {
-        return new Vector2(1080 * Lenght, 1080);
+        return new Vector2(1080 * Lenght, 1080 * Height);
     }
 
 
