@@ -13,28 +13,35 @@ namespace Judiva.Metaverse
         {
             _parent = transform.parent.GetComponent<Camera>();
             _this = GetComponent<Camera>();
-            BootManagerHandlerData.OnSceneReadyForCustomization += () =>
+            BootManagerHandlerData.OnSceneReadyForCustomization += OnSceneReadyForCustomization;
+        }
+
+        private void OnDestroy()
+        {
+            BootManagerHandlerData.OnSceneReadyForCustomization -= OnSceneReadyForCustomization;
+        }
+
+        void OnSceneReadyForCustomization()
+        {
+            //can we find transparent objects ?
+            GameObject[] list = FindObjectsOfType<GameObject>();
+            bool found = false;
+            foreach (GameObject go in list)
+                if (go.layer == transparentMaterialLayer)
+                {
+                    found = true;
+                    break;
+                }
+            if (!found)
             {
-                //can we find transparent objects ?
-                GameObject[] list = FindObjectsOfType<GameObject>();
-                bool found = false;
-                foreach (GameObject go in list)
-                    if (go.layer == transparentMaterialLayer)
-                    {
-                        found = true;
-                        break;
-                    }
-                if (!found)
-                {
-                    gameObject.SetActive(false);
-                    _parent.cullingMask = _parent.cullingMask | 1 << transparentMaterialLayer;
-                }
-                else
-                {
-                    _this.cullingMask = 1 << transparentMaterialLayer;
-                    _parent.cullingMask = _parent.cullingMask | ~(1 << transparentMaterialLayer);
-                }
-            };
+                gameObject.SetActive(false);
+                _parent.cullingMask = _parent.cullingMask | 1 << transparentMaterialLayer;
+            }
+            else
+            {
+                _this.cullingMask = 1 << transparentMaterialLayer;
+                _parent.cullingMask = _parent.cullingMask | ~(1 << transparentMaterialLayer);
+            }
         }
         void LateUpdate()
         {

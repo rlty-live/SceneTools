@@ -38,11 +38,16 @@ namespace RLTY.SessionInfo
         public static void ServerReady() => OnServerReady?.Invoke();
 
 
-        public static event Action OnClientIsAdminReady;
-        public static void NotifyClientReady()
+        /// <summary>
+        /// Notifies that the client is ready, and provides the admin status
+        /// At this point Sync_IsAdmin may not be valid (it may take a few milliseconds to sync),
+        /// so please use this bool and not AllPlayers.Me.Sync_IsAdmin (unless you are sure that a few milliseconds have passed)
+        /// </summary>
+        public static event Action<bool> OnClientIsAdminReady;
+        public static void NotifyClientReady(bool isAdmin)
         {
             JLogBase.Log("Client ready", typeof(SessionInfoManagerHandlerData));
-            OnClientIsAdminReady?.Invoke();
+            OnClientIsAdminReady?.Invoke(isAdmin);
         }
 
         public static event Action OnClientJoined;
