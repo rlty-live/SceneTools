@@ -9,12 +9,25 @@ public static class AllPlayers
     public static event Action<IPlayer> OnPlayerJoined, OnPlayerLeft;
 
     private static Dictionary<int, PlayerLocalData> _localDataCache = new Dictionary<int, PlayerLocalData>();
-    
+
+    private static Vector3 _lastKnownPosition;
+    private static Quaternion _lastKnownRotation;
+    private static bool _lastKnownPositionExists = false;
     public static void NotifyPlayerJoined(IPlayer player, bool me=false)
     {
         JLogBase.Log("Creating player: " + player.ClientId, typeof(AllPlayers));
         if (me)
+        {
             Me = player;
+            if (_lastKnownPositionExists)
+            {
+                Transform tr = (player as MonoBehaviour).transform;
+                tr.position = _lastKnownPosition;
+                tr.rotation= _lastKnownRotation;
+                _lastKnownPositionExists = false;
+            }
+        }
+            
         List[player.ClientId] = player;
 #if !UNITY_SERVER
         if (_localDataCache.TryGetValue(player.ClientId, out PlayerLocalData data))
@@ -36,6 +49,15 @@ public static class AllPlayers
         PlayerLocalData data = new PlayerLocalData();
         data.isLocalyMuted = player.IsLocalyMuted;
         _localDataCache[player.ClientId] = data;
+
+        if (Me==player)
+        {
+            //store last known position
+            Transform tr = (player as MonoBehaviour).transform;
+            _lastKnownPosition = tr.position;
+            _lastKnownRotation = tr.rotation;
+            _lastKnownPositionExists = true;
+        }
 #endif
         if (Me == player)
             Me = null;
