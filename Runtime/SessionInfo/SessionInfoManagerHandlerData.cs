@@ -102,6 +102,10 @@ namespace RLTY.SessionInfo
         
         public static event Action<string> OnSeeUserProfileInteraction;
         public static void SeeUserProfileInteraction(string playerSessionId) => OnSeeUserProfileInteraction?.Invoke(playerSessionId);
+        
+        public static event Action<string> OnSeeUserNftInteraction;
+        public static void SeeUserNftInteraction(string playerSessionId) => OnSeeUserNftInteraction?.Invoke(playerSessionId);
+        
         public static event Action<string> OnBanUserInteraction;
         public static void BanUserInteraction(string playerSessionId) => OnBanUserInteraction?.Invoke(playerSessionId);
         public static event Action<string> OnChatWithUserInteraction;
