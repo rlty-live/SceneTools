@@ -16,8 +16,8 @@ namespace Judiva.Metaverse.Interactions
             _zone = GetComponent<TriggerZone>();
             _zone.onNotEmpty += (x) => enabled = true;
             _zone.onEmpty += (x) => enabled = false;
-            _zone.onPlayerEnter += (x) => SessionInfoManagerHandlerData.UserEnterConferenceStage(conferenceId);
-            _zone.onPlayerExit += (x) => SessionInfoManagerHandlerData.UserExitConferenceStage(conferenceId);
+            _zone.onPlayerEnter += (x) => SceneInteractionHandlerData.UserEnterConferenceStage(conferenceId);
+            _zone.onPlayerExit += (x) => SceneInteractionHandlerData.UserExitConferenceStage(conferenceId);
             enabled = false;
         }
         void OnEnable()

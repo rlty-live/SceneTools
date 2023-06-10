@@ -9,14 +9,36 @@ using Unity.EditorCoroutines.Editor;
 using System.Collections.Generic;
 using System.Diagnostics;
 using RLTY.Customisation;
+using Codice.Client.BaseCommands;
+
+//Fixes to realize
+//DONE
+// Remove the Server/Client subfolders from the Linux Folder
+// Rename the bundles client and server for each plateform folder
+// Copy the linux server bundle to the WebGL folder too
+// Avoid crash when building for IOS or Android
+// Show AssetBundle build setup in Asset Bundle build Editor
+// Fixed ID formatting that can make CICD and local build fail
+// Added automatic bundle association to avoid artists omissions
+
+//DOING
+// always build every standard bundle
+
+//TODO
+// Make sure two scenes cannot have the same ID
+// Use AssetBundle Variant to
+// test it on a mac
 
 public class AssetbundleBuildEditor : EditorWindow
 {
     private static AssetbundleBuildSetup _setup;
+    private static List<AssetbundleBuildSetup.Environment> buildingsList;
     private static string tmpDirectoryName = "RLTYTmp2";
 
     private static List<PlayerTarget> _assetbundleTargets = new List<PlayerTarget>();
     private static List<string> _pathsToDelete = new List<string>();
+
+    //private static string logs;
 
     #region Helpers
 
@@ -57,6 +79,7 @@ public class AssetbundleBuildEditor : EditorWindow
         }
     }
 
+    #region Paths reconstruction
     private static string GetAssetBundlePath(string environmentid, BuildTarget target, StandaloneBuildSubtarget subTarget)
     {
         if (target == BuildTarget.WebGL)
@@ -70,7 +93,8 @@ public class AssetbundleBuildEditor : EditorWindow
         else if (target == BuildTarget.StandaloneLinux64)
             return GetLinuxAssetBundlePath(environmentid, subTarget);
 
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + target + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
+        //Removed sub folder for linux
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + target /* + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client")*/;
     }
 
     private static string FolderNameFromTargetPlatform(BuildTarget target)
@@ -89,7 +113,7 @@ public class AssetbundleBuildEditor : EditorWindow
 
     private static string GetWebGLAssetBundlePath(string environmentid)
     {
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid  + "/" + BuildTarget.WebGL;
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.WebGL;
     }
 
     private static string GetAndroidAssetBundlePath(string environmentid)
@@ -104,13 +128,15 @@ public class AssetbundleBuildEditor : EditorWindow
 
     private static string GetLinuxAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
     {
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.StandaloneLinux64 + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
+        //Removed sub folder for linux
+        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.StandaloneLinux64 /*+ "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client")*/;
     }
 
     private static string GetWindowsAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
     {
         return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + "Windows" + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
     }
+    #endregion
 
     private static void FindSetup()
     {
@@ -143,14 +169,15 @@ public class AssetbundleBuildEditor : EditorWindow
     private static void Init()
     {
         // Get existing open window or if none, make a new one:
-        AssetbundleBuildEditor window = (AssetbundleBuildEditor)EditorWindow.GetWindow(typeof(AssetbundleBuildEditor));
+        AssetbundleBuildEditor window = (AssetbundleBuildEditor)GetWindow(typeof(AssetbundleBuildEditor));
         window.Show();
     }
 
 
-    // Start is called before the first frame update
     void OnGUI()
     {
+        //Show Environment list in 
+
         if (_assetbundleTargets.Count == 0)
         {
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = true, headless = true });
@@ -163,14 +190,20 @@ public class AssetbundleBuildEditor : EditorWindow
         }
 
         FindSetup();
+
         _setup = (AssetbundleBuildSetup)EditorGUILayout.ObjectField("Setup", _setup, typeof(AssetbundleBuildSetup), false);
         for (int i = 0; i < _assetbundleTargets.Count; i++)
             _assetbundleTargets[i].build = GUILayout.Toggle(_assetbundleTargets[i].build, _assetbundleTargets[i].Name);
 
+        
+
+
         if (GUILayout.Button("Build AssetBundles and S3 publication ZIP file(s)"))
         {
             List<PlayerTarget> list = new List<PlayerTarget>();
-            _pathsToDelete.Clear();
+
+            //_pathsToDelete.Clear();
+
             for (int i = 0; i < _assetbundleTargets.Count; i++)
                 if (_assetbundleTargets[i].build)
                     list.Add(_assetbundleTargets[i]);
@@ -191,6 +224,9 @@ public class AssetbundleBuildEditor : EditorWindow
             catch (Exception e)
             {
                 UnityEngine.Debug.LogError(e.Message);
+
+                //Meant to save logs in a file, as switching plateform clears the console
+                //logs += "\n" + "\n" + DateTime.Now + ": " + e.Message;
             }
         }
     }
@@ -231,8 +267,11 @@ public class AssetbundleBuildEditor : EditorWindow
 
                 // perform the build
                 BuildAssetBundlesForTarget(environment.id, tmpDirectory, buildTarget.target, buildTarget.server ? StandaloneBuildSubtarget.Server : StandaloneBuildSubtarget.Player);
+
 #if SIMULATEASSETBUNDLECREATION
-                yield return new EditorWaitForSeconds(4.5f);
+                //What is that for ?
+                //yield return new EditorWaitForSeconds(4.5f);
+                yield return new EditorWaitForSeconds(6f);
 #endif
                 Progress.Finish(buildTaskProgressID, Progress.Status.Succeeded);
             }
@@ -258,11 +297,18 @@ public class AssetbundleBuildEditor : EditorWindow
 
         UnityEngine.Debug.Log("Assetbundle build time=" + (DateTime.Now.Subtract(startTime).TotalSeconds));
 
+        //Meant to save logs in a file, as switching plateform clears the console
+        //logs += "\n" + "\n" + DateTime.Now + ": " + "Assetbundle build time=" + (DateTime.Now.Subtract(startTime).TotalSeconds);
+        //File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) +"/bundleBuildLogs.txt", logs);
+
         if (EditorUserBuildSettings.activeBuildTarget != originalTarget || EditorUserBuildSettings.standaloneBuildSubtarget != originalSubTarget)
         {
-            EditorUserBuildSettings.SwitchActiveBuildTargetAsync(GetTargetGroupForTarget(originalTarget), originalTarget);
+            //Made direct to avoid having to add a wait forsecond (is this why it's there ?)
+            EditorUserBuildSettings.SwitchActiveBuildTarget/*Async*/(GetTargetGroupForTarget(originalTarget), originalTarget);
         }
         Progress.Finish(buildAllProgressID, Progress.Status.Succeeded);
+
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.WebGL, BuildTarget.WebGL);
 
         yield return null;
     }
@@ -276,29 +322,42 @@ public class AssetbundleBuildEditor : EditorWindow
         string path = tmpDirectory + "/" + environmentid + "/" + target;
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
+
         EditorUserBuildSettings.standaloneBuildSubtarget = subTarget;
 
 #if SIMULATEASSETBUNDLECREATION
-        File.WriteAllText(path + "/" + target.ToString() + ".txt", target.ToString());
+        File.WriteAllText(path + "/" + target.ToString() + "_" + subTarget + ".txt", target.ToString());
+
+        //Dry Run builds are still to long for frequent testing
+        //BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.DryRunBuild, target);
 #else
         BuildPipeline.BuildAssetBundles(path,
                                 BuildAssetBundleOptions.None,
                                 target);
 #endif
 
+
         string[] filePaths = Directory.GetFiles(path);
         string assetBundleDirectory = GetAssetBundlePath(environmentid, target, subTarget);
+
         if (!Directory.Exists(assetBundleDirectory))
             Directory.CreateDirectory(assetBundleDirectory);
+
         foreach (string file in filePaths)
         {
             string str = assetBundleDirectory + "/" + Path.GetFileName(file);
+
+            if (File.Exists(str)) File.Delete(str);
             File.Move(file, str);
         }
-        Directory.Delete(tmpDirectory, true);
+
+        //Removed Directory deletion to avoid build fails due to the OS locking the files
+        //Directory.Delete(tmpDirectory, true);
     }
 
-#endregion
+    #endregion
+
+    #region Folders management
 
     private static void PreparePublishToS3(string environment, bool rebuildenvironment, string environementmanifestfile)
     {
@@ -319,34 +378,33 @@ public class AssetbundleBuildEditor : EditorWindow
         UnityEngine.Debug.Log("Copying WebGL client assetbundles");
         CopyToFinalDir(GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.WebGL, false);
 
+        //copy linux server assetbundles
+        UnityEngine.Debug.Log("Copying linux server assetbundles");
+        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
+        //Copy to WebGL folder too
+        CopyToFinalDir(GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
+
+        //copy linux client assetbundles
+        UnityEngine.Debug.Log("Copying linux client assetbundles");
+        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Player);
+
+        //copy windows server assetbundles
+        UnityEngine.Debug.Log("Copying windows server assetbundles");
+        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Server);
+
+        //copy windows client assetbundles
+        UnityEngine.Debug.Log("Copying windows client assetbundles");
+        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Player);
+
         UnityEngine.Debug.Log("Copying Android client assetbundles");
         CopyToFinalDir(GetAndroidAssetBundlePath(environment), environmentpath, BuildTarget.Android, false);
 
         UnityEngine.Debug.Log("Copying iOS client assetbundles");
         CopyToFinalDir(GetiOSAssetBundlePath(environment), environmentpath, BuildTarget.iOS, false);
 
-        //copy linux server assetbundles
-        UnityEngine.Debug.Log("Copying linux server assetbundles");
-        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneLinux64, true, StandaloneBuildSubtarget.Server);
-
-        //copy linux client assetbundles
-        UnityEngine.Debug.Log("Copying linux client assetbundles");
-        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneLinux64, true, StandaloneBuildSubtarget.Player);
-
-        //copy windows server assetbundles
-        UnityEngine.Debug.Log("Copying windows server assetbundles");
-        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneWindows64, true, StandaloneBuildSubtarget.Server);
-
-        //copy windows client assetbundles
-        UnityEngine.Debug.Log("Copying windows client assetbundles");
-        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneWindows64, true, StandaloneBuildSubtarget.Player);
-
-
         //copy manifest
         if (rebuildenvironment)
-        {
             File.Copy(environementmanifestfile, environmentpath + "/" + Path.GetFileName(environementmanifestfile), true);
-        }
 
         //Store everything in a Zip
         StoreInZip(environmentpath);
@@ -362,10 +420,13 @@ public class AssetbundleBuildEditor : EditorWindow
             };
             Process.Start(startInfo);
         }
+
+        DeleteTempFolders();
     }
 
     private static void CopyToFinalDir(string srcrdir, string assetPath, BuildTarget target, bool useSubTarget, StandaloneBuildSubtarget subTarget = StandaloneBuildSubtarget.Player)
     {
+        // Create directory path and folder
         if (!Directory.Exists(srcrdir))
         {
             return;
@@ -380,17 +441,50 @@ public class AssetbundleBuildEditor : EditorWindow
             Directory.CreateDirectory(platformdependentfolder);
         }
 
+        // If created copy files
         if (Directory.Exists(platformdependentfolder))
         {
             foreach (string file in Directory.GetFiles(srcrdir))
             {
                 if (!file.Contains("manifest"))
-                    File.Copy(file, platformdependentfolder + "/" + Path.GetFileName(file));
+                {
+                    if (subTarget == StandaloneBuildSubtarget.Player)
+                    {
+                        if (File.Exists(platformdependentfolder + "/" + "Client"))
+                            File.Delete(platformdependentfolder + "/" + "Client");
+
+                        File.Copy(file, platformdependentfolder + "/" + "Client");
+                    }
+
+                    if (subTarget == StandaloneBuildSubtarget.Server)
+                    {
+                        if (File.Exists(platformdependentfolder + "/" + "Server"))
+                            File.Delete(platformdependentfolder + "/" + "Server");
+
+                        File.Copy(file, platformdependentfolder + "/" + "Server");
+
+                        if(subTarget == StandaloneBuildSubtarget.Server)
+                        {
+                            string webGLPseudoServerPath = assetPath + "/" + FolderNameFromTargetPlatform(BuildTarget.WebGL) + "/Server";
+                            if (File.Exists(webGLPseudoServerPath))
+                                File.Delete(webGLPseudoServerPath);
+
+                            File.Copy(file, webGLPseudoServerPath);
+
+
+                        }
+                    }
+
+                    //File.Copy(file, platformdependentfolder + "/" + Path.GetFileName(file));
+                }
             }
         }
         else
         {
-            UnityEngine.Debug.LogError( platformdependentfolder + " destination publish folder could not be created");
+            UnityEngine.Debug.LogError(platformdependentfolder + " destination publish folder could not be created");
+
+            //Meant to save logs in a file, as switching plateform clears the console
+            //logs += "\n" + "\n" + DateTime.Now + ": " + platformdependentfolder + " destination publish folder could not be created";
         }
     }
 
@@ -399,13 +493,17 @@ public class AssetbundleBuildEditor : EditorWindow
         string destzipfile = environmentPath + "/.." + "/rlty-unity-assets_v" + Application.version + ".zip";
         FolderZipper.ZipUtil.ZipFiles(environmentPath, destzipfile, null);
         UnityEngine.Debug.Log("Assets zipped to " + destzipfile);
+
         _pathsToDelete.Add(Path.GetFullPath(environmentPath));
     }
 
+    //Removed Directory deletion to avoid build fails due to the OS locking the files
     private void OnDisable()
     {
         DeleteTempFolders();
     }
+
+    #endregion
 }
 
 

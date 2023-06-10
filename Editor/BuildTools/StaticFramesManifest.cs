@@ -19,16 +19,18 @@ namespace RLTY.Customisation
             foreach (var frame in allStaticFrames)
             {
                 StaticFrameConfig staticFrameConfig = new StaticFrameConfig();
+
                 staticFrameConfig.FrameID = frame.ID;
                 staticFrameConfig.IsAdmin = frame.Type != StaticFrame.StaticFrameTypeEnum.StaticFramePublic;
-                
+
                 staticFrameConfigs.Add(staticFrameConfig);
             }
             Debug.Log("staticFrameConfigs.Count = " + staticFrameConfigs.Count);
 
             string st = JsonConvert.SerializeObject(staticFrameConfigs, Formatting.Indented);
-            if(allStaticFrames.Length == 0) st = "no Frames found";
-            if(staticFrameConfigs.Count == 0) st = "staticFrameConfigs.Count = 0";
+
+            //if (allStaticFrames.Length == 0) st = "no Frames found";
+            //if (staticFrameConfigs.Count == 0) st = "staticFrameConfigs.Count = 0";
 
             return st;
         }

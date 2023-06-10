@@ -23,7 +23,7 @@ namespace RLTY.Customisation
 
         public void OpenIframe()
         {
-            SessionInfoManagerHandlerData.OpenIframe(_IframeURL);
+            SceneInteractionHandlerData.OpenIframe(_IframeURL);
         }
     }
 }

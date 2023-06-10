@@ -26,7 +26,7 @@ namespace RLTY.Customisation
                 Customisable[] customisables = GameObject.FindObjectsOfType<Customisable>();
                 foreach (Customisable customisable in customisables)
                 {
-                    if (customisable.gameObject.activeInHierarchy)
+                    if (customisable.gameObject.activeInHierarchy && customisable.enabled)
                     {
                         Populate(customisable.type, customisable.key, customisable.commentary);
                     }

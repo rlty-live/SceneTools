@@ -21,7 +21,7 @@ namespace RLTY.Customisation
 
         public void OpenTypeForm()
         {
-            SessionInfoManagerHandlerData.OpenTypeForm(_typeformId);
+            SceneInteractionHandlerData.OpenTypeForm(_typeformId);
         }
     }
 }

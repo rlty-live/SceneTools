@@ -53,7 +53,7 @@ namespace RLTY.Customisation
 
         public void Web3Transaction()
         {
-            SessionInfoManagerHandlerData.Web3Transaction(JsonConvert.SerializeObject(data));
+            SceneInteractionHandlerData.Web3Transaction(JsonConvert.SerializeObject(data));
             JLogBase.Log("Web3: " + JsonConvert.SerializeObject(data), this);
         }
 

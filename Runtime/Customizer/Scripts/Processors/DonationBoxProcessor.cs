@@ -20,7 +20,7 @@ namespace RLTY.Customisation
 
         public void UserDonation()
         {
-            SessionInfoManagerHandlerData.UserDonation(_walletId);
+            SceneInteractionHandlerData.UserDonation(_walletId);
         }
     }
 }
