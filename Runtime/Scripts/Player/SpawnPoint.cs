@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Judiva.Metaverse.Interactions
 {
+    [HideMonoScript]
     public class SpawnPoint : MonoBehaviour
     {
         public static float spawnRadius = 5;
@@ -20,6 +21,10 @@ namespace Judiva.Metaverse.Interactions
 
 #if UNITY_EDITOR
             Handles.color = gizmoColor;
+
+            Vector3 lineStart = transform.position + transform.forward;
+
+            Handles.DrawLine(lineStart, lineStart + transform.forward);
             Handles.DrawWireDisc(transform.position, transform.up, spawnRadius);
 #endif
         }
