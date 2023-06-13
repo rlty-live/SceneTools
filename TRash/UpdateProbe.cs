@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(ReflectionProbe))]
-public class UpdateProbe : RLTYMonoBehaviour
+public class UpdateProbe : MonoBehaviour
 {
     ReflectionProbe probe;
-    static List<UpdateProbe> customProbes;
+    static List<ReflectionProbe> customProbes;
     [ReadOnly]
     public bool updated;
 
@@ -34,9 +34,9 @@ public class UpdateProbe : RLTYMonoBehaviour
         }
 
 
-        else
-            if (debug) 
-            Debug.Log("Reflection Probe missing, can't update", this);
+        //else
+        //    if (debug) 
+        //    Debug.Log("Reflection Probe missing, can't update", this);
     }
 
     public void ActivateRealTimeProbe()
