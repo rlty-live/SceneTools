@@ -154,7 +154,7 @@ public class StaticFrame : SceneTool
         
         if(String.IsNullOrEmpty(ID)) Gizmos.color = Color.red;
         
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.3f * Scale);
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.5f * Scale);
         
         Matrix4x4 trs = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
         Gizmos.matrix = trs;
