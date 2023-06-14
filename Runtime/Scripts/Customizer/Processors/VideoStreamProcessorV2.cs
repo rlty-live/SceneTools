@@ -14,13 +14,14 @@ namespace RLTY.Customisation
 #if UNITY_EDITOR
     [CanEditMultipleObjects]
     [HideMonoScript]
+    [AddComponentMenu("RLTY/VideoPlayer")]
 #endif
     public class VideoStreamProcessorV2 : Processor
     {
         #region Global Variables
         [Title("Global Parameters")]
         public string videoURL;
-        [SerializeField]
+        [SerializeField, LabelText("Mute players when playing")]
         public bool isLiveStream;
 
         [Title("Rendering")]

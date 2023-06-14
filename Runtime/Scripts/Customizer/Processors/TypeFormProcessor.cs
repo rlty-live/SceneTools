@@ -1,9 +1,11 @@
 using UnityEngine;
-using Judiva.Metaverse.Interactions;
 using RLTY.SessionInfo;
+using UnityEditor;
+using Sirenix.OdinInspector;
 
 namespace RLTY.Customisation
 {
+    [AddComponentMenu("RLTY/Iframe opener")]
     public class TypeFormProcessor : Processor
     {
         public override void Customize(KeyValueBase keyValue)
@@ -16,8 +18,9 @@ namespace RLTY.Customisation
             _typeformId = keyValue.value;
         }
 
-        [SerializeField] private bool _checkUserOrientationAlignedWithForward = false;
-        [SerializeField] private string _typeformId = "1";
+        private bool _checkUserOrientationAlignedWithForward = false;
+        [SerializeField] [LabelText("Url or ID")]
+        private string _typeformId = "1";
 
         public void OpenTypeForm()
         {

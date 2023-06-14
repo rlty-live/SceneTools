@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3070793953839719014}
   - component: {fileID: 6386431611741842262}
   m_Layer: 2
-  m_Name: TriggerZone
+  m_Name: VisioArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

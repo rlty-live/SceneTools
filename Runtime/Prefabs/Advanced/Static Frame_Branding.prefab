@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2520958015069854136}
   - component: {fileID: 5041611036652327739}
   m_Layer: 0
-  m_Name: Static Frame
+  m_Name: Static Frame_Branding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
