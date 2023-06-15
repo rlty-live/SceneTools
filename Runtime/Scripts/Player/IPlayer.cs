@@ -79,7 +79,7 @@ public interface IPlayer
 
     int ClientId { get; }
 
-    bool Sync_IsAdmin { get; set; }
+    bool Sync_IsAdmin { get; }
     uint AgoraUserId { get; set; }
     
     bool Sync_IsVoiceBoosted {get;set;}
@@ -91,7 +91,8 @@ public interface IPlayer
     bool IsLocalyMuted { get; set; }
 
     string Username { get; set; }
-    string SkinDesc { get; set; }
+
+    void ModifyMySkin(string skin, bool forceRefresh);
 
     /// <summary>
     /// -1=no mic

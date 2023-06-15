@@ -20,7 +20,10 @@ namespace RLTY.Customisation.Testing
         public bool Sync_IsCrossServerMuted { get; set; }
         public bool IsLocalyMuted { get; set; }
         public string Username { get => "TestPlayer"; set { } }
-        public string SkinDesc { get => null; set { } }
+
+        public void ModifyMySkin(string skin, bool forceRefresh)
+        {
+        }
 
         public event Action<int> OnTalkChanged;
         public event Action<string> OnNameChanged;
