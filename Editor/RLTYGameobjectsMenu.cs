@@ -35,7 +35,7 @@ public class RLTYGameobjectMenu : Editor
     }
 
     #region instantiation
-    [MenuItem(toolbarfolderName + "TriggerZone", priority = 1)]
+    [MenuItem(toolbarfolderName + "TriggerZone")]
     public static void CreateTriggerZoneInstance() => LoadPrefab(RLTYPrefabType.TriggerZone);
 
     [MenuItem(toolbarfolderName + "VideoPlayer")]

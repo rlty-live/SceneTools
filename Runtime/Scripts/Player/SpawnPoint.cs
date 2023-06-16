@@ -29,10 +29,12 @@ namespace Judiva.Metaverse.Interactions
 #endif
         }
 
-        //[Button("Stick to ground")]
-        private void SlapOntoSurface()
+        [Button("Stick to ground")]
+        private void StickToGround()
         {
-            
+            transform.Rotate(Vector3.right, -90f);
+            SlapOntoSurface.SlapThisOntoSurface(transform, 10);
+            transform.Rotate(Vector3.right, +90f);
         }
     }
 }
