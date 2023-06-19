@@ -3,6 +3,7 @@ using UnityEditor;
 using Sirenix.OdinInspector;
 using RLTY.Customisation;
 using UnityEngine.InputSystem;
+using System;
 
 namespace Judiva.Metaverse.Interactions
 {
@@ -14,18 +15,22 @@ namespace Judiva.Metaverse.Interactions
 
         private void OnDrawGizmos()
         {
+            float sphereRadius = 0.3f;
+
             Gizmos.color = gizmoColor;
-            Gizmos.DrawWireSphere(transform.position, 1);
+            Gizmos.DrawSphere(transform.position, sphereRadius);
 
             gizmoColor.a = 100;
 
 #if UNITY_EDITOR
             Handles.color = gizmoColor;
 
-            Vector3 lineStart = transform.position + transform.forward;
+            Vector3 lineStart = transform.position + transform.forward * sphereRadius;
 
             Handles.DrawLine(lineStart, lineStart + transform.forward);
             Handles.DrawWireDisc(transform.position, transform.up, spawnRadius);
+            Handles.Label(lineStart + transform.forward * 1.2f, "Front");
+            Handles.Label(transform.position + transform.forward * spawnRadius, "Max spawn area");
 #endif
         }
 

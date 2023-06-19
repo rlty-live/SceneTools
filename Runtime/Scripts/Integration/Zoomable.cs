@@ -1,6 +1,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 using RLTY.UI;
+using UnityEditor;
 
 [HideMonoScript]
 [RequireComponent(typeof(BoxCollider)), RequireComponent(typeof(RLTYMouseEvent))]
@@ -56,7 +57,13 @@ public class Zoomable : SceneTool
         Vector3 cameraLineEnd = col.bounds.center + transform.forward * -cameraLineLength;
 
         Gizmos.DrawLine(cameraLineStart, cameraLineEnd);
+        Gizmos.DrawLine(cameraLineEnd, cameraLineEnd + transform.up);
         Gizmos.DrawSphere(cameraLineEnd, cameraGizmoRadius);
+
+#if UNITY_EDITOR
+        Handles.Label(cameraLineEnd + transform.up * 1.2f, "Up");
+            
+#endif
     }
 #endif
 }

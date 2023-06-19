@@ -7,6 +7,23 @@ using Sirenix.OdinInspector;
 
 namespace RLTY.Customisation
 {
+    [Serializable]
+    public class RootObject
+    {
+        public PlayerSession playerSession;
+    }
+
+    [Serializable]
+    public class PlayerSession
+    {
+        public string Nickname;
+        public string IsAdmin;
+        public string Token;
+        public SceneDescription SceneDesc;
+    }
+    
+    
+    
     /// <summary>
     /// All information needed to build the scene on the client side
     /// </summary>

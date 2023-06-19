@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -153,7 +154,8 @@ public class StaticFrame : SceneTool
         Gizmos.color = gizmoColor;
         
         if(String.IsNullOrEmpty(ID)) Gizmos.color = Color.red;
-        
+
+        Gizmos.DrawLine(transform.position, transform.position + transform.up * Scale * 0.5f);
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.5f * Scale);
         
         Matrix4x4 trs = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
@@ -167,8 +169,10 @@ public class StaticFrame : SceneTool
             Handles.color = Color.red;
             idDisplay = "No ID";
         }
-        
-        Handles.Label(transform.position, "Frame : "+ idDisplay);
+
+        Handles.Label(transform.position + transform.up * Scale * 0.6f, "Up");
+        Handles.Label(transform.position + transform.forward * 0.5f * Scale, "Front");
+        Handles.Label(transform.position + -transform.right * 0.5f * Scale, idDisplay);
         
         gizmoColor = _FrameBaseColor;
         gizmoColor.a = 125;
