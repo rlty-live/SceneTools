@@ -63,6 +63,11 @@ public static class AllPlayers
             Me = null;
         OnPlayerLeft?.Invoke(player);
     }
+
+    public static void ClearLastKnowPlayerPosition()
+    {
+        _lastKnownPositionExists = false;
+    }
 }
 
 /// <summary>
