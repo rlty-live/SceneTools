@@ -10,6 +10,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using RLTY.Customisation;
 using Codice.Client.BaseCommands;
+using UnityEditor.SceneManagement;
+using DG.Tweening.Plugins.Core.PathCore;
+using UnityEditor.PackageManager.UI;
+
+using Path = System.IO.Path;
+using Debug = UnityEngine.Debug;
 
 //Fixes to realize
 //DONE
@@ -176,9 +182,7 @@ public class AssetbundleBuildEditor : EditorWindow
 
     void OnGUI()
     {
-        //Show Environment list in 
-
-        if (_assetbundleTargets.Count == 0)
+        if (_assetbundleTargets.Count == 0 && _setup)
         {
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = true, headless = true });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = false, headless = false });
@@ -189,25 +193,63 @@ public class AssetbundleBuildEditor : EditorWindow
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.Android, server = false, headless = false });
         }
 
+        _setup = (AssetbundleBuildSetup)EditorGUILayout.ObjectField("Setup", _setup, typeof(AssetbundleBuildSetup), false);
         FindSetup();
 
-        _setup = (AssetbundleBuildSetup)EditorGUILayout.ObjectField("Setup", _setup, typeof(AssetbundleBuildSetup), false);
-        for (int i = 0; i < _assetbundleTargets.Count; i++)
-            _assetbundleTargets[i].build = GUILayout.Toggle(_assetbundleTargets[i].build, _assetbundleTargets[i].Name);
-
-        
-
-
-        if (GUILayout.Button("Build AssetBundles and S3 publication ZIP file(s)"))
+        //Hide targets and build button if no setup has been selected
+        if (_setup)
         {
-            List<PlayerTarget> list = new List<PlayerTarget>();
-
-            //_pathsToDelete.Clear();
-
+            //Create toggle for each target
             for (int i = 0; i < _assetbundleTargets.Count; i++)
-                if (_assetbundleTargets[i].build)
-                    list.Add(_assetbundleTargets[i]);
-            EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
+                _assetbundleTargets[i].build = GUILayout.Toggle(_assetbundleTargets[i].build, _assetbundleTargets[i].Name);
+
+            //Check all targets
+            bool allTargets = false;
+            GUILayout.Space(10);
+            if (GUILayout.Toggle(allTargets, "All targets"))
+                foreach (PlayerTarget target in _assetbundleTargets)
+                    target.build = true;
+
+            //Allow for build only if setup is present and targets are checked
+            if (GUILayout.Button("Build AssetBundles"))
+            {
+                List<PlayerTarget> list = new List<PlayerTarget>();
+
+                //_pathsToDelete.Clear();
+
+                for (int i = 0; i < _assetbundleTargets.Count; i++)
+                    if (_assetbundleTargets[i].build)
+                        list.Add(_assetbundleTargets[i]);
+                EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
+            }
+        }
+
+        else
+        {
+            //Create an assetbundlebuild setup from currently loaded scenes
+            if (GUILayout.Button("New setup from current scenes"))
+            {
+                //Create new AssetbundleBuildSetup Asset
+                _setup = AssetbundleBuildSetup.CreateInstance<AssetbundleBuildSetup>();
+                AssetDatabase.CreateAsset(_setup, "Assets/AssetBundle build setup.asset");
+
+                //Create environment
+                _setup.environmentList = new List<AssetbundleBuildSetup.Environment>();
+                AssetbundleBuildSetup.Environment newEnvironment = new AssetbundleBuildSetup.Environment();
+                newEnvironment.id = EditorSceneManager.GetActiveScene().name;
+
+                Debug.Log(EditorSceneManager.GetActiveScene().name);
+
+                //Populate with loaded scenes
+                for (int i = 0; i < EditorSceneManager.sceneCount; i++)
+                {
+                    newEnvironment.scenes.Add((SceneAsset)AssetDatabase.LoadAssetAtPath(EditorSceneManager.GetSceneAt(i).path, typeof(SceneAsset)));
+                    Debug.Log(EditorSceneManager.GetActiveScene().name);
+                }
+                    
+                newEnvironment.rebuild = true;
+                _setup.environmentList.Add(newEnvironment);
+            }
         }
     }
 
