@@ -249,6 +249,8 @@ public class AssetbundleBuildEditor : EditorWindow
                     
                 newEnvironment.rebuild = true;
                 _setup.environmentList.Add(newEnvironment);
+
+                Selection.activeObject = _setup;
             }
         }
     }
