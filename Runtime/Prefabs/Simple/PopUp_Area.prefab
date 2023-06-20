@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 49304728a3fee8b46bc0dfad0b55fad4, type: 2}
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_text: Enter to open Iframe
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 49304728a3fee8b46bc0dfad0b55fad4, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -182,11 +182,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2004756874325953117}
   - component: {fileID: 2004756874325953113}
-  - component: {fileID: 2004756874325953112}
-  - component: {fileID: 2004756874325953119}
   - component: {fileID: 2004756874325953118}
+  - component: {fileID: 2004756872617764406}
   m_Layer: 2
-  m_Name: PopUpArea
+  m_Name: PopUp_Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,7 +198,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2004756874325953116}
-  m_LocalRotation: {x: -0, y: 0.25730133, z: -0, w: 0.9663313}
+  m_LocalRotation: {x: 0, y: 0.2573014, z: 0, w: 0.9663313}
   m_LocalPosition: {x: -4.67, y: -0.69013834, z: 1.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -221,56 +220,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2004756874325953112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2004756874325953116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showUtilities: 0
-  correctSetup: 0
-  debug: 1
-  deactivable: 1
-  type: 11
-  displayKey: Iframe Area
-  key: Iframe_Area
-  useGameobjectName: 1
-  section: 
-  group: 
-  labelGroup: 
-  manualDescription: 1
-  displayCommentary: Iframe opener
-  commentary: 
-  technicalInfo: 
-  _keyValue:
-    key: 
-    value: 
-  processor: {fileID: 2004756874325953119}
-  target: {fileID: 2004756874325953119}
-  showGizmo: 0
-  gizmoOffset: {x: 1, y: 0, z: 0}
---- !u!114 &2004756874325953119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2004756874325953116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99407a0798931f44cacbd8037591d3d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showUtilities: 0
-  correctSetup: 0
-  debug: 1
-  _typeformId: 1
 --- !u!114 &2004756874325953118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,9 +241,9 @@ MonoBehaviour:
   OnPlayerEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2004756874325953119}
-        m_TargetAssemblyTypeName: RLTY.Customisation.TypeFormProcessor, rlty.scenetools.runtime
-        m_MethodName: OpenTypeForm
+      - m_Target: {fileID: 2004756872617764406}
+        m_TargetAssemblyTypeName: IframeOpener, rlty.scenetools.runtime
+        m_MethodName: OpenIFrame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -319,3 +268,17 @@ MonoBehaviour:
   OnNotEmpty:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2004756872617764406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004756874325953116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7304477444b3b5d459d8fbca2124b941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  url: 
+  warningMessage: Wrong URL formatting, please correct it.

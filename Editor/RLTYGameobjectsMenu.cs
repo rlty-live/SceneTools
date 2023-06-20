@@ -10,17 +10,18 @@ public class RLTYGameobjectMenu : Editor
     public enum RLTYPrefabType
     {
         TriggerZone,
-        VideoPlayer,
         SpawnPoint,
         Teleport,
         Jump,
         MusicArea,
+        VideoPlayer,
         SocialWall,
         Frame_Admin,
         Frame_Public,
         Zoomable,
         VisioArea,
-        PopUpArea
+        PopUp_Area,
+        PopUp_Clickbox,
     }
 
     public static Object LoadPrefab(RLTYPrefabType type)
@@ -35,11 +36,8 @@ public class RLTYGameobjectMenu : Editor
     }
 
     #region instantiation
-    [MenuItem(toolbarfolderName + "TriggerZone")]
+    [MenuItem(toolbarfolderName + "Advanced/" + "TriggerZone")]
     public static void CreateTriggerZoneInstance() => LoadPrefab(RLTYPrefabType.TriggerZone);
-
-    [MenuItem(toolbarfolderName + "VideoPlayer")]
-    public static void CreateVideoStreamPrefab() => LoadPrefab(RLTYPrefabType.VideoPlayer);
 
     [MenuItem(toolbarfolderName + "SpawnPoint")]
     public static void CreateSpawnPoint() => LoadPrefab(RLTYPrefabType.SpawnPoint);
@@ -53,13 +51,16 @@ public class RLTYGameobjectMenu : Editor
     [MenuItem(toolbarfolderName + "MusicArea")]
     public static void CreateMusicArea() => LoadPrefab(RLTYPrefabType.MusicArea);
 
+    [MenuItem(toolbarfolderName + "VideoPlayer")]
+    public static void CreateVideoStreamPrefab() => LoadPrefab(RLTYPrefabType.VideoPlayer);
+
     [MenuItem(toolbarfolderName + "SocialWall")]
     public static void CreateSocialWall() => LoadPrefab(RLTYPrefabType.SocialWall);
 
     [MenuItem(toolbarfolderName + "Admin Frame")]
     public static void CreateAdminFrame() => LoadPrefab(RLTYPrefabType.Frame_Admin);
 
-    [MenuItem(toolbarfolderName + "Admin Frame")]
+    [MenuItem(toolbarfolderName + "User Frame")]
     public static void CreateUserFrame() => LoadPrefab(RLTYPrefabType.Frame_Public);
 
     [MenuItem(toolbarfolderName + "Zoomable object")]
