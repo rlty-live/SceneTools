@@ -1,4 +1,4 @@
-#define SIMULATEASSETBUNDLECREATION
+//#define SIMULATEASSETBUNDLECREATION
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -9,7 +9,6 @@ using Unity.EditorCoroutines.Editor;
 using System.Collections.Generic;
 using System.Diagnostics;
 using RLTY.Customisation;
-using Codice.Client.BaseCommands;
 using UnityEditor.SceneManagement;
 using Path = System.IO.Path;
 using Debug = UnityEngine.Debug;
@@ -563,7 +562,7 @@ public class AssetbundleBuildEditor : EditorWindow
                 sceneToolsVersion = packageInfo.version;
         }
 
-        string destzipfile = environmentPath + "/.." + "/rlty-unity-assets_v" + sceneToolsVersion + ".zip";
+        string destzipfile = environmentPath + "/.." + sceneToolsVersion + ".zip";
         FolderZipper.ZipUtil.ZipFiles(environmentPath, destzipfile, null);
         UnityEngine.Debug.Log("Assets zipped to " + destzipfile);
 

@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
 using UnityEditor;
-using RLTY.Customisation;
-using Newtonsoft.Json;
-using Sirenix.Utilities;
-using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
+using Sirenix.Utilities;
+using Sirenix.OdinInspector;
 
+[HideMonoScript]
 [CreateAssetMenu(fileName = "AssetBundleSceneSetup", menuName = "RLTY/BuildSetup/Assetbundles", order = 1)]
 public class AssetbundleBuildSetup : ScriptableObject
 {
     public bool useCustomFolder = false;
+    [ShowIf("useCustomFolder")]
     public string customFolderPath = "../../AssetBundles";
 
     public string StreamingAssetsLocalPath
@@ -49,42 +48,75 @@ public class AssetbundleBuildSetup : ScriptableObject
 
     private void OnValidate()
     {
+        CheckSetup();
+        //foreach (Environment e in environmentList)
+        //    Debug.Log(e);
+    }
+
+    public void CheckSetup()
+    {
+        //Format environments IDs
         foreach (Environment e in environmentList)
         {
             e.scenes.Sort((x, y) => AssetDatabase.GetAssetPath(x).CompareTo(AssetDatabase.GetAssetPath(y)));
 
             //Make ID compatible with assetbundle allowed characters
-            Regex rgx = new Regex("[^a-z-]");
-            e.id = rgx.Replace(e.id, "");
-            e.variant = rgx.Replace(e.variant, "");
-
-            //Apply AssetBundleTag
-            //foreach (SceneAsset sceneAsset in e.scenes)
-            //    if (sceneAsset)
-            //        AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sceneAsset)).SetAssetBundleNameAndVariant(e.id, e.variant);
+            e.id = AlphaNumeric(e.id, true);
+            e.variant = AlphaNumeric(e.variant, true);
         }
 
-        //Check for duplicate and add numbering if found
+        //Check for duplicate and add copy index if found
         foreach (Environment e in environmentList)
         {
             int duplicateIndex = 1;
 
             foreach (Environment e1 in environmentList)
             {
-
                 if (e != e1 && e.id == e1.id)
                 {
                     e1.id = e.id + duplicateIndex;
                     duplicateIndex++;
                 }
             }
-        }
 
-        foreach (Environment e in environmentList)
-            Debug.Log(e);
+            //Deactivate building of empty Environments
+            bool containsValidScenes = false;
+
+            if (!e.scenes.IsNullOrEmpty())
+            {
+                foreach (SceneAsset scene in e.scenes)
+                {
+                    if (scene != null)
+                        containsValidScenes = true;
+                }
+            }
+            if (!containsValidScenes)
+                e.rebuild = false;
+        }
     }
 
+    /// <summary>
+    /// Will return a string containing only letters, numbers and "-"
+    /// </summary>
+    /// <param name="_string">The string to format</param>
+    /// <param name="lowerCase">Should highercase characters be authorized ?</param>
+    /// <returns>Formated string</returns>
+    public static string AlphaNumeric(string _string, bool lowerCase)
+    {
+        Regex rgx;
 
+        if (lowerCase)
+        {
+            rgx = new Regex("[^a-z0-9-]");
+            _string = _string.ToLower();
+        }
+
+        else
+            rgx = new Regex("[^a-zA-Z0-9-]");
+
+        _string = rgx.Replace(_string, "");
+        return _string;
+    }
 
     public void PrepareForBuild()
     {
@@ -113,4 +145,3 @@ public class AssetbundleBuildSetup : ScriptableObject
         }
     }
 }
-
