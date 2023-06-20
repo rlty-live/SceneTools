@@ -59,13 +59,26 @@ public class AssetbundleBuildSetup : ScriptableObject
             e.variant = rgx.Replace(e.variant, "");
 
             //Apply AssetBundleTag
-            foreach (SceneAsset sceneAsset in e.scenes)
-                if (sceneAsset)
-                    AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sceneAsset)).SetAssetBundleNameAndVariant(e.id, e.variant);
+            //foreach (SceneAsset sceneAsset in e.scenes)
+            //    if (sceneAsset)
+            //        AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sceneAsset)).SetAssetBundleNameAndVariant(e.id, e.variant);
         }
 
-        //TODO
-        //Check for duplicate ID
+        //Check for duplicate and add numbering if found
+        foreach (Environment e in environmentList)
+        {
+            int duplicateIndex = 1;
+
+            foreach (Environment e1 in environmentList)
+            {
+
+                if (e != e1 && e.id == e1.id)
+                {
+                    e1.id = e.id + duplicateIndex;
+                    duplicateIndex++;
+                }
+            }
+        }
 
         foreach (Environment e in environmentList)
             Debug.Log(e);
@@ -100,3 +113,4 @@ public class AssetbundleBuildSetup : ScriptableObject
         }
     }
 }
+

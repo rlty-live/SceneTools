@@ -1,4 +1,4 @@
-//#define SIMULATEASSETBUNDLECREATION
+#define SIMULATEASSETBUNDLECREATION
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -11,29 +11,9 @@ using System.Diagnostics;
 using RLTY.Customisation;
 using Codice.Client.BaseCommands;
 using UnityEditor.SceneManagement;
-using DG.Tweening.Plugins.Core.PathCore;
-using UnityEditor.PackageManager.UI;
-
 using Path = System.IO.Path;
 using Debug = UnityEngine.Debug;
-
-//Fixes to realize
-//DONE
-// Remove the Server/Client subfolders from the Linux Folder
-// Rename the bundles client and server for each plateform folder
-// Copy the linux server bundle to the WebGL folder too
-// Avoid crash when building for IOS or Android
-// Show AssetBundle build setup in Asset Bundle build Editor
-// Fixed ID formatting that can make CICD and local build fail
-// Added automatic bundle association to avoid artists omissions
-
-//DOING
-// always build every standard bundle
-
-//TODO
-// Make sure two scenes cannot have the same ID
-// Use AssetBundle Variant to
-// test it on a mac
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 public class AssetbundleBuildEditor : EditorWindow
 {
@@ -179,7 +159,6 @@ public class AssetbundleBuildEditor : EditorWindow
         window.Show();
     }
 
-
     void OnGUI()
     {
         if (_assetbundleTargets.Count == 0 && _setup)
@@ -194,6 +173,17 @@ public class AssetbundleBuildEditor : EditorWindow
         }
 
         _setup = (AssetbundleBuildSetup)EditorGUILayout.ObjectField("Setup", _setup, typeof(AssetbundleBuildSetup), false);
+
+        //Add Warning Message
+        GUILayout.Space(10);
+        GUIStyle style = new GUIStyle();
+        style.fontStyle = FontStyle.Bold;
+        style.alignment = TextAnchor.MiddleCenter;
+        style.richText = true;
+        string setupWarning = "<color=red>Please check your setup file before building</color>";
+        GUILayout.Label(setupWarning, style);
+        GUILayout.Space(10);
+
         FindSetup();
 
         //Hide targets and build button if no setup has been selected
@@ -210,17 +200,46 @@ public class AssetbundleBuildEditor : EditorWindow
                 foreach (PlayerTarget target in _assetbundleTargets)
                     target.build = true;
 
-            //Allow for build only if setup is present and targets are checked
-            if (GUILayout.Button("Build AssetBundles"))
+            bool anyTargetSelected = false;
+
+            //Allow build only if targets are selected
+            foreach (PlayerTarget target in _assetbundleTargets)
             {
-                List<PlayerTarget> list = new List<PlayerTarget>();
+                if (target.build)
+                    anyTargetSelected = true;
+            }
 
-                //_pathsToDelete.Clear();
+            //Allow build only if environment are checked for build
+            bool anyBundleSelectedForBuild = false;
+            foreach (AssetbundleBuildSetup.Environment e in _setup.environmentList)
+            {
+                if (e.rebuild)
+                    anyBundleSelectedForBuild = true;
+            }
 
-                for (int i = 0; i < _assetbundleTargets.Count; i++)
-                    if (_assetbundleTargets[i].build)
-                        list.Add(_assetbundleTargets[i]);
-                EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
+            //Add warning message if not
+            if (anyBundleSelectedForBuild == false)
+            {
+                GUILayout.Space(10);
+                string rebuildWarning = "<color=white>No environment marked for build, please add one</color>";
+                GUILayout.Label(rebuildWarning, style);
+                GUILayout.Space(10);
+            }
+
+            if (anyTargetSelected && anyBundleSelectedForBuild)
+            {
+                //Allow for build only if setup is present and targets are checked
+                if (GUILayout.Button("Build AssetBundles"))
+                {
+                    List<PlayerTarget> list = new List<PlayerTarget>();
+
+                    //_pathsToDelete.Clear();
+
+                    for (int i = 0; i < _assetbundleTargets.Count; i++)
+                        if (_assetbundleTargets[i].build)
+                            list.Add(_assetbundleTargets[i]);
+                    EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
+                }
             }
         }
 
@@ -246,7 +265,7 @@ public class AssetbundleBuildEditor : EditorWindow
                     newEnvironment.scenes.Add((SceneAsset)AssetDatabase.LoadAssetAtPath(EditorSceneManager.GetSceneAt(i).path, typeof(SceneAsset)));
                     Debug.Log(EditorSceneManager.GetActiveScene().name);
                 }
-                    
+
                 newEnvironment.rebuild = true;
                 _setup.environmentList.Add(newEnvironment);
 
@@ -446,6 +465,10 @@ public class AssetbundleBuildEditor : EditorWindow
         UnityEngine.Debug.Log("Copying iOS client assetbundles");
         CopyToFinalDir(GetiOSAssetBundlePath(environment), environmentpath, BuildTarget.iOS, false);
 
+        //Add duplicate next to the zipfile
+        if (rebuildenvironment)
+            File.Copy(environementmanifestfile, environmentpath + Path.GetFileName(environementmanifestfile), true);
+
         //copy manifest
         if (rebuildenvironment)
             File.Copy(environementmanifestfile, environmentpath + "/" + Path.GetFileName(environementmanifestfile), true);
@@ -478,7 +501,7 @@ public class AssetbundleBuildEditor : EditorWindow
         string platformdependentfolder = assetPath + "/" + FolderNameFromTargetPlatform(target);
         if (useSubTarget)
         {
-            platformdependentfolder += "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
+            platformdependentfolder += "/" + (subTarget == StandaloneBuildSubtarget.Server ? "server" : "client");
         }
         if (!Directory.Exists(platformdependentfolder))
         {
@@ -494,28 +517,26 @@ public class AssetbundleBuildEditor : EditorWindow
                 {
                     if (subTarget == StandaloneBuildSubtarget.Player)
                     {
-                        if (File.Exists(platformdependentfolder + "/" + "Client"))
-                            File.Delete(platformdependentfolder + "/" + "Client");
+                        if (File.Exists(platformdependentfolder + "/" + "client"))
+                            File.Delete(platformdependentfolder + "/" + "client");
 
-                        File.Copy(file, platformdependentfolder + "/" + "Client");
+                        File.Copy(file, platformdependentfolder + "/" + "client");
                     }
 
                     if (subTarget == StandaloneBuildSubtarget.Server)
                     {
-                        if (File.Exists(platformdependentfolder + "/" + "Server"))
-                            File.Delete(platformdependentfolder + "/" + "Server");
+                        if (File.Exists(platformdependentfolder + "/" + "server"))
+                            File.Delete(platformdependentfolder + "/" + "server");
 
-                        File.Copy(file, platformdependentfolder + "/" + "Server");
+                        File.Copy(file, platformdependentfolder + "/" + "server");
 
-                        if(subTarget == StandaloneBuildSubtarget.Server)
+                        if (subTarget == StandaloneBuildSubtarget.Server)
                         {
-                            string webGLPseudoServerPath = assetPath + "/" + FolderNameFromTargetPlatform(BuildTarget.WebGL) + "/Server";
+                            string webGLPseudoServerPath = assetPath + "/" + FolderNameFromTargetPlatform(BuildTarget.WebGL) + "/server";
                             if (File.Exists(webGLPseudoServerPath))
                                 File.Delete(webGLPseudoServerPath);
 
                             File.Copy(file, webGLPseudoServerPath);
-
-
                         }
                     }
 
@@ -534,7 +555,15 @@ public class AssetbundleBuildEditor : EditorWindow
 
     private static void StoreInZip(string environmentPath)
     {
-        string destzipfile = environmentPath + "/.." + "/rlty-unity-assets_v" + Application.version + ".zip";
+        string sceneToolsVersion = string.Empty;
+
+        foreach (PackageInfo packageInfo in PackageInfo.GetAllRegisteredPackages())
+        {
+            if (packageInfo.name == "live.rlty.scenetools")
+                sceneToolsVersion = packageInfo.version;
+        }
+
+        string destzipfile = environmentPath + "/.." + "/rlty-unity-assets_v" + sceneToolsVersion + ".zip";
         FolderZipper.ZipUtil.ZipFiles(environmentPath, destzipfile, null);
         UnityEngine.Debug.Log("Assets zipped to " + destzipfile);
 
