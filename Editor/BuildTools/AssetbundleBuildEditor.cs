@@ -13,6 +13,7 @@ using UnityEditor.SceneManagement;
 using Path = System.IO.Path;
 using Debug = UnityEngine.Debug;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
+using Mono.Cecil;
 
 public class AssetbundleBuildEditor : EditorWindow
 {
@@ -22,6 +23,8 @@ public class AssetbundleBuildEditor : EditorWindow
 
     private static List<PlayerTarget> _assetbundleTargets = new List<PlayerTarget>();
     private static List<string> _pathsToDelete = new List<string>();
+
+    private static string packageVersion;
 
     //private static string logs;
 
@@ -160,6 +163,8 @@ public class AssetbundleBuildEditor : EditorWindow
 
     void OnGUI()
     {
+        EditorGUILayout.SelectableLabel("Scenetools version: " + packageVersion);
+
         if (_assetbundleTargets.Count == 0 && _setup)
         {
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = true, headless = true });
@@ -172,6 +177,12 @@ public class AssetbundleBuildEditor : EditorWindow
         }
 
         _setup = (AssetbundleBuildSetup)EditorGUILayout.ObjectField("Setup", _setup, typeof(AssetbundleBuildSetup), false);
+
+        foreach (PackageInfo packageInfo in PackageInfo.GetAllRegisteredPackages())
+        {
+            if (packageInfo.name == "live.rlty.scenetools")
+                packageVersion = packageInfo.version;
+        }
 
         //Add Warning Message
         GUILayout.Space(10);
@@ -430,41 +441,36 @@ public class AssetbundleBuildEditor : EditorWindow
             Directory.Delete(path, true);
         Directory.CreateDirectory(path);
 
-        string environmentpath = path + "/rlty-unity-assets/" + environment + "/v" + Application.version;
+        string environmentpath = path + "/rlty-unity-assets/" + environment + "/v" + packageVersion;
 
         Directory.CreateDirectory(environmentpath);
 
-        //copy client assetbundles
-        UnityEngine.Debug.Log("Copying client assetbundles");
+        Debug.Log("Copying client assetbundles");
 
-        UnityEngine.Debug.Log("Copying WebGL client assetbundles");
-        CopyToFinalDir(GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.WebGL, false);
+        Debug.Log("Copying WebGL client assetbundles");
+        CopyToFinalDir(environment, GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.WebGL, false);
 
-        //copy linux server assetbundles
-        UnityEngine.Debug.Log("Copying linux server assetbundles");
-        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
+        Debug.Log("Copying linux server assetbundles");
+        CopyToFinalDir(environment, GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
         //Copy to WebGL folder too
-        CopyToFinalDir(GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
+        CopyToFinalDir(environment, GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
 
-        //copy linux client assetbundles
-        UnityEngine.Debug.Log("Copying linux client assetbundles");
-        CopyToFinalDir(GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Player);
+        Debug.Log("Copying linux client assetbundles");
+        CopyToFinalDir(environment, GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Player);
 
-        //copy windows server assetbundles
-        UnityEngine.Debug.Log("Copying windows server assetbundles");
-        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Server);
+        Debug.Log("Copying windows server assetbundles");
+        CopyToFinalDir(environment, GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Server);
 
-        //copy windows client assetbundles
-        UnityEngine.Debug.Log("Copying windows client assetbundles");
-        CopyToFinalDir(GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Player);
+        Debug.Log("Copying windows client assetbundles");
+        CopyToFinalDir(environment, GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Player);
 
-        UnityEngine.Debug.Log("Copying Android client assetbundles");
-        CopyToFinalDir(GetAndroidAssetBundlePath(environment), environmentpath, BuildTarget.Android, false);
+        Debug.Log("Copying iOS client assetbundles");
+        CopyToFinalDir(environment, GetiOSAssetBundlePath(environment), environmentpath, BuildTarget.iOS, false);
 
-        UnityEngine.Debug.Log("Copying iOS client assetbundles");
-        CopyToFinalDir(GetiOSAssetBundlePath(environment), environmentpath, BuildTarget.iOS, false);
+        Debug.Log("Copying Android client assetbundles");
+        CopyToFinalDir(environment, GetAndroidAssetBundlePath(environment), environmentpath, BuildTarget.Android, false);
 
-        //Add duplicate next to the zipfile
+        //Add duplicate manifest next to the zipfile
         if (rebuildenvironment)
             File.Copy(environementmanifestfile, environmentpath + Path.GetFileName(environementmanifestfile), true);
 
@@ -487,32 +493,37 @@ public class AssetbundleBuildEditor : EditorWindow
             Process.Start(startInfo);
         }
 
-        DeleteTempFolders();
+        //DeleteTempFolders();
     }
 
-    private static void CopyToFinalDir(string srcrdir, string assetPath, BuildTarget target, bool useSubTarget, StandaloneBuildSubtarget subTarget = StandaloneBuildSubtarget.Player)
+    private static void CopyToFinalDir(string environemnentID, string srcrdir, string assetPath, BuildTarget target, bool useSubTarget, StandaloneBuildSubtarget subTarget = StandaloneBuildSubtarget.Player)
     {
         // Create directory path and folder
         if (!Directory.Exists(srcrdir))
-        {
             return;
-        }
+
         string platformdependentfolder = assetPath + "/" + FolderNameFromTargetPlatform(target);
+
         if (useSubTarget)
-        {
             platformdependentfolder += "/" + (subTarget == StandaloneBuildSubtarget.Server ? "server" : "client");
-        }
+
         if (!Directory.Exists(platformdependentfolder))
-        {
             Directory.CreateDirectory(platformdependentfolder);
-        }
 
         // If created copy files
         if (Directory.Exists(platformdependentfolder))
         {
             foreach (string file in Directory.GetFiles(srcrdir))
             {
-                if (!file.Contains("manifest"))
+                //Avoid copying the default asset created by Unity as they will overwritte the previous one wich is the one we want
+                //Alternative: destroy them after creation -> Deletion permition problems to anticipate
+                //Better yet, how to make unity not create them in the first place
+
+                //If file is not a manifest and if this file is
+                FileInfo fileInfo = new FileInfo(file);
+                Debug.Log(file + " full name, file size " + fileInfo.Length + " bytes");
+
+                if (!file.Contains("manifest") && fileInfo.Length > 10000)
                 {
                     if (subTarget == StandaloneBuildSubtarget.Player)
                     {
@@ -546,23 +557,13 @@ public class AssetbundleBuildEditor : EditorWindow
         else
         {
             UnityEngine.Debug.LogError(platformdependentfolder + " destination publish folder could not be created");
-
-            //Meant to save logs in a file, as switching plateform clears the console
-            //logs += "\n" + "\n" + DateTime.Now + ": " + platformdependentfolder + " destination publish folder could not be created";
         }
     }
 
     private static void StoreInZip(string environmentPath)
     {
-        string sceneToolsVersion = string.Empty;
+        string destzipfile = environmentPath + "/v" + packageVersion + ".zip";
 
-        foreach (PackageInfo packageInfo in PackageInfo.GetAllRegisteredPackages())
-        {
-            if (packageInfo.name == "live.rlty.scenetools")
-                sceneToolsVersion = packageInfo.version;
-        }
-
-        string destzipfile = environmentPath + "/.." + sceneToolsVersion + ".zip";
         FolderZipper.ZipUtil.ZipFiles(environmentPath, destzipfile, null);
         UnityEngine.Debug.Log("Assets zipped to " + destzipfile);
 
@@ -572,7 +573,7 @@ public class AssetbundleBuildEditor : EditorWindow
     //Removed Directory deletion to avoid build fails due to the OS locking the files
     private void OnDisable()
     {
-        DeleteTempFolders();
+        //DeleteTempFolders();
     }
 
     #endregion
