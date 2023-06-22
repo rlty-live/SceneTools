@@ -63,6 +63,9 @@ public class RLTYGameobjectMenu : Editor
     [MenuItem(toolbarfolderName + "MusicArea")]
     public static void CreateMusicArea() => LoadPrefab(RLTYPrefabType.MusicArea, true);
 
+    [MenuItem(toolbarfolderName + "VisioArea")]
+    public static void CreateVisioArea() => LoadPrefab(RLTYPrefabType.VisioArea, true);
+
     [MenuItem(toolbarfolderName + "VideoPlayer")]
     public static void CreateVideoStreamPrefab() => LoadPrefab(RLTYPrefabType.VideoPlayer, true);
 
