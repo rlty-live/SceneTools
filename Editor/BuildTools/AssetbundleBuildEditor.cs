@@ -515,11 +515,7 @@ public class AssetbundleBuildEditor : EditorWindow
         {
             foreach (string file in Directory.GetFiles(srcrdir))
             {
-                //Avoid copying the default asset created by Unity as they will overwritte the previous one wich is the one we want
-                //Alternative: destroy them after creation -> Deletion permition problems to anticipate
-                //Better yet, how to make unity not create them in the first place
-
-                //If file is not a manifest and if this file is
+                //If file is not a manifest and if this file is bigger than 10Kb (default bundle created by unity)
                 FileInfo fileInfo = new FileInfo(file);
                 Debug.Log(file + " full name, file size " + fileInfo.Length + " bytes");
 
