@@ -7,6 +7,7 @@ public class RLTYGameobjectMenu : Editor
 {
     const string toolbarfolderName = "GameObject/RLTY/";
     const string assetFolderName = "Packages/live.rlty.scenetools/Runtime/Prefabs/";
+
     public enum RLTYPrefabType
     {
         TestAvatar,
@@ -30,9 +31,12 @@ public class RLTYGameobjectMenu : Editor
         string category = simple ? "Simple" : "Advanced";
         string path = assetFolderName + category + "/" + type.ToString() + ".prefab";
 
+        Transform sceneViewCameraTransform = SceneView.lastActiveSceneView.camera.transform;
+
         Object asset = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
         GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(asset, EditorSceneManager.GetActiveScene());
         GameObjectUtility.SetParentAndAlign(instance, Selection.activeGameObject);
+        instance.transform.position = sceneViewCameraTransform.position + sceneViewCameraTransform.forward*5;
 
         Undo.RegisterCreatedObjectUndo(instance, "Delete created object");
         Selection.activeObject = instance;
