@@ -85,11 +85,6 @@ public class RLTYGameobjectMenu : Editor
     [MenuItem(toolbarfolderName + "Zoomable object")]
     public static void CreateZoomableFrame() => LoadPrefab(RLTYPrefabType.Zoomable, true);
 
-    [MenuItem(toolbarfolderName + "PopUpLink Area")]
-    public static void CreatePopUpLinkArea() => LoadPrefab(RLTYPrefabType.PopUp_Area, true);
-
-    [MenuItem(toolbarfolderName + "PopUpLink Object")]
-    public static void CreatePopUpLinkObject() => LoadPrefab(RLTYPrefabType.PopUp_Clickbox, true);
     #endregion
 
     #region CreateFromScratch
