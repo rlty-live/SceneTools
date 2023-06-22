@@ -24,6 +24,7 @@ public class RLTYGameobjectMenu : Editor
         VisioArea,
         PopUp_Area,
         PopUp_Clickbox,
+        DonationBox
     }
 
     public static Object LoadPrefab(RLTYPrefabType type, bool simple)
@@ -74,6 +75,9 @@ public class RLTYGameobjectMenu : Editor
 
     [MenuItem(toolbarfolderName + "Admin Frame")]
     public static void CreateAdminFrame() => LoadPrefab(RLTYPrefabType.Frame_Admin, true);
+
+    [MenuItem(toolbarfolderName + "Donation Box")]
+    public static void CreateDonationBox() => LoadPrefab(RLTYPrefabType.DonationBox, true);
 
     [MenuItem(toolbarfolderName + "User Frame")]
     public static void CreateUserFrame() => LoadPrefab(RLTYPrefabType.Frame_Public, true);
