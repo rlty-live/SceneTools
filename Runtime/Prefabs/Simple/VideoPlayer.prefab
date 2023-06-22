@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 80bc4b658a4da20449216c7a37b7da2a, type: 2}
+  - {fileID: 2100000, guid: a98c42417efc4f64b924a3d2db0abcf0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -139,10 +139,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa7c92aa5202084d83fd06baad98bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showUtilities: 0
+  correctSetup: 0
+  debug: 1
   col: {fileID: 2969980131381502450}
   cameraGizmoRadius: 0.26
-  cameraLineDistance: 1
   cameraLineLength: 2
+  gizmoColor: {r: 1, g: 0, b: 0, a: 0.8}
 --- !u!1 &4596773756500884280
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,20 +201,17 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  invariable: 0
+  deactivable: 1
   type: 2
-  displayKey: VideoPlayer V2_Simple
-  key: VideoPlayer_V2_Simple
+  displayKey: VideoPlayer
+  key: VideoPlayer
   useGameobjectName: 1
   section: 
-  newSection: 
   group: 
-  newGroup: 
   labelGroup: 
-  newLabelGroup: 
-  manualDescription: 1
-  displayCommentary: 
-  commentary: 
+  manualDescription: 0
+  displayCommentary: LIVE_
+  commentary: LIVE_
   technicalInfo: 
   _keyValue:
     key: 
