@@ -6,12 +6,18 @@ using Sirenix.Utilities;
 using Sirenix.OdinInspector;
 
 [HideMonoScript]
-[CreateAssetMenu(fileName = "AssetBundleSceneSetup", menuName = "RLTY/BuildSetup/Assetbundles", order = 1)]
+[CreateAssetMenu(fileName = "AssetBundle scene setup", menuName = "RLTY/BuildSetup/Assetbundles", order = 1)]
 public class AssetbundleBuildSetup : ScriptableObject
 {
     public bool useCustomFolder = false;
     [ShowIf("useCustomFolder")]
     public string customFolderPath = "../../AssetBundles";
+
+    //[Button, ShowIf("useCustomFolder")]
+    //public void OpenDestinationFolder()
+    //{
+    //    EditorUtility.RevealInFinder(customFolderPath);
+    //}
 
     public string StreamingAssetsLocalPath
     {

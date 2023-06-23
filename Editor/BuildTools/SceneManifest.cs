@@ -67,7 +67,7 @@ namespace RLTY.Customisation
             SceneManifest manifest = new SceneManifest();
             foreach (Customisable c in fullList)
                 manifest.Populate(c.type, c.key, c.commentary);
-            Debug.Log("SceneManifest=" + manifest.ToJson());
+            Debug.Log(manifest.ToJson());
         }
     }
 

@@ -1,4 +1,5 @@
 using Judiva.Metaverse.Interactions;
+using System.Diagnostics.Eventing.Reader;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class RLTYGameobjectMenu : Editor
 {
     const string toolbarfolderName = "GameObject/RLTY/";
     const string assetFolderName = "Packages/live.rlty.scenetools/Runtime/Prefabs/";
+    const int maxSpawnDistance = 50;
 
     public enum RLTYPrefabType
     {
@@ -36,8 +38,23 @@ public class RLTYGameobjectMenu : Editor
 
         Object asset = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
         GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(asset, EditorSceneManager.GetActiveScene());
-        GameObjectUtility.SetParentAndAlign(instance, Selection.activeGameObject);
-        instance.transform.position = sceneViewCameraTransform.position + sceneViewCameraTransform.forward*5;
+
+        if (Selection.activeGameObject)
+            GameObjectUtility.SetParentAndAlign(instance, Selection.activeGameObject);
+        else
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(sceneViewCameraTransform.position, sceneViewCameraTransform.forward, out hit, maxSpawnDistance))
+            {
+                instance.transform.position = hit.point;
+                Debug.Log("Raycast hit " + hit.collider.gameObject.name + ", instancing " + type.ToString() + " at " + Mathf.Round(Vector3.Distance(hit.point, sceneViewCameraTransform.position)) + " m distance.");
+            }
+            else
+            {
+                instance.transform.position = sceneViewCameraTransform.position + sceneViewCameraTransform.forward * 5;
+                Debug.Log("No object closer that 100m, instancing " + type.ToString() + " in front of the scene camera");
+            }
+        }
 
         Undo.RegisterCreatedObjectUndo(instance, "Delete created object");
         Selection.activeObject = instance;
