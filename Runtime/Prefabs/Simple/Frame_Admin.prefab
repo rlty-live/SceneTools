@@ -44,6 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e1450ed5f723548baea9c77371d3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScreenSize: {x: 1920, y: 1080}
+  showUtilities: 0
+  correctSetup: 0
+  debug: 1
+  ID: 
+  Type: 1
+  ScreenSize: {x: 1080, y: 1080}
   Scale: 1
-  MediaUrl: 
+  Width: 1
+  Height: 1
+  BaselineSize: 1080
+  OffsetFromSurfaceInMillimeters: 1
