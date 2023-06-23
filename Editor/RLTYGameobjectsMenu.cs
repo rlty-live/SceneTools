@@ -52,7 +52,7 @@ public class RLTYGameobjectMenu : Editor
             else
             {
                 instance.transform.position = sceneViewCameraTransform.position + sceneViewCameraTransform.forward * 5;
-                Debug.Log("No object closer that 100m, instancing " + type.ToString() + " in front of the scene camera");
+                Debug.Log("No object closer that" + maxSpawnDistance + "m, instancing " + type.ToString() + " in front of the scene camera");
             }
         }
 
