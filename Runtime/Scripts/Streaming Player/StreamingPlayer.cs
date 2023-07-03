@@ -17,7 +17,7 @@ public class StreamingPlayer : SceneTool
     [TitleGroup("Settings")]
     public string ID;
     public string Commentary;
-    public List<Renderer> TargetMeshes;
+    [FormerlySerializedAs("TargetMeshes")] public List<MeshRenderer> TargetMeshesRenderer;
 
 
     [TitleGroup("Size")]
