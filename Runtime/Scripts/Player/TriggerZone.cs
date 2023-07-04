@@ -9,7 +9,7 @@ using System.Linq;
 namespace Judiva.Metaverse.Interactions
 {
 #if UNITY_EDITOR
-    [AddComponentMenu("RLTY/Interaction/Trigger Zone"), HideMonoScript]
+    [AddComponentMenu("RLTY/Interaction/Trigger Zone"), HideMonoScript, RequireComponent(typeof(Collider))]
 #endif
     public class TriggerZone : RLTYMonoBehaviourBase
     {
@@ -188,10 +188,20 @@ namespace Judiva.Metaverse.Interactions
             if (Application.isPlaying)
                 return;
             if (gameObject.layer!=2) gameObject.layer = 2;
-            
+
             Collider[] c = GetComponents<Collider>();
+            MeshCollider newCO;
+
             foreach (Collider co in c)
+            {
+                if (co.GetType() == typeof(MeshCollider))
+                {
+                    newCO = (MeshCollider)co;
+                    newCO.convex = true;
+                }
+
                 co.isTrigger = true;
+            }
         }
 
         /// <summary>
