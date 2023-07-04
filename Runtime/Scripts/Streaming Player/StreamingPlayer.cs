@@ -17,6 +17,7 @@ public class StreamingPlayer : SceneTool
     [TitleGroup("Settings")]
     public string ID;
     public string Commentary;
+    public bool MutePlayersWhenPlyingVideo = false;
     [FormerlySerializedAs("TargetMeshes")] public List<MeshRenderer> TargetMeshesRenderer;
 
 
