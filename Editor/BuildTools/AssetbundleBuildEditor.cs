@@ -1,4 +1,6 @@
+//Will create textfiles instead of .asset file for faster testing
 //#define SIMULATEASSETBUNDLECREATION
+
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -10,10 +12,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using RLTY.Customisation;
 using UnityEditor.SceneManagement;
+
 using Path = System.IO.Path;
 using Debug = UnityEngine.Debug;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
-using Mono.Cecil;
+using static AssetbundleBuildSetup;
 
 public class AssetbundleBuildEditor : EditorWindow
 {
@@ -28,131 +31,7 @@ public class AssetbundleBuildEditor : EditorWindow
 
     //private static string logs;
 
-    #region Helpers
-
-    class PlayerTarget
-    {
-        public BuildTarget target;
-        public bool server = false;
-        public bool build = false;
-        public bool headless = false;
-
-        public string Name
-        {
-            get
-            {
-                switch (target)
-                {
-                    case BuildTarget.WebGL:
-                        return "WebGL";
-                    case BuildTarget.StandaloneWindows64:
-                        return "Windows " + (headless ? "Headless " : "") + Label;
-                    case BuildTarget.StandaloneLinux64:
-                        return "Linux " + (headless ? "Headless " : "") + Label;
-                    case BuildTarget.iOS:
-                        return "iOS " + (headless ? "Headless " : "") + Label;
-                    case BuildTarget.Android:
-                        return "Android " + (headless ? "Headless " : "") + Label;
-                }
-                return "unnamed";
-            }
-        }
-
-        public string Label
-        {
-            get
-            {
-                return server ? "Server" : "Client";
-            }
-        }
-    }
-
-    #region Paths reconstruction
-    private static string GetAssetBundlePath(string environmentid, BuildTarget target, StandaloneBuildSubtarget subTarget)
-    {
-        if (target == BuildTarget.WebGL)
-            return GetWebGLAssetBundlePath(environmentid);
-        else if (target == BuildTarget.iOS)
-            return GetiOSAssetBundlePath(environmentid);
-        else if (target == BuildTarget.Android)
-            return GetAndroidAssetBundlePath(environmentid);
-        else if (target == BuildTarget.StandaloneWindows64)
-            return GetWindowsAssetBundlePath(environmentid, subTarget);
-        else if (target == BuildTarget.StandaloneLinux64)
-            return GetLinuxAssetBundlePath(environmentid, subTarget);
-
-        //Removed sub folder for linux
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + target /* + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client")*/;
-    }
-
-    private static string FolderNameFromTargetPlatform(BuildTarget target)
-    {
-        if (target == BuildTarget.StandaloneWindows64)
-            return "Windows";
-        else if (target == BuildTarget.StandaloneLinux64)
-            return "Linux";
-        return target.ToString();
-    }
-
-    private static string GetManifestFilePath(string environement)
-    {
-        return _setup.StreamingAssetsLocalPath + "/" + environement + "/" + "manifest.json";
-    }
-
-    private static string GetWebGLAssetBundlePath(string environmentid)
-    {
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.WebGL;
-    }
-
-    private static string GetAndroidAssetBundlePath(string environmentid)
-    {
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.Android;
-    }
-
-    private static string GetiOSAssetBundlePath(string environmentid)
-    {
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.iOS;
-    }
-
-    private static string GetLinuxAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
-    {
-        //Removed sub folder for linux
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.StandaloneLinux64 /*+ "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client")*/;
-    }
-
-    private static string GetWindowsAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
-    {
-        return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + "Windows" + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
-    }
-    #endregion
-
-    private static void FindSetup()
-    {
-        if (_setup == null)
-        {
-            string[] guids = AssetDatabase.FindAssets(string.Format("t:{0}", typeof(AssetbundleBuildSetup)));
-            if (guids.Length > 0)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
-                _setup = AssetDatabase.LoadAssetAtPath<AssetbundleBuildSetup>(assetPath);
-            }
-        }
-    }
-
-    private static BuildTargetGroup GetTargetGroupForTarget(BuildTarget target) => target switch
-    {
-        BuildTarget.StandaloneOSX => BuildTargetGroup.Standalone,
-        BuildTarget.StandaloneWindows => BuildTargetGroup.Standalone,
-        BuildTarget.iOS => BuildTargetGroup.iOS,
-        BuildTarget.Android => BuildTargetGroup.Android,
-        BuildTarget.StandaloneWindows64 => BuildTargetGroup.Standalone,
-        BuildTarget.WebGL => BuildTargetGroup.WebGL,
-        BuildTarget.StandaloneLinux64 => BuildTargetGroup.Standalone,
-        _ => BuildTargetGroup.Unknown
-    };
-
-    #endregion
-
+    #region Unity UI
     [MenuItem("RLTY/AssetBundle Build Editor")]
     private static void Init()
     {
@@ -164,6 +43,9 @@ public class AssetbundleBuildEditor : EditorWindow
     void OnGUI()
     {
         EditorGUILayout.SelectableLabel("Scenetools version: " + packageVersion);
+
+        //Provokes error in console because method is called before the setup is displayed, see https://discussions.unity.com/t/argumentexception-getting-control-0s-position-in-a-group-with-only-0-controls-when-doing-repaint-aborting-why-c/63422
+        FindSetup();
 
         if (_assetbundleTargets.Count == 0 && _setup)
         {
@@ -194,7 +76,7 @@ public class AssetbundleBuildEditor : EditorWindow
         GUILayout.Label(setupWarning, style);
         GUILayout.Space(10);
 
-        FindSetup();
+        //FindSetup();
 
         //Hide targets and build button if no setup has been selected
         if (_setup)
@@ -259,15 +141,14 @@ public class AssetbundleBuildEditor : EditorWindow
             if (GUILayout.Button("New setup from current scenes"))
             {
                 //Create new AssetbundleBuildSetup Asset
-                _setup = AssetbundleBuildSetup.CreateInstance<AssetbundleBuildSetup>();
+                _setup = 
+                _setup = CreateInstance<AssetbundleBuildSetup>();
                 AssetDatabase.CreateAsset(_setup, "Assets/AssetBundle build setup.asset");
 
                 //Create environment
                 _setup.environmentList = new List<AssetbundleBuildSetup.Environment>();
                 AssetbundleBuildSetup.Environment newEnvironment = new AssetbundleBuildSetup.Environment();
                 newEnvironment.id = EditorSceneManager.GetActiveScene().name;
-
-                Debug.Log(EditorSceneManager.GetActiveScene().name);
 
                 //Populate with loaded scenes
                 for (int i = 0; i < EditorSceneManager.sceneCount; i++)
@@ -279,30 +160,139 @@ public class AssetbundleBuildEditor : EditorWindow
                 newEnvironment.rebuild = true;
                 _setup.environmentList.Add(newEnvironment);
 
+                EditorUtility.SetDirty(_setup);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                EditorUtility.FocusProjectWindow();
                 Selection.activeObject = _setup;
             }
         }
     }
+    #endregion
 
-    #region Assetbundles
-
-    private static void DeleteTempFolders()
+    #region Paths reconstruction
+    private static string GetAssetBundlePath(string environmentid, BuildTarget target)
     {
-        foreach (var pathtodelete in _pathsToDelete)
+        switch (target)
         {
-            try
-            {
-                Directory.Delete(pathtodelete, true);
-            }
-            catch (Exception e)
-            {
-                UnityEngine.Debug.LogError(e.Message);
+            case BuildTarget.WebGL:
+                return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.WebGL;
 
-                //Meant to save logs in a file, as switching plateform clears the console
-                //logs += "\n" + "\n" + DateTime.Now + ": " + e.Message;
+            case BuildTarget.iOS:
+                return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.iOS;
+
+            case BuildTarget.Android:
+                return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.Android;
+
+            case BuildTarget.StandaloneWindows64:
+                return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.StandaloneWindows64;
+
+            case BuildTarget.StandaloneLinux64:
+                return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.StandaloneLinux64;
+
+            default:
+                Debug.Log(target + " not impletemented");
+                return string.Empty;
+
+        }
+    }
+
+    private static string GetManifestFilePath(string environement)
+    {
+        return _setup.StreamingAssetsLocalPath + "/" + environement + "/" + "manifest.json";
+    }
+
+    private static string FolderNameFromTargetPlatform(BuildTarget target)
+    {
+        if (target == BuildTarget.StandaloneWindows64)
+            return "Windows";
+        else if (target == BuildTarget.StandaloneLinux64)
+            return "Linux";
+        return target.ToString();
+    }
+    #endregion
+
+    #region OldVersion, Refactored kept for history
+    //private static string GetAssetBundlePath(string environmentid, BuildTarget target, StandaloneBuildSubtarget subTarget)
+    //{
+    //    #region OldVersion, refactored
+    //    if (target == BuildTarget.WebGL)
+    //        return GetWebGLAssetBundlePath(environmentid);
+    //    else if (target == BuildTarget.iOS)
+    //        return GetiOSAssetBundlePath(environmentid);
+    //    else if (target == BuildTarget.Android)
+    //        return GetAndroidAssetBundlePath(environmentid);
+    //    else if (target == BuildTarget.StandaloneWindows64)
+    //        return GetWindowsAssetBundlePath(environmentid, subTarget);
+    //    else if (target == BuildTarget.StandaloneLinux64)
+    //        return GetLinuxAssetBundlePath(environmentid, subTarget);
+
+    //    //Removed sub folder for linux
+    //    return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + target /* + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client")*/;
+    //    #endregion
+    //}
+
+    //private static string GetManifestFilePath(string environement)
+    //{
+    //    return _setup.StreamingAssetsLocalPath + "/" + environement + "/" + "manifest.json";
+    //}
+
+    //private static string GetWebGLAssetBundlePath(string environmentid)
+    //{
+    //    return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.WebGL;
+    //}
+
+    //private static string GetAndroidAssetBundlePath(string environmentid)
+    //{
+    //    return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.Android;
+    //}
+
+    //private static string GetiOSAssetBundlePath(string environmentid)
+    //{
+    //    return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.iOS;
+    //}
+
+    //private static string GetLinuxAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
+    //{
+    //    //Removed sub folder for linux
+    //    return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + BuildTarget.StandaloneLinux64 /*+ "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client")*/;
+    //}
+
+    //private static string GetWindowsAssetBundlePath(string environmentid, StandaloneBuildSubtarget subTarget)
+    //{
+    //    return _setup.StreamingAssetsLocalPath + "/" + environmentid + "/" + "Windows" + "/" + (subTarget == StandaloneBuildSubtarget.Server ? "Server" : "Client");
+    //}
+    #endregion
+
+    #region AssetBundleSetup
+    private static void FindSetup()
+    {
+        if (_setup == null)
+        {
+            string[] guids = AssetDatabase.FindAssets(string.Format("t:{0}", typeof(AssetbundleBuildSetup)));
+            if (guids.Length > 0)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+                _setup = AssetDatabase.LoadAssetAtPath<AssetbundleBuildSetup>(assetPath);
             }
         }
     }
+
+    private static BuildTargetGroup GetTargetGroupForTarget(BuildTarget target) => target switch
+    {
+        BuildTarget.StandaloneOSX => BuildTargetGroup.Standalone,
+        BuildTarget.StandaloneWindows => BuildTargetGroup.Standalone,
+        BuildTarget.iOS => BuildTargetGroup.iOS,
+        BuildTarget.Android => BuildTargetGroup.Android,
+        BuildTarget.StandaloneWindows64 => BuildTargetGroup.Standalone,
+        BuildTarget.WebGL => BuildTargetGroup.WebGL,
+        BuildTarget.StandaloneLinux64 => BuildTargetGroup.Standalone,
+        _ => BuildTargetGroup.Unknown
+    };
+    #endregion
+
+    #region Assetbundles building
 
     IEnumerator PerformBuildAssetBundles(List<PlayerTarget> targetsToBuild)
     {
@@ -313,7 +303,7 @@ public class AssetbundleBuildEditor : EditorWindow
         string tmpDirectory = tmp.Substring(0, tmp.IndexOf(":") + 2) + tmpDirectoryName;
         DateTime startTime = DateTime.Now;
 
-        // show the progress display
+        // Show the progress bar
         int buildAllProgressID = Progress.Start("Build All Assetbundles", "Building all selected platforms", Progress.Options.Sticky);
         Progress.ShowDetails();
         yield return new EditorWaitForSeconds(0.5f);
@@ -323,22 +313,24 @@ public class AssetbundleBuildEditor : EditorWindow
 
         foreach (var environment in _setup.environmentList)
         {
-            //delete environement folder
+            // Overwrite previous folder
             string envfolder = _setup.StreamingAssetsLocalPath + "/" + environment.id;
             if (Directory.Exists(envfolder))
             {
                 Directory.Delete(envfolder, true);
                 Directory.CreateDirectory(envfolder);
             }
-            // build each target
+
+            // Build each target
             for (int targetIndex = 0; targetIndex < targetsToBuild.Count; ++targetIndex)
             {
                 var buildTarget = targetsToBuild[targetIndex];
 
+                //Update the progress bar
                 Progress.Report(buildAllProgressID, targetIndex + 1, targetsToBuild.Count);
                 int buildTaskProgressID = Progress.Start($"Build {buildTarget.Name}", null, Progress.Options.Sticky, buildAllProgressID);
 
-                // perform the build
+                // Perform the build
                 BuildAssetBundlesForTarget(environment.id, tmpDirectory, buildTarget.target, buildTarget.server ? StandaloneBuildSubtarget.Server : StandaloneBuildSubtarget.Player);
 
 #if SIMULATEASSETBUNDLECREATION
@@ -404,6 +396,10 @@ public class AssetbundleBuildEditor : EditorWindow
         //Dry Run builds are still to long for frequent testing
         //BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.DryRunBuild, target);
 #else
+
+        //Recreate a list of bundles from selected ones, to avoid removing tags before building (conflicts with CICD)
+
+
         BuildPipeline.BuildAssetBundles(path,
                                 BuildAssetBundleOptions.None,
                                 target);
@@ -411,7 +407,7 @@ public class AssetbundleBuildEditor : EditorWindow
 
 
         string[] filePaths = Directory.GetFiles(path);
-        string assetBundleDirectory = GetAssetBundlePath(environmentid, target, subTarget);
+        string assetBundleDirectory = GetAssetBundlePath(environmentid, target);
 
         if (!Directory.Exists(assetBundleDirectory))
             Directory.CreateDirectory(assetBundleDirectory);
@@ -447,36 +443,55 @@ public class AssetbundleBuildEditor : EditorWindow
 
         Debug.Log("Copying client assetbundles");
 
-        Debug.Log("Copying WebGL client assetbundles");
-        CopyToFinalDir(environment, GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.WebGL, false);
+        foreach (PlayerTarget target in _assetbundleTargets)
+        {
+            StandaloneBuildSubtarget subTarget;
+            if (target.server)
+                subTarget = StandaloneBuildSubtarget.Server;
 
-        Debug.Log("Copying linux server assetbundles");
-        CopyToFinalDir(environment, GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
-        //Copy to WebGL folder too
-        CopyToFinalDir(environment, GetWebGLAssetBundlePath(environment), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Server);
+            Debug.Log("Copying " + target.target + " assetbundles");
+            CopyToFinalDir(environment, GetAssetBundlePath(environment, target.target), environmentpath, target.target, StandaloneBuildSubtarget.Server);
+        }
 
-        Debug.Log("Copying linux client assetbundles");
-        CopyToFinalDir(environment, GetLinuxAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneLinux64, false, StandaloneBuildSubtarget.Player);
+        #region old factorisation
+        //Debug.Log("Copying WebGL client assetbundles");
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.WebGL),
+        //    environmentpath, BuildTarget.WebGL);
 
-        Debug.Log("Copying windows server assetbundles");
-        CopyToFinalDir(environment, GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Server), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Server);
+        //Debug.Log("Copying linux server assetbundles");
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.StandaloneLinux64),
+        //    environmentpath, BuildTarget.StandaloneLinux64, StandaloneBuildSubtarget.Server);
+        ////Copy to WebGL folder too
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.StandaloneLinux64),
+        //    environmentpath, BuildTarget.StandaloneLinux64, StandaloneBuildSubtarget.Server);
 
-        Debug.Log("Copying windows client assetbundles");
-        CopyToFinalDir(environment, GetWindowsAssetBundlePath(environment, StandaloneBuildSubtarget.Player), environmentpath, BuildTarget.StandaloneWindows64, false, StandaloneBuildSubtarget.Player);
+        //Debug.Log("Copying linux client assetbundles");
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.StandaloneLinux64),
+        //    environmentpath, BuildTarget.StandaloneLinux64);
 
-        Debug.Log("Copying iOS client assetbundles");
-        CopyToFinalDir(environment, GetiOSAssetBundlePath(environment), environmentpath, BuildTarget.iOS, false);
+        //Debug.Log("Copying windows server assetbundles");
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.StandaloneWindows64),
+        //    environmentpath, BuildTarget.StandaloneWindows64, StandaloneBuildSubtarget.Server);
 
-        Debug.Log("Copying Android client assetbundles");
-        CopyToFinalDir(environment, GetAndroidAssetBundlePath(environment), environmentpath, BuildTarget.Android, false);
+        //Debug.Log("Copying windows client assetbundles");
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.StandaloneWindows64),
+        //    environmentpath, BuildTarget.StandaloneWindows64);
 
-        //Add duplicate manifest next to the zipfile
-        if (rebuildenvironment)
-            File.Copy(environementmanifestfile, environmentpath + Path.GetFileName(environementmanifestfile), true);
+        //Debug.Log("Copying iOS client assetbundles");
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.iOS),
+        //    environmentpath, BuildTarget.iOS);
+
+        //Debug.Log("Copying Android client assetbundles");
+        //CopyToFinalDir(environment, GetAssetBundlePath(environment, BuildTarget.Android),
+        //    environmentpath, BuildTarget.Android);
+        #endregion
 
         //copy manifest
         if (rebuildenvironment)
             File.Copy(environementmanifestfile, environmentpath + "/" + Path.GetFileName(environementmanifestfile), true);
+        //Add duplicate manifest next to the zipfile
+        if (rebuildenvironment)
+            File.Copy(environementmanifestfile, environmentpath + Path.GetFileName(environementmanifestfile), true);
 
         //Store everything in a Zip
         StoreInZip(environmentpath);
@@ -493,19 +508,17 @@ public class AssetbundleBuildEditor : EditorWindow
             Process.Start(startInfo);
         }
 
+        //Removed Directory deletion to avoid build fails due to the OS locking the files
         //DeleteTempFolders();
     }
 
-    private static void CopyToFinalDir(string environemnentID, string srcrdir, string assetPath, BuildTarget target, bool useSubTarget, StandaloneBuildSubtarget subTarget = StandaloneBuildSubtarget.Player)
+    private static void CopyToFinalDir(string environemnentID, string srcrdir, string assetPath, BuildTarget target, StandaloneBuildSubtarget subTarget = StandaloneBuildSubtarget.Player)
     {
         // Create directory path and folder
         if (!Directory.Exists(srcrdir))
             return;
 
         string platformdependentfolder = assetPath + "/" + FolderNameFromTargetPlatform(target);
-
-        if (useSubTarget)
-            platformdependentfolder += "/" + (subTarget == StandaloneBuildSubtarget.Server ? "server" : "client");
 
         if (!Directory.Exists(platformdependentfolder))
             Directory.CreateDirectory(platformdependentfolder);
@@ -521,6 +534,8 @@ public class AssetbundleBuildEditor : EditorWindow
 
                 if (!file.Contains("manifest") && fileInfo.Length > 10000)
                 {
+
+                    //Rename client bundles to "client" (Case sensitive)
                     if (subTarget == StandaloneBuildSubtarget.Player)
                     {
                         if (File.Exists(platformdependentfolder + "/" + "client"))
@@ -529,6 +544,7 @@ public class AssetbundleBuildEditor : EditorWindow
                         File.Copy(file, platformdependentfolder + "/" + "client");
                     }
 
+                    //Rename server bundles to "server" (Case sensitive)
                     if (subTarget == StandaloneBuildSubtarget.Server)
                     {
                         if (File.Exists(platformdependentfolder + "/" + "server"))
@@ -536,7 +552,8 @@ public class AssetbundleBuildEditor : EditorWindow
 
                         File.Copy(file, platformdependentfolder + "/" + "server");
 
-                        if (subTarget == StandaloneBuildSubtarget.Server)
+                        // Copy the Linux SubTarget to the WebGL folder too, as "server"
+                        if (target == BuildTarget.StandaloneLinux64)
                         {
                             string webGLPseudoServerPath = assetPath + "/" + FolderNameFromTargetPlatform(BuildTarget.WebGL) + "/server";
                             if (File.Exists(webGLPseudoServerPath))
@@ -545,8 +562,6 @@ public class AssetbundleBuildEditor : EditorWindow
                             File.Copy(file, webGLPseudoServerPath);
                         }
                     }
-
-                    //File.Copy(file, platformdependentfolder + "/" + Path.GetFileName(file));
                 }
             }
         }
@@ -566,15 +581,68 @@ public class AssetbundleBuildEditor : EditorWindow
         _pathsToDelete.Add(Path.GetFullPath(environmentPath));
     }
 
-    //Removed Directory deletion to avoid build fails due to the OS locking the files
+    private static void DeleteTempFolders()
+    {
+        foreach (var pathtodelete in _pathsToDelete)
+        {
+            try
+            {
+                Directory.Delete(pathtodelete, true);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError(e.Message);
+
+                //Meant to save logs in a file, as switching plateform clears the console
+                //logs += "\n" + "\n" + DateTime.Now + ": " + e.Message;
+            }
+        }
+    }
+
     private void OnDisable()
     {
-        //DeleteTempFolders();
+        DeleteTempFolders();
     }
 
     #endregion
 }
 
+class PlayerTarget
+{
+    public BuildTarget target;
+    public bool server = false;
+    public bool build = false;
+    public bool headless = false;
+
+    public string Name
+    {
+        get
+        {
+            switch (target)
+            {
+                case BuildTarget.WebGL:
+                    return "WebGL";
+                case BuildTarget.StandaloneWindows64:
+                    return "Windows " + (headless ? "Headless " : "") + Label;
+                case BuildTarget.StandaloneLinux64:
+                    return "Linux " + (headless ? "Headless " : "") + Label;
+                case BuildTarget.iOS:
+                    return "iOS " + (headless ? "Headless " : "") + Label;
+                case BuildTarget.Android:
+                    return "Android " + (headless ? "Headless " : "") + Label;
+            }
+            return "unnamed";
+        }
+    }
+
+    public string Label
+    {
+        get
+        {
+            return server ? "Server" : "Client";
+        }
+    }
+}
 
 namespace FolderZipper
 {

@@ -4,6 +4,7 @@ using UnityEditor;
 using System.Text.RegularExpressions;
 using Sirenix.Utilities;
 using Sirenix.OdinInspector;
+using UnityEditor.SceneManagement;
 
 [HideMonoScript]
 [CreateAssetMenu(fileName = "AssetBundle scene setup", menuName = "RLTY/BuildSetup/Assetbundles", order = 1)]
@@ -11,14 +12,7 @@ public class AssetbundleBuildSetup : ScriptableObject
 {
     public bool useCustomFolder = false;
     [ShowIf("useCustomFolder")]
-    public string customFolderPath = "../../AssetBundles";
-
-    //[Button, ShowIf("useCustomFolder")]
-    //public void OpenDestinationFolder()
-    //{
-    //    EditorUtility.RevealInFinder(customFolderPath);
-    //}
-
+    public string customFolderPath = "../AssetBundles";
     public string StreamingAssetsLocalPath
     {
         get
@@ -29,7 +23,6 @@ public class AssetbundleBuildSetup : ScriptableObject
             return tmp;
         }
     }
-
     public string PublishS3Path
     {
         get
@@ -38,6 +31,7 @@ public class AssetbundleBuildSetup : ScriptableObject
         }
     }
 
+    public List<Environment> environmentList;
     [System.Serializable]
     public class Environment
     {
@@ -50,13 +44,46 @@ public class AssetbundleBuildSetup : ScriptableObject
         public bool rebuild = true;
     }
 
-    public List<Environment> environmentList;
+    private bool environmentExists = false;
 
     private void OnValidate()
     {
         CheckSetup();
         //foreach (Environment e in environmentList)
         //    Debug.Log(e);
+    }
+
+    //[Button, ShowIf("useCustomFolder")]
+    //public void OpenDestinationFolder()
+    //{
+    //    EditorUtility.RevealInFinder(System.IO.Directory.GetParent(System.IO.Directory.GetParent(Application.dataPath).ToString()).ToString());
+    //}
+
+    [Button, HideIf("environmentExists")]
+    public void AddCurrentSceneSetup()
+    {
+        if(!environmentExists)
+        {
+            Environment newEnvironment = new AssetbundleBuildSetup.Environment();
+            newEnvironment.id = AlphaNumeric(EditorSceneManager.GetActiveScene().name, true);
+
+            //Populate with loaded scenes
+            for (int i = 0; i < EditorSceneManager.sceneCount; i++)
+            {
+                newEnvironment.scenes.Add((SceneAsset)AssetDatabase.LoadAssetAtPath(EditorSceneManager.GetSceneAt(i).path, typeof(SceneAsset)));
+                Debug.Log(EditorSceneManager.GetActiveScene().name);
+            }
+
+            newEnvironment.rebuild = true;
+            environmentList.Add(newEnvironment);
+
+            EditorUtility.SetDirty(this);
+        }
+        else
+        {
+            JLogBase.Log("Can't create new environement as it already exists", typeof(AssetbundleBuildSetup));
+        }
+
     }
 
     public void CheckSetup()
@@ -99,6 +126,19 @@ public class AssetbundleBuildSetup : ScriptableObject
             if (!containsValidScenes)
                 e.rebuild = false;
         }
+
+        //Check if current scene already exists in the environement list
+        string environmentID = AlphaNumeric(EditorSceneManager.GetActiveScene().name, true);
+        foreach (Environment env in environmentList)
+        {
+            if (env.id == environmentID)
+            {
+                environmentExists = true;
+                return;
+            }
+        }
+
+        environmentExists = false;
     }
 
     /// <summary>
