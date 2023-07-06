@@ -11,10 +11,3 @@ Use Unity 2021.3.4f1 - URP
  
 [<img src="Docs~/TutorialVideo.png">](http://example.com/)
 </details>
-
-**Note 📝:** when browsing unity package manager, you will always get an error:
-```
-[Package Manager Window] Cannot perform upm operation: Unable to perform online search:
-  Request [GET https://npm.pkg.github.com/@rlty-live/-/v1/search?text=live.rlty&from=0&size=250] failed with status code [405] [NotFound].
-```
-This is because GitHub doesn't have an API to get package list. You should ignore this error.
