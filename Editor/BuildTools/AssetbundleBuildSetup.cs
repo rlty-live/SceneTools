@@ -40,6 +40,7 @@ public class AssetbundleBuildSetup : ScriptableObject
         //To use when loading assetbundles
         [HideInInspector]
         public string variant;
+
         public List<SceneAsset> scenes = new List<SceneAsset>();
         public bool rebuild = true;
     }

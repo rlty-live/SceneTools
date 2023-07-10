@@ -16,7 +16,6 @@ using UnityEditor.SceneManagement;
 using Path = System.IO.Path;
 using Debug = UnityEngine.Debug;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
-using static AssetbundleBuildSetup;
 
 public class AssetbundleBuildEditor : EditorWindow
 {
@@ -49,11 +48,11 @@ public class AssetbundleBuildEditor : EditorWindow
 
         if (_assetbundleTargets.Count == 0 && _setup)
         {
+            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.WebGL, server = false, headless = false });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = true, headless = true });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneWindows64, server = false, headless = false });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneLinux64, server = true, headless = true });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.StandaloneLinux64, server = false, headless = true });
-            _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.WebGL, server = false, headless = false });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.iOS, server = false, headless = false });
             _assetbundleTargets.Add(new PlayerTarget { target = BuildTarget.Android, server = false, headless = false });
         }
@@ -85,7 +84,7 @@ public class AssetbundleBuildEditor : EditorWindow
             for (int i = 0; i < _assetbundleTargets.Count; i++)
                 _assetbundleTargets[i].build = GUILayout.Toggle(_assetbundleTargets[i].build, _assetbundleTargets[i].Name);
 
-            //Check all targets
+            //All targets toggle
             bool allTargets = false;
             GUILayout.Space(10);
             if (GUILayout.Toggle(allTargets, "All targets"))
@@ -96,10 +95,8 @@ public class AssetbundleBuildEditor : EditorWindow
 
             //Allow build only if targets are selected
             foreach (PlayerTarget target in _assetbundleTargets)
-            {
                 if (target.build)
                     anyTargetSelected = true;
-            }
 
             //Allow build only if environment are checked for build
             bool anyBundleSelectedForBuild = false;
@@ -126,10 +123,16 @@ public class AssetbundleBuildEditor : EditorWindow
                     List<PlayerTarget> list = new List<PlayerTarget>();
 
                     //_pathsToDelete.Clear();
+                    foreach (AssetbundleBuildSetup.Environment e in _setup.environmentList)
+                        if (e.rebuild)
+                            foreach (PlayerTarget target in _assetbundleTargets)
+                                if (target.build)
+                                    list.Add(target);
 
-                    for (int i = 0; i < _assetbundleTargets.Count; i++)
-                        if (_assetbundleTargets[i].build)
-                            list.Add(_assetbundleTargets[i]);
+                            //for (int i = 0; i < _assetbundleTargets.Count; i++)
+                            //if (_assetbundleTargets[i].build)
+                            //    list.Add(_assetbundleTargets[i]);
+
                     EditorCoroutineUtility.StartCoroutine(PerformBuildAssetBundles(list), this);
                 }
             }
@@ -141,7 +144,7 @@ public class AssetbundleBuildEditor : EditorWindow
             if (GUILayout.Button("New setup from current scenes"))
             {
                 //Create new AssetbundleBuildSetup Asset
-                _setup = 
+                _setup =
                 _setup = CreateInstance<AssetbundleBuildSetup>();
                 AssetDatabase.CreateAsset(_setup, "Assets/AssetBundle build setup.asset");
 
@@ -313,36 +316,39 @@ public class AssetbundleBuildEditor : EditorWindow
 
         foreach (var environment in _setup.environmentList)
         {
-            // Overwrite previous folder
             string envfolder = _setup.StreamingAssetsLocalPath + "/" + environment.id;
-            if (Directory.Exists(envfolder))
+            if (environment.rebuild)
             {
-                Directory.Delete(envfolder, true);
-                Directory.CreateDirectory(envfolder);
-            }
+                // Overwrite previous folder
+                if (Directory.Exists(envfolder))
+                {
+                    Directory.Delete(envfolder, true);
+                    Directory.CreateDirectory(envfolder);
+                }
 
-            // Build each target
-            for (int targetIndex = 0; targetIndex < targetsToBuild.Count; ++targetIndex)
-            {
-                var buildTarget = targetsToBuild[targetIndex];
+                // Build each target
+                for (int targetIndex = 0; targetIndex < targetsToBuild.Count; ++targetIndex)
+                {
+                    var buildTarget = targetsToBuild[targetIndex];
 
-                //Update the progress bar
-                Progress.Report(buildAllProgressID, targetIndex + 1, targetsToBuild.Count);
-                int buildTaskProgressID = Progress.Start($"Build {buildTarget.Name}", null, Progress.Options.Sticky, buildAllProgressID);
+                    //Update the progress bar
+                    Progress.Report(buildAllProgressID, targetIndex + 1, targetsToBuild.Count);
+                    int buildTaskProgressID = Progress.Start($"Build {buildTarget.Name}", null, Progress.Options.Sticky, buildAllProgressID);
 
-                // Perform the build
-                BuildAssetBundlesForTarget(environment.id, tmpDirectory, buildTarget.target, buildTarget.server ? StandaloneBuildSubtarget.Server : StandaloneBuildSubtarget.Player);
+                    // Perform the build
+                    BuildAssetBundlesForTarget(environment.id, tmpDirectory, buildTarget.target, buildTarget.server ? StandaloneBuildSubtarget.Server : StandaloneBuildSubtarget.Player);
 
 #if SIMULATEASSETBUNDLECREATION
                 //What is that for ?
                 //yield return new EditorWaitForSeconds(4.5f);
                 yield return new EditorWaitForSeconds(6f);
 #endif
-                Progress.Finish(buildTaskProgressID, Progress.Status.Succeeded);
+                    Progress.Finish(buildTaskProgressID, Progress.Status.Succeeded);
+                }
             }
         }
 
-        //build manifests
+        //build manifests and package bundles
         foreach (var environment in _setup.environmentList)
         {
             string environementmanifestfile = null;
@@ -356,8 +362,8 @@ public class AssetbundleBuildEditor : EditorWindow
                     Directory.CreateDirectory(environementmanifestfilepath);
                 }
                 File.WriteAllText(environementmanifestfile, manifest.ToJson());
+                PreparePublishToS3(environment.id, environment.rebuild, environementmanifestfile);
             }
-            PreparePublishToS3(environment.id, environment.rebuild, environementmanifestfile);
         }
 
         UnityEngine.Debug.Log("Assetbundle build time=" + (DateTime.Now.Subtract(startTime).TotalSeconds));
@@ -366,6 +372,7 @@ public class AssetbundleBuildEditor : EditorWindow
         //logs += "\n" + "\n" + DateTime.Now + ": " + "Assetbundle build time=" + (DateTime.Now.Subtract(startTime).TotalSeconds);
         //File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) +"/bundleBuildLogs.txt", logs);
 
+        //Return to original editor build target
         if (EditorUserBuildSettings.activeBuildTarget != originalTarget || EditorUserBuildSettings.standaloneBuildSubtarget != originalSubTarget)
         {
             //Made direct to avoid having to add a wait forsecond (is this why it's there ?)
@@ -398,11 +405,11 @@ public class AssetbundleBuildEditor : EditorWindow
 #else
 
         //Recreate a list of bundles from selected ones, to avoid removing tags before building (conflicts with CICD)
+        //Use the AssetBundleBuild API to reconstruct a list of bundles to be built from the AssetBundleBuildSetup
 
+        //path += subTarget == StandaloneBuildSubtarget.Server ? "server" : "client";
 
-        BuildPipeline.BuildAssetBundles(path,
-                                BuildAssetBundleOptions.None,
-                                target);
+        BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.None, target);
 #endif
 
 
@@ -421,7 +428,7 @@ public class AssetbundleBuildEditor : EditorWindow
         }
 
         //Removed Directory deletion to avoid build fails due to the OS locking the files
-        //Directory.Delete(tmpDirectory, true);
+        Directory.Delete(tmpDirectory, true);
     }
 
     #endregion
@@ -441,16 +448,23 @@ public class AssetbundleBuildEditor : EditorWindow
 
         Directory.CreateDirectory(environmentpath);
 
-        Debug.Log("Copying client assetbundles");
+        Debug.Log("Copying assetbundles");
 
         foreach (PlayerTarget target in _assetbundleTargets)
         {
-            StandaloneBuildSubtarget subTarget;
-            if (target.server)
-                subTarget = StandaloneBuildSubtarget.Server;
+            if (target.build)
+            {
+                StandaloneBuildSubtarget subTarget;
 
-            Debug.Log("Copying " + target.target + " assetbundles");
-            CopyToFinalDir(environment, GetAssetBundlePath(environment, target.target), environmentpath, target.target, StandaloneBuildSubtarget.Server);
+                if (target.server)
+                    subTarget = StandaloneBuildSubtarget.Server;
+                else
+                    subTarget = StandaloneBuildSubtarget.Player;
+
+                Debug.Log("Copying " + target.target + " - " + (target.server ? "server" : "client") + " assetbundles");
+
+                CopyToFinalDir(environment, GetAssetBundlePath(environment, target.target), environmentpath, target.target, subTarget);
+            }
         }
 
         #region old factorisation
@@ -530,7 +544,6 @@ public class AssetbundleBuildEditor : EditorWindow
             {
                 //If file is not a manifest and if this file is bigger than 10Kb (default bundle created by unity)
                 FileInfo fileInfo = new FileInfo(file);
-                Debug.Log(file + " full name, file size " + fileInfo.Length + " bytes");
 
                 if (!file.Contains("manifest") && fileInfo.Length > 10000)
                 {
@@ -563,6 +576,11 @@ public class AssetbundleBuildEditor : EditorWindow
                         }
                     }
                 }
+
+                if(fileInfo.Length > 10000)
+                    Debug.Log(file + ", file size " + fileInfo.Length + " bytes, excluded from copy as it is the default bundle");
+                if (file.Contains("manifest"))
+                    Debug.Log(file + " is bundle manifest, excluded from final size");
             }
         }
         else
@@ -599,10 +617,10 @@ public class AssetbundleBuildEditor : EditorWindow
         }
     }
 
-    private void OnDisable()
-    {
-        DeleteTempFolders();
-    }
+    //private void OnDisable()
+    //{
+    //    DeleteTempFolders();
+    //}
 
     #endregion
 }
