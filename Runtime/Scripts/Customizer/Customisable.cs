@@ -43,7 +43,6 @@ namespace RLTY.Customisation
         private static List<string> groups = new List<string>();
         private static List<string> labelGroups = new List<string>();
 
-        [InfoBox("To organize the way customisables appear on your space add a CustomisationManager")]
         [ValueDropdown("GetSections")]
         [Tooltip("Customisables in the same section appear in a panel named 'Section'")]
         [ShowIf("customizer")]
@@ -57,7 +56,7 @@ namespace RLTY.Customisation
         public string group;
 
         [ValueDropdown("GetLabelGroups")]
-        [Tooltip("To be added")]
+        [Tooltip("Customisables grouped in LabelGroups appear under a label parent to sections")]
         [ShowIf("customizer")]
         [LabelWidth(labelWidth)]
         public string labelGroup;
@@ -84,7 +83,7 @@ namespace RLTY.Customisation
         [ShowIf("showUtilities", true)]
         public Vector3 gizmoOffset = new Vector3(1, 0, 0);
 
-        private static CustomisationManager customizer;
+        public static CustomisationManager customizer;
         const int labelWidth = 80;
         string technicalInfo;
         #endregion
@@ -95,37 +94,38 @@ namespace RLTY.Customisation
 
         public IEnumerable<string> GetGroups()
         {
+            List<string> category = new List<string>();
+
             if (customizer)
-                return customizer.groups;
+                category = customizer.groups;
             else
-                return FindOrCreateCustomisationManager().groups;
+                category = FindOrCreateCustomisationManager().groups;
+
+            return category;
         }
 
         public IEnumerable<string> GetSections()
         {
+            List<string> category = new List<string>();
+
             if (customizer)
-                return customizer.sections;
+                category = customizer.sections;
             else
-                return FindOrCreateCustomisationManager().sections;
+                category = FindOrCreateCustomisationManager().sections;
+
+            return category;
         }
 
         public IEnumerable<string> GetLabelGroups()
         {
-            if (customizer)
-                return customizer.groupLabels;
-            else
-                return FindOrCreateCustomisationManager().groupLabels;
-        }
+            List<string> category = new List<string>();
 
-        public void UpdateCustomisableOrganisation()
-        {
-            //Add Empty slot if there are none
-            if (!groups.Contains(""))
-                groups.Add("");
-            if (!sections.Contains(""))
-                sections.Add("");
-            if (!labelGroups.Contains(""))
-                labelGroups.Add("");
+            if (customizer)
+                category = customizer.groupLabels;
+            else
+                category = FindOrCreateCustomisationManager().groupLabels;
+
+            return category;
         }
 
         public void UpdateKey()
@@ -144,14 +144,17 @@ namespace RLTY.Customisation
             if (!label.IsNullOrWhitespace())
             {
                 string indexStr = string.Empty;
+                string labelGroupStr = string.Empty;
+                string sectionStr = string.Empty;
+                string groupStr = string.Empty;
                 //if (customizer && customizer.customisablesInScene.Contains(this))
                 //    indexStr = customizer.customisablesInScene.IndexOf(this).ToString() + " #";
 
-                string labelGroupStr = string.IsNullOrWhiteSpace(labelGroup) ? string.Empty : labelGroup + "/";
-                string sectionStr = string.IsNullOrWhiteSpace(section) ? string.Empty : section + "$";
-                string groupStr = string.IsNullOrWhiteSpace(group) ? string.Empty : group + "_";
+                labelGroupStr = string.IsNullOrWhiteSpace(labelGroup) ? string.Empty : labelGroup + "/";
+                sectionStr = string.IsNullOrWhiteSpace(section) ? string.Empty : section + "$";
+                groupStr = string.IsNullOrWhiteSpace(group) ? string.Empty : group + "_";
 
-                _description = indexStr + labelGroupStr + sectionStr + groupStr + _description;
+                _description = indexStr + labelGroupStr + sectionStr + groupStr + label;
             }
         }
 
@@ -184,7 +187,6 @@ namespace RLTY.Customisation
             UpdateKey();
             CheckForProcessor();
             GetTechnicalInfo();
-            UpdateCustomisableOrganisation();
             UpdateDescription();
         }
 

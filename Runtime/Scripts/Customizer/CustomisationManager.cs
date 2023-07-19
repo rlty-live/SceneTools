@@ -14,33 +14,38 @@ namespace RLTY.Customisation
 {
     [DisallowMultipleComponent]
     [HideMonoScript]
-    [HelpURL("https://rlty.notion.site/How-to-set-descriptions-for-customizables-15f2ae881601470084454b994f8c1cbf"), AddComponentMenu("RLTY/Customisable/Managers/Customisation Manager")]
+    [HelpURL(docURL), AddComponentMenu("RLTY/Customisable/Managers/Customisation Manager")]
     public class CustomisationManager : RLTYMonoBehaviour
     {
         #region Global variables
 
         [SerializeField, ReadOnly] private string sceneToolsVersion;
 
-        [Title("Organizing")] [Space(5)] [DetailedInfoBox("How to", howTo, InfoMessageType.Info)]
+        [Title("Organizing")]
+        [Space(5)]
+        [DetailedInfoBox("warning", warning, InfoMessageType.Warning)]
         public List<string> groupLabels = new List<string>();
         public List<string> sections = new List<string>();
         public List<string> groups = new List<string>();
 
+        [Title("Sorting")]
+        public List<Customisable> customisablesInScene = new List<Customisable>();
 
-        [Title("Sorting")] public List<Customisable> customisablesInScene = new List<Customisable>();
+        [SerializeField]
+        private const string warning = "Renaming a category won't have an effect on customisable previously setup until you have refreshed them";
 
-        //Set in Reset()
-        Texture2D customisableClassification;
+        private const string ordering =
+       "1) Reorder those lists to change their displaying order on the website \n" +
+       "2) You can add and set groups on any Customizable component \n" +
+       "see documentation for more information.";
 
-        [SerializeField] private const string howTo =
-            "1) Reorder those lists to change their displaying order on the website \n" +
-            "2) You can add and set groups on any Customizable component \n" +
-            "see documentation for more information.";
-
-        [PropertyOrder(40)] [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
+        [PropertyOrder(40)]
+        [SerializeField, HorizontalGroup("selector", Title = "Tools"), LabelWidth(100)]
         private CustomisableType customisables;
 
         [ReadOnly, SerializeField] private List<Customisable> uncustomizedCustomisables;
+
+        private const string docURL = "https://rlty.notion.site/How-to-set-descriptions-for-customizables-15f2ae881601470084454b994f8c1cbf";
 
         #endregion
 
@@ -49,14 +54,13 @@ namespace RLTY.Customisation
 #if UNITY_EDITOR
 
         [Button]
-        public void OpenDocumentation() => Application.OpenURL(
-            "https://rlty.notion.site/How-to-set-descriptions-for-customizables-15f2ae881601470084454b994f8c1cbf");
+        public void OpenDocumentation() => Application.OpenURL(docURL);
 
         /// <summary>
         /// Select all Customisable corresponding to CustomisablesToSelect in Hierarchy
         /// </summary>
-        [Button("Select"), HorizontalGroup("selector")]
-        public void SelectAll()
+        [Button("Select"), HorizontalGroup("TypeSelector")]
+        public void SelectAll(CustomisableType type)
         {
             Customisable[] list = FindObjectsOfType<Customisable>();
             List<GameObject> gos = new List<GameObject>();
@@ -69,19 +73,44 @@ namespace RLTY.Customisation
             Selection.objects = gos.ToArray();
         }
 
+        //If i don't find a way to automatically refresh a customisable selected group/labelgroup etc after renaming, i can make them selectable by those criterias for rapid change
+        //[Button("Select"), HorizontalGroup("")]
+        //public void SelectAll(string category)
+        //{
+        //    Customisable[] list = FindObjectsOfType<Customisable>();
+        //    List<GameObject> gos = new List<GameObject>();
+        //    foreach (Customisable c in list)
+        //    {
+        //        if (c.type == customisables)
+        //            gos.Add(c.gameObject);
+        //    }
+
+        //    Selection.objects = gos.ToArray();
+        //}
+
         public void OnValidate()
         {
             GetPackageVersion();
             RefreshCustomisableList();
-
-            foreach (Customisable customisable in customisablesInScene)
-                customisable.UpdateDescription();
+            UpdateCustomisables();
         }
 
         public void Reset()
         {
-            customisableClassification = (Texture2D)AssetDatabase.LoadAssetAtPath(
-                "Packages/com.live.rlty.scenetools/Docs/Customisables/classification.png", typeof(Texture2D));
+            RefreshCustomisableList();
+            UpdateCustomisables();
+        }
+
+        public void UpdateCustomisables()
+        {
+            if (!Customisable.customizer)
+                Customisable.customizer = this;
+
+            foreach (Customisable customisable in customisablesInScene)
+            {
+                if (!Customisable.customizer)
+                    customisable.UpdateDescription();
+            }
         }
 
         public void RefreshCustomisableList()
@@ -101,7 +130,7 @@ namespace RLTY.Customisation
                         else customisablesInScene.Add(custo);
                     }
 
-                    JLogBase.Log("Updated customisable List", this);
+                    //JLogBase.Log("Updated customisable List", this);
                 }
                 //if not create new list
                 else
