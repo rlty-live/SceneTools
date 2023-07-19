@@ -14,7 +14,7 @@ namespace RLTY.Customisation
 {
     [DisallowMultipleComponent]
     [HideMonoScript]
-    [HelpURL("https://www.youtube.com/watch?v=-AXetJvTfU0"), AddComponentMenu("RLTY/Customisable/Managers/Customizer")]
+    [HelpURL("https://rlty.notion.site/How-to-set-descriptions-for-customizables-15f2ae881601470084454b994f8c1cbf"), AddComponentMenu("RLTY/Customisable/Managers/Customisation Manager")]
     public class CustomisationManager : RLTYMonoBehaviour
     {
         #region Global variables
@@ -22,10 +22,10 @@ namespace RLTY.Customisation
         [SerializeField, ReadOnly] private string sceneToolsVersion;
 
         [Title("Organizing")] [Space(5)] [DetailedInfoBox("How to", howTo, InfoMessageType.Info)]
-        public List<string> groupLabel = new List<string>();
-
-        public List<string> groups = new List<string>();
+        public List<string> groupLabels = new List<string>();
         public List<string> sections = new List<string>();
+        public List<string> groups = new List<string>();
+
 
         [Title("Sorting")] public List<Customisable> customisablesInScene = new List<Customisable>();
 
@@ -73,6 +73,9 @@ namespace RLTY.Customisation
         {
             GetPackageVersion();
             RefreshCustomisableList();
+
+            foreach (Customisable customisable in customisablesInScene)
+                customisable.UpdateDescription();
         }
 
         public void Reset()
@@ -83,7 +86,9 @@ namespace RLTY.Customisation
 
         public void RefreshCustomisableList()
         {
+            //Don't refresh the list in the prefab asset
             if (!PrefabUtility.IsPartOfPrefabAsset(this))
+            {
                 //If there are elements in it
                 if (customisablesInScene.Any())
                 {
@@ -104,7 +109,9 @@ namespace RLTY.Customisation
                     customisablesInScene = FindObjectsOfType<Customisable>().ToList();
                     JLogBase.Log("Created new List", this);
                 }
+            }
 
+            //Remove emptyentries
             customisablesInScene.RemoveAll(item => item == null);
         }
 #endif
@@ -112,8 +119,6 @@ namespace RLTY.Customisation
         #endregion
 
         #region Runtime logic
-
-        #region UnityCallbacks
 
         public void Awake()
         {
@@ -128,8 +133,6 @@ namespace RLTY.Customisation
                     ToggleUnCustomizedActivation();
             }
         }
-
-        #endregion
 
         public void GetPackageVersion()
         {
@@ -239,10 +242,6 @@ namespace RLTY.Customisation
                     custo.gameObject.SetActive(true);
             }
         }
-
-        #endregion
-
-        #region Event Registrations
 
         public override void EventHandlerRegister()
         {

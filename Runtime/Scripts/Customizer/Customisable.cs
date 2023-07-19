@@ -3,6 +3,8 @@ using UnityEngine;
 using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using UnityEngine.Serialization;
+using System.Runtime.CompilerServices;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,87 +21,100 @@ namespace RLTY.Customisation
         #region Global variables
 
         [Title("Configuration")]
-        [InfoBox(
-            "If you want to copy this gameobject just give it the same name and it will be customized the same way")]
+        //[InfoBox("If you want to copy this gameobject just give it the same name and it will be customized the same way")]
         public bool deactivable = true;
 
-        [LabelWidth(40), Space(5)] public CustomisableType type;
+        [LabelWidth(40), Space(5)]
+        public CustomisableType type;
 
-        [HorizontalGroup("IDs"), LabelText("Key"), LabelWidth(40)] [SerializeField]
+        [HorizontalGroup("IDs"), LabelText("Key"), LabelWidth(40)]
+        [SerializeField]
         public string displayKey;
-
         [ReadOnly, ShowIf("showUtilities", true), LabelText("realKey")]
         public string key;
 
-        [SerializeField] [HorizontalGroup("IDs", 10, 0)] [ShowIf("showUtilities", true)]
+        [SerializeField]
+        [HorizontalGroup("IDs", 10, 0)]
+        [ShowIf("showUtilities", true)]
         private bool useGameobjectName;
 
-        [Title("Organization")] [SerializeField]
+        [Title("Organization")]
         private static List<string> sections = new List<string>();
+        private static List<string> groups = new List<string>();
+        private static List<string> labelGroups = new List<string>();
 
-        [SerializeField] private static List<string> groups = new List<string>();
-        [SerializeField] private static List<string> labelGroups = new List<string>();
-
-        const int labelWidth = 80;
-
+        [InfoBox("To organize the way customisables appear on your space add a CustomisationManager")]
         [ValueDropdown("GetSections")]
         [Tooltip("Customisables in the same section appear in a panel named 'Section'")]
+        [ShowIf("customizer")]
         [LabelWidth(labelWidth)]
         public string section;
 
         [ValueDropdown("GetGroups")]
         [Tooltip("Grouped customisable appear in the same bloc, without labels")]
+        [ShowIf("customizer")]
         [LabelWidth(labelWidth)]
         public string group;
 
-        [ValueDropdown("GetLabelGroups")] [Tooltip("To be added")] [LabelWidth(labelWidth)]
+        [ValueDropdown("GetLabelGroups")]
+        [Tooltip("To be added")]
+        [ShowIf("customizer")]
+        [LabelWidth(labelWidth)]
         public string labelGroup;
 
         [Title("Description")]
-        [SerializeField, ShowIf("showUtilities")]
-        [Tooltip("Set this to true if you haven't already added your grouping and sectioning")]
-        private bool manualDescription = true;
-
-        [TextArea, LabelText("Commentary")] public string displayCommentary;
-
-        [TextArea, ReadOnly, ShowIf("showUtilities", true), LabelText("Real Commentary")]
-        public string commentary;
-
-        [SerializeField, ReadOnly] string technicalInfo;
+        [TextArea, FormerlySerializedAs("displayCommentary")]
+        public string label;
+        [TextArea, ReadOnly, ShowIf("showUtilities", true), FormerlySerializedAs("commentary")]
+        public string _description;
 
         [SerializeField, ReadOnly, ShowIf("showUtilities")]
         public KeyValueBase _keyValue;
 
-        [Title("Setup")] [ShowIf("showUtilities", true), ReadOnly]
+        [Title("Setup")]
+        [ShowIf("showUtilities", true), ReadOnly]
         public Processor processor;
-
         [SerializeField] private Component target;
-        private static CustomisationManager customizer;
-        private static bool checkingCustomisationManager = false;
 
-        [Title("Handles")] [SerializeField] [ShowIf("showUtilities", true)]
+        [Title("Handles")]
+        [SerializeField]
+        [ShowIf("showUtilities", true)]
         private bool showGizmo = false;
 
-        [ShowIf("showUtilities", true)] public Vector3 gizmoOffset = new Vector3(1, 0, 0);
+        [ShowIf("showUtilities", true)]
+        public Vector3 gizmoOffset = new Vector3(1, 0, 0);
 
+        private static CustomisationManager customizer;
+        const int labelWidth = 80;
+        string technicalInfo;
         #endregion
 
         #region EditorOnly Logic
 
 #if UNITY_EDITOR
+
         public IEnumerable<string> GetGroups()
         {
-            return groups;
+            if (customizer)
+                return customizer.groups;
+            else
+                return FindOrCreateCustomisationManager().groups;
         }
 
         public IEnumerable<string> GetSections()
         {
-            return sections;
+            if (customizer)
+                return customizer.sections;
+            else
+                return FindOrCreateCustomisationManager().sections;
         }
 
         public IEnumerable<string> GetLabelGroups()
         {
-            return labelGroups;
+            if (customizer)
+                return customizer.groupLabels;
+            else
+                return FindOrCreateCustomisationManager().groupLabels;
         }
 
         public void UpdateCustomisableOrganisation()
@@ -124,9 +139,9 @@ namespace RLTY.Customisation
                 key = key.Replace(" ", "_");
         }
 
-        public void UpdateCommentary()
+        public void UpdateDescription()
         {
-            if (!manualDescription && !displayCommentary.IsNullOrWhitespace())
+            if (!label.IsNullOrWhitespace())
             {
                 string indexStr = string.Empty;
                 //if (customizer && customizer.customisablesInScene.Contains(this))
@@ -136,7 +151,7 @@ namespace RLTY.Customisation
                 string sectionStr = string.IsNullOrWhiteSpace(section) ? string.Empty : section + "$";
                 string groupStr = string.IsNullOrWhiteSpace(group) ? string.Empty : group + "_";
 
-                commentary = indexStr + labelGroupStr + sectionStr + groupStr + displayCommentary;
+                _description = indexStr + labelGroupStr + sectionStr + groupStr + _description;
             }
         }
 
@@ -145,35 +160,32 @@ namespace RLTY.Customisation
             //no processor-specific code here, please call a method on the processor instead
         }
 
-        public static void CheckCustomisationManager()
+        public CustomisationManager FindOrCreateCustomisationManager()
         {
-            //Create a second CustomisationManager, change associated events
-            // checkingCustomisationManager = true;
-            // customizer = FindObjectOfType<CustomisationManager>();
-            //
-            // if (!customizer)
-            // {
-            //     GameObject customisationManager;
-            //     customisationManager = new GameObject("Customisation Manager", typeof(CustomisationManager));
-            //     customizer = customisationManager.GetComponent<CustomisationManager>();
-            //
-            //     JLogBase.Log("No CustomisationManager present in the scene, added one.", customizer);
-            // }
+            if (!FindObjectOfType<CustomisationManager>())
+            {
+                GameObject customisationManager;
+                customisationManager = new GameObject("Customisation Manager", typeof(CustomisationManager));
+                customizer = customisationManager.GetComponent<CustomisationManager>();
+
+                JLogBase.Log("No CustomisationManager present in the scene, added one.", customizer);
+                //Selection.activeObject = customizer;
+
+                return customizer;
+            }
+            else
+            {
+                return FindObjectOfType<CustomisationManager>();
+            }
         }
 
         public void OnValidate()
         {
-            if (!checkingCustomisationManager)
-                CheckCustomisationManager();
-            
             UpdateKey();
-            UpdateCustomisableOrganisation();
-
-            if (!manualDescription)
-                UpdateCommentary();
-
             CheckForProcessor();
             GetTechnicalInfo();
+            UpdateCustomisableOrganisation();
+            UpdateDescription();
         }
 
         public void Reset() => useGameobjectName = true;
@@ -188,6 +200,11 @@ namespace RLTY.Customisation
                 if (gizmoOffset.magnitude > 1)
                     Gizmos.DrawLine(transform.position, gizmoPosition);
             }
+        }
+
+        public void OnGUI()
+        {
+            FindOrCreateCustomisationManager();
         }
 #endif
 
