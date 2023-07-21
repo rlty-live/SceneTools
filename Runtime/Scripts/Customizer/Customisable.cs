@@ -147,9 +147,8 @@ namespace RLTY.Customisation
                 string labelGroupStr = string.Empty;
                 string sectionStr = string.Empty;
                 string groupStr = string.Empty;
-                //if (customizer && customizer.customisablesInScene.Contains(this))
-                //    indexStr = customizer.customisablesInScene.IndexOf(this).ToString() + " #";
 
+                indexStr = customizer.activeCustomisablesInScene.IndexOf(this).ToString() + " #";
                 labelGroupStr = string.IsNullOrWhiteSpace(labelGroup) ? string.Empty : labelGroup + "/";
                 sectionStr = string.IsNullOrWhiteSpace(section) ? string.Empty : section + "$";
                 groupStr = string.IsNullOrWhiteSpace(group) ? string.Empty : group + "_";

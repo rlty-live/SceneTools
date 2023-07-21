@@ -29,6 +29,8 @@ namespace RLTY.Customisation
         public List<string> groups = new List<string>();
 
         [Title("Sorting")]
+        [SerializeField]
+        public List<Customisable> activeCustomisablesInScene = new List<Customisable>();
         public List<Customisable> customisablesInScene = new List<Customisable>();
 
         [SerializeField]
@@ -88,6 +90,12 @@ namespace RLTY.Customisation
         //    Selection.objects = gos.ToArray();
         //}
 
+        public void OnGUI()
+        {
+            GetPackageVersion();
+            RefreshCustomisableList();
+        }
+
         public void OnValidate()
         {
             GetPackageVersion();
@@ -118,30 +126,50 @@ namespace RLTY.Customisation
             //Don't refresh the list in the prefab asset
             if (!PrefabUtility.IsPartOfPrefabAsset(this))
             {
-                //If there are elements in it
-                if (customisablesInScene.Any())
-                {
-                    Customisable[] tempCustomisablesInScene = FindObjectsOfType<Customisable>();
+                Customisable[] tempCustomisablesInScene = FindObjectsOfType<Customisable>();
 
-                    //Only add the new ones at the end
+                //If there are elements in it
+                if (activeCustomisablesInScene.Any())
+                {
+                    //Only add the new ones at the end (Useful to maintain list order)
                     foreach (Customisable custo in tempCustomisablesInScene)
                     {
                         if (customisablesInScene.Contains(custo)) continue;
                         else customisablesInScene.Add(custo);
-                    }
 
-                    //JLogBase.Log("Updated customisable List", this);
+                        if (activeCustomisablesInScene.Contains(custo)) continue;
+                        else
+                        {
+                            if (custo.isActiveAndEnabled)
+                                activeCustomisablesInScene.Add(custo);
+                        }
+                    }
                 }
-                //if not create new list
+                //if not start from scratch
                 else
                 {
-                    customisablesInScene = FindObjectsOfType<Customisable>().ToList();
-                    JLogBase.Log("Created new List", this);
+                    foreach (Customisable custo in tempCustomisablesInScene)
+                        if (custo.isActiveAndEnabled)
+                            activeCustomisablesInScene.Add(custo);
+
+                    customisablesInScene = tempCustomisablesInScene.ToList();
+
+                    JLogBase.Log("Created new customisables lists", this);
                 }
             }
 
             //Remove emptyentries
+            activeCustomisablesInScene.RemoveAll(item => item == null);
+            customisablesInScene = customisablesInScene.Distinct().ToList();
             customisablesInScene.RemoveAll(item => item == null);
+
+            //activeCustomisablesInScene = activeCustomisablesInScene.Distinct().ToList();
+            //customisablesInScene = customisablesInScene.Distinct().ToList();
+        }
+
+        public void SetCustomisablesOrder()
+        {
+
         }
 #endif
 
