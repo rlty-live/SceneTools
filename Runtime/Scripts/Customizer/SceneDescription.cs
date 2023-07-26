@@ -197,6 +197,7 @@ namespace RLTY.Customisation
         Web3Transaction,
         TypeForm,
         Iframe,
+        Skybox,
         Invalid
     }
 
