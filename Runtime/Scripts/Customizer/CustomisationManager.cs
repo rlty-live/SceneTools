@@ -90,12 +90,6 @@ namespace RLTY.Customisation
         //    Selection.objects = gos.ToArray();
         //}
 
-        public void OnGUI()
-        {
-            GetPackageVersion();
-            RefreshCustomisableList();
-        }
-
         public void OnValidate()
         {
             GetPackageVersion();
