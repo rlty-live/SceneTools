@@ -26,9 +26,9 @@ namespace RLTY.Customisation
                 Customisable[] customisables = GameObject.FindObjectsOfType<Customisable>();
                 foreach (Customisable customisable in customisables)
                 {
-                    if (customisable.gameObject.activeInHierarchy)
+                    if (customisable.gameObject.activeInHierarchy && customisable.enabled)
                     {
-                        Populate(customisable.type, customisable.key, customisable.commentary);
+                        Populate(customisable.type, customisable.key, customisable._description);
                     }
                 }
             }
@@ -66,8 +66,8 @@ namespace RLTY.Customisation
             Customisable[] fullList = GameObject.FindObjectsOfType<Customisable>();
             SceneManifest manifest = new SceneManifest();
             foreach (Customisable c in fullList)
-                manifest.Populate(c.type, c.key, c.commentary);
-            Debug.Log("SceneManifest=" + manifest.ToJson());
+                manifest.Populate(c.type, c.key, c._description);
+            Debug.Log(manifest.ToJson());
         }
     }
 
