@@ -28,11 +28,13 @@ namespace Judiva.Metaverse.Interactions
 
         private void Start()
         {
+            /*
             GetComponent<TriggerZone>().onPlayerEnter += (x) =>
             {
                 AllPlayers.Me.SetAdditionalSpeed(additionalSpeed * (Orientation * Vector3.forward));
                 AllPlayers.Me.SetVerticalVelocity(verticalVelocity);  
             };
+            */
         }
     }
 }

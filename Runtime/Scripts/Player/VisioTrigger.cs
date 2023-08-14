@@ -7,6 +7,7 @@ namespace Judiva.Metaverse.Interactions
     [RequireComponent(typeof(TriggerZone))]
     public class VisioTrigger : MonoBehaviour
     {
+        /*
         public string visioId="1";
         private TriggerZone _zone;
 
@@ -77,6 +78,7 @@ namespace Judiva.Metaverse.Interactions
                     return true;
             return false;
         }
+        */
     }
 }
 

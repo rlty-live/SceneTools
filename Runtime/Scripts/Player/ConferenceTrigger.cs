@@ -13,11 +13,11 @@ namespace Judiva.Metaverse.Interactions
         private void Awake()
         {
             conferenceScreen.SetActive(false);
-            _zone = GetComponent<TriggerZone>();
-            _zone.onNotEmpty += (x) => enabled = true;
-            _zone.onEmpty += (x) => enabled = false;
-            _zone.onPlayerEnter += (x) => SceneInteractionHandlerData.UserEnterConferenceStage(conferenceId);
-            _zone.onPlayerExit += (x) => SceneInteractionHandlerData.UserExitConferenceStage(conferenceId);
+            //_zone = GetComponent<TriggerZone>();
+            //_zone.onNotEmpty += (x) => enabled = true;
+            //_zone.onEmpty += (x) => enabled = false;
+            //_zone.onPlayerEnter += (x) => SceneInteractionHandlerData.UserEnterConferenceStage(conferenceId);
+            //_zone.onPlayerExit += (x) => SceneInteractionHandlerData.UserExitConferenceStage(conferenceId);
             enabled = false;
         }
         void OnEnable()

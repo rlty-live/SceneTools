@@ -92,11 +92,15 @@ public static class JLogBase
 
     public static void LogError(string message, Component c)
     {
+#if !UNITY_EDITOR
         Debug.LogError("[" + c.GetType().ToString() + ":" + c.gameObject.name + "] " + message);
+#endif
     }
     public static void LogError(string message, Type t)
     {
+#if !UNITY_EDITOR
         Debug.LogError("[" + t.ToString() + "] " + message);
+#endif
     }
 
     private static string GetLogHeader(Component c)

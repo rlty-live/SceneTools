@@ -59,12 +59,13 @@ namespace Judiva.Metaverse.Interactions
             
             if (DateTime.Now.Subtract(_arrivedTime).TotalSeconds < 0.5f || connected==null)
                 return;
-            IPlayer avatar = other.GetComponentInParent<IPlayer>();
+            //IPlayer avatar = other.GetComponentInParent<IPlayer>();
             //only teleport me
-            if (avatar == null || avatar!= AllPlayers.Me) return;
+           // if (avatar == null || avatar!= AllPlayers.Me) return;
 
             UIManagerHandlerData.CrossFade(fadeOutTime, fadeInTime, () =>
             {
+                /*
                 Vector3 pos = connected.transform.TransformPoint(transform.InverseTransformPoint(AllPlayers.Me.Transform.position));
                 connected.NotifyTeleport();
                 if (useConnectedOrientation)
@@ -75,6 +76,7 @@ namespace Judiva.Metaverse.Interactions
                 else
                     AllPlayers.Me.Teleport(pos, AllPlayers.Me.Transform.rotation);
                 OnTeleport?.Invoke();
+                */
             });
         }
 

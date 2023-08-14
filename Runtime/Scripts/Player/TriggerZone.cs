@@ -13,9 +13,10 @@ namespace Judiva.Metaverse.Interactions
 #endif
     public class TriggerZone : RLTYMonoBehaviourBase
     {
+        /*
         #region Global Variables
-        [SerializeField]
-        private List<IPlayer> _inside = new List<IPlayer>();
+        //[SerializeField]
+        //private List<IPlayer> _inside = new List<IPlayer>();
 
         #region EditorDisplay
         [PropertyOrder(40), BoxGroup("Display", VisibleIf ="showUtilities")]
@@ -265,5 +266,6 @@ namespace Judiva.Metaverse.Interactions
         }
 #endif
         #endregion
+        */
     }
 }
