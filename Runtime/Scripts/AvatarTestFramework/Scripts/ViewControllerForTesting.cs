@@ -121,14 +121,14 @@ namespace RLTY.Customisation.Testing
 
         private void OnDisable()
         {
-            UIDrag d = FindObjectOfType<UIDrag>();
-            if (d) d.OnUserDrag -= OnDrag;
+            //UIDrag d = FindObjectOfType<UIDrag>();
+            //if (d) d.OnUserDrag -= OnDrag;
         }
 
         private void OnEnable()
         {
-            UIDrag d = FindObjectOfType<UIDrag>();
-            if (d) d.OnUserDrag += OnDrag;
+            //UIDrag d = FindObjectOfType<UIDrag>();
+            //if (d) d.OnUserDrag += OnDrag;
         }
 
         private void Update()
