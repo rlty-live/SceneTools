@@ -36,7 +36,7 @@ namespace GameQuestSystem
         public int AmountOfChestsToSpawn;
         [ShowIf("QuestType", GameQuestType.Farm)]
         public FarmQuestCompletionType QuestCompletionType;
-        [ShowIf("QuestType", GameQuestType.Farm)]
+        [ShowIf("QuestType", GameQuestType.Farm), HideIf("QuestCompletionType", FarmQuestCompletionType.FarmJustOne)]
         public FarmQuestRewardType QuestRewardType;
         public bool QuestVisibleToActivatorOnly;
 
