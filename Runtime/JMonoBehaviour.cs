@@ -37,6 +37,7 @@ public static class JLogBase
 
     public static void Log(string message, Component c)
     {
+        
 #if UNITY_EDITOR
         string header = GetLogHeader(c);
         if (!string.IsNullOrEmpty(header))
