@@ -17,6 +17,12 @@ namespace GameQuestSystem
         FarmJustOne
     }
     
+    public enum FarmQuestRewardType
+    {
+        RewardPerChest,
+        RewardAfterAllChests
+    }
+    
     public class GameQuestData : NetworkSceneTool
     {
         public GameQuestType QuestType;
@@ -30,6 +36,8 @@ namespace GameQuestSystem
         public int AmountOfChestsToSpawn;
         [ShowIf("QuestType", GameQuestType.Farm)]
         public FarmQuestCompletionType QuestCompletionType;
+        [ShowIf("QuestType", GameQuestType.Farm)]
+        public FarmQuestRewardType QuestRewardType;
         public bool QuestVisibleToActivatorOnly;
 
 #if UNITY_EDITOR
