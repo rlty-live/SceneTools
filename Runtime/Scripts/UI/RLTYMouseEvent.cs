@@ -17,10 +17,34 @@ namespace RLTY.UI
         /// </summary>
         public UnityEvent OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp, OnClick;
 
-        public void NotifyOnPointerEnter() { OnPointerEnter?.Invoke(); }
-        public void NotifyOnPointerExit() { OnPointerExit?.Invoke(); }
-        public void NotifyOnPointerDown() { OnPointerDown?.Invoke(); }
-        public void NotifyOnPointerUp() { OnPointerUp?.Invoke(); }
-        public void NotifyOnClick() { OnClick?.Invoke(); }
+        public void NotifyOnPointerEnter()
+        {
+            //Debug.Log($"OnPointerEnter {name}");
+            OnPointerEnter?.Invoke();
+        }
+
+        public void NotifyOnPointerExit()
+        {
+            //Debug.Log($"OnPointerExit {name}");
+            OnPointerExit?.Invoke();
+        }
+
+        public void NotifyOnPointerDown()
+        {
+            //Debug.Log($"OnPointerDown {name}");
+            OnPointerDown?.Invoke();
+        }
+
+        public void NotifyOnPointerUp()
+        {
+            //Debug.Log($"OnPointerUp {name}");
+            OnPointerUp?.Invoke();
+        }
+
+        public void NotifyOnClick()
+        {
+            //Debug.Log($"OnClick {name}");
+            OnClick?.Invoke();
+        }
     }
 }
