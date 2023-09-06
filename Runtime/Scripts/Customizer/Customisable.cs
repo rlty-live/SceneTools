@@ -279,7 +279,7 @@ namespace RLTY.Customisation
                 if (valid)
                 {
 #if UNITY_EDITOR
-                    if (!PrefabUtility.IsPartOfPrefabAsset(this) && this.gameObject.activeInHierarchy)
+                    if (!PrefabUtility.IsPartOfPrefabAsset(this) && gameObject.activeInHierarchy)
                         StartCoroutine(TemporaryBoolSwitch(3));
 #endif
                     return "Processor is present and compatible";
@@ -287,10 +287,9 @@ namespace RLTY.Customisation
 
                 else
                 {
-                    JLogWarning("No Processor found in children, added " + processor +
-                                " automatically, please set it up.");
+                    JLogBase.LogWarning("No Processor found in children, added " + processor + " automatically, please set it up.", this);
 #if UNITY_EDITOR
-                    if (!PrefabUtility.IsPartOfPrefabAsset(this) && this.gameObject.activeInHierarchy)
+                    if (!PrefabUtility.IsPartOfPrefabAsset(this) && gameObject.activeInHierarchy)
                         StartCoroutine(TemporaryBoolSwitch(3));
 #endif
                     return "No Processor found in children, added one automatically, please set it up.";
