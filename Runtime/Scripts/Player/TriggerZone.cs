@@ -13,11 +13,12 @@ namespace Judiva.Metaverse.Interactions
 #endif
     public class TriggerZone : RLTYMonoBehaviourBase
     {
+
         /*
         #region Global Variables
         //[SerializeField]
         //private List<IPlayer> _inside = new List<IPlayer>();
-
+*/
         #region EditorDisplay
         [PropertyOrder(40), BoxGroup("Display", VisibleIf ="showUtilities")]
         public bool alwaysDisplay = false;
@@ -33,7 +34,7 @@ namespace Judiva.Metaverse.Interactions
             activatedByPlayer = UnityEngine.Color.red,
             activatedByBoth = UnityEngine.Color.magenta;
         #endregion
-
+/*
         #endregion
 
         #region Events
@@ -181,7 +182,7 @@ namespace Judiva.Metaverse.Interactions
         }
 
         #endregion
-
+*/
         #region Editor
 #if UNITY_EDITOR
         private void OnValidate()
@@ -204,38 +205,9 @@ namespace Judiva.Metaverse.Interactions
                 co.isTrigger = true;
             }
         }
-
-        /// <summary>
-        /// Update gizmos color to show detection of either player, other, or both
-        /// </summary>
-        /// <param name="player"> Is it the player ? </param>
-        /// <param name="enter"> Is he entering (true) or exiting (false) </param>
-        private void UpdateGizmosColor(bool playerEntering)
-        {
-            if (_inside.Count == 1)
-            {
-                if (playerEntering) Gizmos.color = activatedByPlayer;
-                else Gizmos.color = activatedByOther;
-            }
-
-            else
-            {
-                if (playerEntering) Gizmos.color = activatedByBoth;
-                else Gizmos.color = activatedByOther;
-            }
-
-            //Add chosen opacity
-            Gizmos.color = new UnityEngine.Color(Gizmos.color.r, Gizmos.color.g, Gizmos.color.b, opacity);
-        }
+        
         private void OnDrawGizmos()
         {
-            if (!_inside.Any())
-            {
-                Gizmos.color = idle;
-                //Add chosen opacity
-                Gizmos.color = new UnityEngine.Color(Gizmos.color.r, Gizmos.color.g, Gizmos.color.b, opacity);
-            }
-
             if (alwaysDisplay)
             {
                 if (TryGetComponent(out MeshCollider _meshC))
@@ -266,6 +238,5 @@ namespace Judiva.Metaverse.Interactions
         }
 #endif
         #endregion
-        */
     }
 }
