@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3624836934926218209}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0.41259122, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3007923517414979688}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &4293003527838214726
 MeshFilter:
@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 3007923517414979688}
   - component: {fileID: 1414182882541179746}
   - component: {fileID: 1705334672367358244}
-  - component: {fileID: 2379140337576674608}
   m_Layer: 9
   m_Name: Sign
   m_TagString: Untagged
@@ -117,7 +116,6 @@ RectTransform:
   - {fileID: 7037099353806724524}
   - {fileID: 96651998346431035}
   m_Father: {fileID: 3323139564361437864}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -132,9 +130,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6555660882467993696}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 0.21}
   m_Center: {x: 0, y: 0.43, z: 0}
 --- !u!114 &1705334672367358244
@@ -249,21 +255,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2379140337576674608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6555660882467993696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130598d01b72bf54e94d4d1c9ead448f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _usedCollider: {fileID: 1414182882541179746}
-  _targetParentClass: {fileID: 11500000, guid: 44c7c2bc76ed7d447af75303a0d84907, type: 3}
-  _customisableType: 10
 --- !u!1 &6929673399487655051
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +283,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6929673399487655051}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -301,7 +293,6 @@ Transform:
   - {fileID: 7160028044827836660}
   - {fileID: 3007923517414979688}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!135 &333741472954328874
 SphereCollider:
@@ -311,9 +302,17 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6929673399487655051}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Radius: 0.4
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &3177538956841093113
@@ -333,16 +332,14 @@ MonoBehaviour:
   debug: 1
   deactivable: 1
   type: 10
-  displayKey: Web3Transaction (1)
-  key: Web3Transaction_(1)
+  displayKey: NFT Mint Box
+  key: NFT_Mint_Box
   useGameobjectName: 1
   section: 
   group: 
   labelGroup: 
-  manualDescription: 1
-  displayCommentary: 
-  commentary: 
-  technicalInfo: 
+  label: 
+  _description: 
   _keyValue:
     key: 
     value: 
@@ -368,24 +365,6 @@ MonoBehaviour:
   alwaysDisplay: 0
   solidColor: 0
   opacity: 0.5
-  OnPlayerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnOtherEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  OnOtherExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEmpty:
-    m_PersistentCalls:
-      m_Calls: []
-  OnNotEmpty:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &7769227247880562896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,7 +385,7 @@ MonoBehaviour:
   validWeb3Data: 0
 --- !u!95 &574607409235118689
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -423,7 +402,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9116524823975204527
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,13 +429,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9116524823975204527}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.41259122, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3007923517414979688}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6409480700761564922
 MeshFilter:
@@ -512,6 +492,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3323139564361437864}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2e9e3bdf649980a40b36adbbc6f97222, type: 3}
@@ -579,6 +560,9 @@ PrefabInstance:
       value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e9e3bdf649980a40b36adbbc6f97222, type: 3}
 --- !u!4 &6798735179694615631 stripped
 Transform:
@@ -590,6 +574,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3323139564361437864}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2fd98dddf90a9a440bc2e0b4fc502271, type: 3}
@@ -657,6 +642,9 @@ PrefabInstance:
       value: halo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fd98dddf90a9a440bc2e0b4fc502271, type: 3}
 --- !u!4 &7160028044827836660 stripped
 Transform:
