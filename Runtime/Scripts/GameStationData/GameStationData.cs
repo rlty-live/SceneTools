@@ -10,6 +10,7 @@ namespace GameStationData
         public Transform countingAreaPosition;
         public GameObject GameLeaderBoard;
         public GameObject GameStartButton;
+        public GameObject GameBanner;
         public bool AutoStart;
         public float GameTimerInSec;
     }
