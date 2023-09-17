@@ -12,7 +12,7 @@ namespace GameStationData
         public GameObject GameStartButton;
         public GameObject GameBanner;
         public bool AutoStart;
-        public float GameTimerInSec;
+        public int GameTimerInSec;
     }
     public enum GameSessionType
     {
