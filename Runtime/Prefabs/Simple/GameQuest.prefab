@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7346449854246729890}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3769718268410612042
 MonoBehaviour:
@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   QuestType: 0
-  FarmQuestType: 0
-  StartTransform: {fileID: 0}
-  ShouldRestartAfterCompletion: 0
-  RestartDelayInSec: 0
+  WinnerCoinAmount: 0
+  ChestSpawnPositions: []
+  AmountOfChestsToSpawn: 0
+  QuestCompletionType: 0
+  QuestRewardType: 0
+  QuestVisibleToActivatorOnly: 0

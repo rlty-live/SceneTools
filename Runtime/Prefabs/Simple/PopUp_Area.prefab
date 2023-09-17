@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2004756874325953117}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -198,6 +197,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2004756874325953116}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.2573014, z: 0, w: 0.9663313}
   m_LocalPosition: {x: -4.67, y: -0.69013834, z: 1.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -205,7 +205,6 @@ Transform:
   m_Children:
   - {fileID: 2004756873269463956}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 29.82, z: 0}
 --- !u!65 &2004756874325953113
 BoxCollider:
@@ -215,9 +214,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2004756874325953116}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2004756874325953118
@@ -238,36 +245,6 @@ MonoBehaviour:
   alwaysDisplay: 1
   solidColor: 0
   opacity: 0.5
-  OnPlayerEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2004756872617764406}
-        m_TargetAssemblyTypeName: IframeOpener, rlty.scenetools.runtime
-        m_MethodName: OpenIFrame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnPlayerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnOtherEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  OnOtherExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEmpty:
-    m_PersistentCalls:
-      m_Calls: []
-  OnNotEmpty:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &2004756872617764406
 MonoBehaviour:
   m_ObjectHideFlags: 0
