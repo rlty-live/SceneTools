@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 809202575}
   - component: {fileID: 2746819140394514760}
   - component: {fileID: 2698337355345011526}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Info Terminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3881856753702619982}
   - component: {fileID: 3678648293729831269}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -255,7 +255,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8428910638312961705}
   - component: {fileID: 6727439063687199813}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Line (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,9 +677,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4cf776df4f326264e98378a2524c8d25, type: 2}
+    - target: {fileID: -871714298509485805, guid: 5f2584305c4d5a849a1bc75b50ee9935, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 635547659545568360, guid: 5f2584305c4d5a849a1bc75b50ee9935, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5f2584305c4d5a849a1bc75b50ee9935, type: 3}
       propertyPath: m_Name
       value: Terminal_Modular
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5f2584305c4d5a849a1bc75b50ee9935, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -6694755761742603305, guid: 5f2584305c4d5a849a1bc75b50ee9935, type: 3}
