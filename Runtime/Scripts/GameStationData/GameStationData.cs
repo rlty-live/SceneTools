@@ -11,6 +11,7 @@ namespace GameStationData
         public GameObject GameLeaderBoard;
         public GameObject GameStartButton;
         public GameObject GameBanner;
+        public GameObject ReturnPosition;
         public bool AutoStart;
         public int GameTimerInSec;
     }

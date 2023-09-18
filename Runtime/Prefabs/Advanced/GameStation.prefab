@@ -124,6 +124,7 @@ Transform:
   - {fileID: 5696495554978108153}
   - {fileID: 2320831618913147401}
   - {fileID: 8901559813259966391}
+  - {fileID: 5482200356844013515}
   - {fileID: 9099822256568441877}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -146,6 +147,7 @@ MonoBehaviour:
   GameLeaderBoard: {fileID: 718057236144600523}
   GameStartButton: {fileID: 2179557881567247306}
   GameBanner: {fileID: 8125445699810684173}
+  ReturnPosition: {fileID: 4797795960911030116}
   AutoStart: 0
   GameTimerInSec: 5
 --- !u!1 &2179557881567247306
@@ -206,6 +208,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dir: {x: 180, y: 0, z: 0}
+--- !u!1 &4797795960911030116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5482200356844013515}
+  - component: {fileID: 5934389531754769982}
+  m_Layer: 0
+  m_Name: ReturnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5482200356844013515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4797795960911030116}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.8, y: 3, z: -0.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8730961099885908133}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5934389531754769982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4797795960911030116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a70e25534f476d94e8cd384af6df5719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  multiplier: 0.8333333
 --- !u!1 &4824302735717718462
 GameObject:
   m_ObjectHideFlags: 0
