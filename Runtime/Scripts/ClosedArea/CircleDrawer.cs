@@ -11,6 +11,7 @@ public class CircleDrawer : MonoBehaviour
         Color32 color = Color.green;
         color.a = 255;
         UnityEditor.Handles.color = color;
+        UnityEditor.Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
         UnityEditor.Handles.DrawWireDisc(transform.position + Vector3.up * 0.3f, Vector3.up, transform.localScale.x * 1.5f * multiplier);
     }
 #endif
