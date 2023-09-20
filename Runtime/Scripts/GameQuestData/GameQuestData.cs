@@ -38,29 +38,44 @@ namespace GameQuestSystem
         public FarmQuestCompletionType QuestCompletionType;
         [ShowIf("QuestType", GameQuestType.Farm), HideIf("QuestCompletionType", FarmQuestCompletionType.FarmJustOne)]
         public FarmQuestRewardType QuestRewardType;
-        public bool QuestVisibleToActivatorOnly;
+        [ShowIf("QuestType", GameQuestType.Farm)]
+        public bool TimedQuest;
+        [ShowIf("@this.QuestType == GameQuestType.Farm && this.TimedQuest")]
+        [Tooltip("If a player doesn't interact with a chest within this time, the quest will fail. 0 = no time limit")]
+        public float MaxTimePerChestInSeconds;
+        [ShowIf("@this.QuestType == GameQuestType.Farm && this.TimedQuest && this.QuestCompletionType != FarmQuestCompletionType.FarmJustOne")]
+        [Tooltip("If all chests aren't interacted with within this time, the quest will fail. 0 = no time limit")]
+        public float MaxTimeAllChestsInSeconds;
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
+            Color32 color = Color.green;
+            string label = "";
             if (ChestSpawnPositions == null || ChestSpawnPositions.Count == 0)
             {
-                Handles.Label(transform.position + Vector3.up, "Waiting for Start Transform...");
-
-                Gizmos.color = Color.red;
-                Gizmos.DrawCube(transform.position, Vector3.one * 0.5f);
-                return;
+                label = "No chest spawn positions...";
+                color = Color.red;
             }
-
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawCube(transform.position, Vector3.one * 0.5f);
-            Handles.Label(transform.position + Vector3.up, $"{QuestType} Quest");
-
-            foreach (Transform chestSpawn in ChestSpawnPositions)
+            else
             {
-                Gizmos.DrawSphere(chestSpawn.position, 0.2f);
-                Handles.Label(chestSpawn.position + Vector3.up, $"{QuestType} Quest");
+                label = $"{QuestType} Quest";
             }
+            Handles.Label(transform.position + Vector3.up, label);
+            color.a = 255;
+
+            Color32 colorSeeThrough = color;
+            colorSeeThrough.a = 64;
+            
+            Matrix4x4 previousMatrix = Gizmos.matrix;
+            Gizmos.matrix = transform.localToWorldMatrix;
+
+            Vector3 size = new Vector3(1f, 1f, 0.2f);
+            Gizmos.color = color;
+            Gizmos.DrawWireCube(Vector3.zero, size);
+            Gizmos.color = colorSeeThrough;
+            Gizmos.DrawCube(Vector3.zero, size);
+            Gizmos.matrix = previousMatrix;
         }
 #endif
     }

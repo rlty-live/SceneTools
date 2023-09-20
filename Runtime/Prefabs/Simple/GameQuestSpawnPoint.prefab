@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4148252573867043865}
-  - component: {fileID: 3769718268410612042}
+  - component: {fileID: 30765445847895179}
   m_Layer: 0
-  m_Name: GameQuest
+  m_Name: GameQuestSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3769718268410612042
+--- !u!114 &30765445847895179
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,15 +41,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7346449854246729890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11e681d3e92d4111bd51299485cb3c00, type: 3}
+  m_Script: {fileID: 11500000, guid: 885c8ba6c4854074885e47bf9d620afa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QuestType: 0
-  WinnerCoinAmount: 0
-  ChestSpawnPositions: []
-  AmountOfChestsToSpawn: 0
-  QuestCompletionType: 0
-  QuestRewardType: 0
-  TimedQuest: 0
-  MaxTimePerChestInSeconds: 0
-  MaxTimeAllChestsInSeconds: 0
