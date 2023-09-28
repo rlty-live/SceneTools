@@ -16,10 +16,11 @@ namespace RLTY.UI
         public float mouseDetectDistance = 1000;
         [ShowIf("@transform.GetComponent<RectTransform>() != null")]
         public bool AutoResizeColliderOnStart;
+
         /// <summary>
         /// UnityEvents for Inspector
         /// </summary>
-        public UnityEvent OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp, OnClick;
+        public UnityEvent OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp, OnClick = new UnityEvent();
 
         private Collider _collider;
         public Collider Collider => _collider != null ? _collider : _collider = GetComponent<Collider>();
@@ -42,7 +43,7 @@ namespace RLTY.UI
                 }
             }
         }
-        
+
         public void NotifyOnPointerEnter()
         {
             //Debug.Log($"OnPointerEnter {name}");
