@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseDetectDistance: 1000
+  AutoResizeColliderOnStart: 0
   OnPointerEnter:
     m_PersistentCalls:
       m_Calls: []
