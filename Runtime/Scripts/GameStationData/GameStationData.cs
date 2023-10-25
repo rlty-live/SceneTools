@@ -15,6 +15,7 @@ namespace GameStationData
         public bool AutoStart;
         public int GameTimerInSec;
     }
+    
     public enum GameSessionType
     {
         CannonGame,
