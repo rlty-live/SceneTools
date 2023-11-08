@@ -168,7 +168,9 @@ namespace RLTY.Customisation
 
         public CustomisationManager FindOrCreateCustomisationManager()
         {
-            if (!FindObjectOfType<CustomisationManager>())
+            customizer = FindObjectOfType<CustomisationManager>();
+
+            if (!customizer)
             {
                 GameObject customisationManager;
                 customisationManager = new GameObject("Customisation Manager", typeof(CustomisationManager));
@@ -176,13 +178,8 @@ namespace RLTY.Customisation
 
                 JLogBase.Log("No CustomisationManager present in the scene, added one.", customizer);
                 //Selection.activeObject = customizer;
-
-                return customizer;
             }
-            else
-            {
-                return FindObjectOfType<CustomisationManager>();
-            }
+            return customizer;
         }
 
         public void OnValidate()
