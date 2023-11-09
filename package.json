@@ -1,6 +1,6 @@
 {
   "name": "live.rlty.scenetools",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "displayName": "RLTY SceneTools",
   "description": "Tools needed to create a RLTY scene",
   "unity": "2022.3",
