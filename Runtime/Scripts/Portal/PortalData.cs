@@ -11,9 +11,13 @@ namespace Portal
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.cyan;
+            Matrix4x4 previousMatrix = Gizmos.matrix;
+            Gizmos.matrix = transform.localToWorldMatrix;
 
-            Gizmos.DrawCube(transform.position + (Vector3.up * 0.75f), new Vector3(1.5f, 1.5f, 0.1f));
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(Vector3.zero + Vector3.up * 0.75f, new Vector3(2.5f, 3.5f, 0.2f));
+
+            Gizmos.matrix = previousMatrix;
         }
 #endif
     }
