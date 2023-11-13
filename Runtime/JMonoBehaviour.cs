@@ -40,8 +40,8 @@ public static class JLogBase
         
 #if UNITY_EDITOR
         string header = GetLogHeader(c);
-        // if (!string.IsNullOrEmpty(header))
-        //     Debug.Log(header + message, c);
+        if (!string.IsNullOrEmpty(header))
+             Debug.Log(header + message, c);
 #elif !UNITY_SERVER
     if (logInRelease || Debug.isDebugBuild)
         Debug.Log(GetLogHeader(c) + message);
