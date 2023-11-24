@@ -45,6 +45,7 @@ namespace Judiva.Metaverse.Interactions
         {
             if (DateTime.Now.Subtract(_arrivedTime).TotalSeconds < 0.5f || connected==null)
                 return;
+                /*
             IPlayer avatar = other.GetComponentInParent<IPlayer>();
             //only teleport me
             if (avatar == null || avatar!= AllPlayers.Me) return;
@@ -62,6 +63,7 @@ namespace Judiva.Metaverse.Interactions
                     AllPlayers.Me.Teleport(pos, AllPlayers.Me.Transform.rotation);
                 OnTeleport?.Invoke();
             });
+            */
         }
 
         public void NotifyTeleport()

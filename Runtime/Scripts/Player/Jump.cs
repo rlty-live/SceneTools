@@ -5,8 +5,6 @@ using UnityEngine;
 
 namespace Judiva.Metaverse.Interactions
 {
-
-    
     public class Jump : SceneTool
     {
         public float verticalVelocity = 5;
@@ -14,7 +12,7 @@ namespace Judiva.Metaverse.Interactions
         public float orientationOffset = 0;
         public float additionalSpeed = 0;
 
-        Quaternion Orientation { get { return Quaternion.Euler(new Vector3(0, orientationOffset, 0)) * transform.rotation; } }
+        public Quaternion Orientation => Quaternion.Euler(new Vector3(0, orientationOffset, 0)) * transform.rotation;
 
 
         

@@ -90,7 +90,7 @@ public class ZoomController : MonoBehaviour
 
     public void Zoom()
     {
-        if (Vector3.Distance(AllPlayers.Me.Transform.position, transform.position) > _range) return;
+        //if (Vector3.Distance(AllPlayers.Me.Transform.position, transform.position) > _range) return;
 
         if (ZoomManager.Instance.IsZoomed)
             UnZoom();

@@ -7,6 +7,7 @@ public class BoxScaleDrawer : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        Matrix4x4 PreviousMatrix = Gizmos.matrix;
         Matrix4x4 trs = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale);
         Gizmos.matrix = trs;
         
@@ -17,10 +18,10 @@ public class BoxScaleDrawer : MonoBehaviour
         
         Gizmos.color = color;
 
-        Vector3 toto = new Vector3(1,1,1);
-        Gizmos.DrawWireCube(Vector3.zero, toto);
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
         Gizmos.color = colorSeeThrough;
-        Gizmos.DrawCube(Vector3.zero, toto);
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+        Gizmos.matrix = PreviousMatrix;
     }
 #endif
 }

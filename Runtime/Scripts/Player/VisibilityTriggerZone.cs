@@ -35,8 +35,8 @@ namespace Judiva.Metaverse.Interactions
             Camera mainView = Camera.main;
             mainView.cullingMask = mainView.cullingMask & ~(1 << invisibleWhenFarLayer);
 
-            trigger.onPlayerEnter += (x) => Show(true);
-            trigger.onPlayerExit += (x) => Show(false);
+            //trigger.onPlayerEnter += (x) => Show(true);
+            //trigger.onPlayerExit += (x) => Show(false);
 
             //support for other avatars (not yet implemented)
             /*

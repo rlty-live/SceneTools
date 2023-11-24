@@ -28,13 +28,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634046458943239958}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.042, y: 3.327, z: 0}
   m_LocalScale: {x: 2.17984, y: 1.22616, z: 1.3624}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1954671619077324201}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3309807369053956667
 MeshFilter:
@@ -94,9 +94,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634046458943239958}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 0.01}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3309807369053956665
@@ -112,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseDetectDistance: 1000
+  AutoResizeColliderOnStart: 0
   OnPointerEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -179,7 +188,6 @@ RectTransform:
   - {fileID: 8179972169882565207}
   - {fileID: 5391063868951806263}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -209,10 +217,8 @@ MonoBehaviour:
   section: 
   group: 
   labelGroup: 
-  manualDescription: 0
-  displayCommentary: LIVE_
-  commentary: LIVE_
-  technicalInfo: 
+  label: LIVE_
+  _description: -1 #LIVE_
   _keyValue:
     key: 
     value: 
@@ -249,6 +255,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1954671619077324201}
     m_Modifications:
     - target: {fileID: 1333643971069145858, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
@@ -394,6 +401,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6133041427506890637, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
     - {fileID: 7068857523383251542, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33f729ae651fae24187084f509fa5e2f, type: 3}
 --- !u!114 &5650047355815888598 stripped
 MonoBehaviour:

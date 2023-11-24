@@ -275,8 +275,8 @@ namespace RLTY.Customisation.Testing
             if (_destinationGizmo) _destinationGizmo.SetActive(false);
             if (_forceWalkForward <= 0)
                 _targetSpeed = 0;
-            UIDrag d = FindObjectOfType<UIDrag>();
-            if (d != null) d.OnUserClick -= OnUserClick;
+            //UIDrag d = FindObjectOfType<UIDrag>();
+            //if (d != null) d.OnUserClick -= OnUserClick;
         }
 
         private void OnEnable()
@@ -284,8 +284,8 @@ namespace RLTY.Customisation.Testing
             if (_forceWalkForward <= 0)
                 _targetSpeed = 0;
             _agent.enabled = false;
-            UIDrag d = FindObjectOfType<UIDrag>();
-            if (d != null) d.OnUserClick += OnUserClick;
+            //UIDrag d = FindObjectOfType<UIDrag>();
+            //if (d != null) d.OnUserClick += OnUserClick;
         }
 
         #endregion
@@ -341,8 +341,8 @@ namespace RLTY.Customisation.Testing
         {
             //Tell every TriggerZone that player left
             //To do: this is not accurate, we should tell TriggerZones where the player is moving so it can decide if that's an exit or not
-            foreach (TriggerZone zone in TriggerZone.All)
-                zone.ForcePlayerExit(position);
+            //foreach (TriggerZone zone in TriggerZone.All)
+                //zone.ForcePlayerExit(position);
 
             //move player AND view
             Vector3 move = position - transform.position;

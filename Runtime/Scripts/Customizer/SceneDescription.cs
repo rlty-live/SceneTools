@@ -30,6 +30,8 @@ namespace RLTY.Customisation
     [System.Serializable]
     public class SceneDescription
     {
+        public static string language = "en";
+
         /// <summary>
         /// URL of the assetbundle to load on the server side
         /// </summary>

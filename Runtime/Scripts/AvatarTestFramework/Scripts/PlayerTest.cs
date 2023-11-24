@@ -6,6 +6,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 namespace RLTY.Customisation.Testing
 {
+    /*
     public class PlayerTest : MonoBehaviour, IPlayer
     {
         public Transform Transform => transform;
@@ -43,7 +44,7 @@ namespace RLTY.Customisation.Testing
         {
             sim = Physics.autoSimulation;
             sim2 = Physics.autoSyncTransforms;
-        }*/
+        }
 
         void OnDestroy()
         {
@@ -76,5 +77,6 @@ namespace RLTY.Customisation.Testing
             PlayerController.SetVerticalVelocity(verticalVelocity);
         }
     }
+    */
 }
 #endif

@@ -37,10 +37,11 @@ public static class JLogBase
 
     public static void Log(string message, Component c)
     {
+        
 #if UNITY_EDITOR
         string header = GetLogHeader(c);
         if (!string.IsNullOrEmpty(header))
-            Debug.Log(header + message, c);
+             Debug.Log(header + message, c);
 #elif !UNITY_SERVER
     if (logInRelease || Debug.isDebugBuild)
         Debug.Log(GetLogHeader(c) + message);
