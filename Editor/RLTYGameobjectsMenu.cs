@@ -26,7 +26,8 @@ public class RLTYGameobjectMenu : Editor
         VisioArea,
         PopUp_Area,
         PopUp_Clickbox,
-        DonationBox
+        DonationBox,
+        Credits
     }
 
     public static Object LoadPrefab(RLTYPrefabType type, bool simple)
@@ -68,6 +69,9 @@ public class RLTYGameobjectMenu : Editor
 
     [MenuItem(toolbarfolderName + "Advanced/" + "TriggerZone")]
     public static void CreateTriggerZoneInstance() => LoadPrefab(RLTYPrefabType.TriggerZone, false);
+
+    [MenuItem(toolbarfolderName + "Advanced/" + "Credits")]
+    public static void CreateCreditCanvas() => LoadPrefab(RLTYPrefabType.Credits, false);
 
     [MenuItem(toolbarfolderName + "SpawnPoint")]
     public static void CreateSpawnPoint() => LoadPrefab(RLTYPrefabType.SpawnPoint, true);

@@ -25,5 +25,6 @@ namespace GameStationData
         ShiFuMiTournamentGame,
         WereWolfGame,
         TotoGame,
+        BattleRoyale,
     }
 }
