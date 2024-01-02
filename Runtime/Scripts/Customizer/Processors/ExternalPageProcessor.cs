@@ -1,7 +1,9 @@
+using Newtonsoft.Json;
 using RLTY.Customisation;
 using RLTY.SessionInfo;
 using RLTY.UI;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem.Composites;
 using UnityEngine.UI;
@@ -18,6 +20,8 @@ namespace RLTY.Customisation
         [SerializeField]
         private RLTYMouseEvent mouseEvent;
         [SerializeField] private string url = "";
+
+        public static event Action<string> onOpenURL;
 
         public override Component FindComponent()
         {
@@ -55,7 +59,10 @@ namespace RLTY.Customisation
         public void OpenNewInternetPage()
         {
             if (url != null && url != "")
+            {
                 Application.OpenURL(url);
+                onOpenURL?.Invoke(url); ;
+            }
 
             if (Debug.isDebugBuild)
                 Debug.Log("Trying to open external url: " + url, this);
