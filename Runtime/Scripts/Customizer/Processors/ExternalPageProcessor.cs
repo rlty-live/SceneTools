@@ -58,10 +58,13 @@ namespace RLTY.Customisation
 
         public void OpenNewInternetPage()
         {
-            if (url != null && url != "")
+            if (!string.IsNullOrEmpty(url))
             {
+                JLog("Try open external link");
+                onOpenURL?.Invoke(url);
+#if !UNITY_IOS && !UNITY_ANDROID
                 Application.OpenURL(url);
-                onOpenURL?.Invoke(url); ;
+#endif
             }
 
             if (Debug.isDebugBuild)
