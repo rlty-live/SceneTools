@@ -60,7 +60,7 @@ namespace RLTY.Customisation
         {
             if (!string.IsNullOrEmpty(url))
             {
-                JLog("Try open external link");
+                JLog("Try open external link "+onOpenURL);
                 onOpenURL?.Invoke(url);
 #if !UNITY_IOS && !UNITY_ANDROID
                 Application.OpenURL(url);

@@ -70,7 +70,6 @@ namespace RLTY.UI
 
         public void NotifyOnClick()
         {
-            JLog($"OnClick {name}");
             OnClick?.Invoke();
         }
     }
