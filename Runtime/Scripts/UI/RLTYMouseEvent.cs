@@ -58,19 +58,18 @@ namespace RLTY.UI
 
         public void NotifyOnPointerDown()
         {
-            //Debug.Log($"OnPointerDown {name}");
+            //JLog($"OnPointerDown {name}");
             OnPointerDown?.Invoke();
         }
 
         public void NotifyOnPointerUp()
         {
-            //Debug.Log($"OnPointerUp {name}");
+            //JLog($"OnPointerUp {name}");
             OnPointerUp?.Invoke();
         }
 
         public void NotifyOnClick()
         {
-            //Debug.Log($"OnClick {name}");
             OnClick?.Invoke();
         }
     }

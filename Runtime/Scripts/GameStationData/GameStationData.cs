@@ -26,5 +26,6 @@ namespace GameStationData
         WereWolfGame,
         TotoGame,
         BattleRoyale,
+        DeathrunGame,
     }
 }
