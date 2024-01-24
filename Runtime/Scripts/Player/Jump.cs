@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Judiva.Metaverse.Interactions
 {
     public class Jump : LauncherSceneTool
     {
-        [Title("Jump data")]
+        [Header("Jump data")]
         public float VerticalVelocity = 5;
         [Range(-180, 180)]
         public float OrientationOffset = 0;

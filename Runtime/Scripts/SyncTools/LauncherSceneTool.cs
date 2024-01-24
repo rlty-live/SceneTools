@@ -1,9 +1,8 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class LauncherSceneTool : SceneTool
 {
-    [Title("LauncherSceneTool")]
+    [Header("Launcher Data")]
     public bool DrawTrajectoryOnlyOnSelected;
     public float LauncherGizmoRadius = 0.5f;
     

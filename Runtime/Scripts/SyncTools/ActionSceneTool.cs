@@ -1,7 +1,13 @@
-﻿using Sirenix.OdinInspector;
+﻿using UnityEngine;
 
 public abstract class ActionSceneTool : SceneTool
 {
-    [Title("ActionSceneTool")]
+    [Header("Action Data")] 
+    public Transform Target;
     public bool ExecuteAtStart = false;
+    
+    protected override bool IsDataValid()
+    {
+        return Target != null;
+    }
 }

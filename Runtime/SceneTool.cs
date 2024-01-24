@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class SceneTool : RLTYMonoBehaviourBase
 {
-    [Title("SceneTool")] 
+    [Header("Tool Data")] 
     public bool ShowGizmo = true;
     
     [ReadOnly] public int Id;

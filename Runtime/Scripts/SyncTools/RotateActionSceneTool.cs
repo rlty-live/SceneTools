@@ -1,24 +1,21 @@
-﻿using DG.Tweening;
-using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class RotateActionSceneTool : ActionSceneTool
+public enum ERotateMode
 {
-    [Title("RotationActionSceneTool")] 
-    public Transform Target;
-    public Vector3 RotationToAdd = Vector3.zero;
-    public float Duration = 1f;
-    public Ease EaseFunction = Ease.Linear;
-    public bool IsLoop = true;
+    Fast,
+    FastBeyond360,
+    WorldAxisAdd,
+    LocalAxisAdd,
+}
 
-    protected override bool IsDataValid()
-    {
-        return Target != null;
-    }
+public class RotateActionSceneTool : TransformActionSceneTool
+{
+    [Header("Rotation Data")] 
+    public ERotateMode RotateMode;
     
     protected override void DrawGizmos()
     {
-        if(RotationToAdd.x % 360 == 0 && RotationToAdd.y % 360 == 0 && RotationToAdd.z % 360 == 0) return;
+        if(QuantityToAdd.x % 360 == 0 && QuantityToAdd.y % 360 == 0 && QuantityToAdd.z % 360 == 0) return;
         
         Gizmos.color = Color.yellow;
        
@@ -26,7 +23,7 @@ public class RotateActionSceneTool : ActionSceneTool
         Quaternion initialRotation = Target.rotation;
         Vector3 initialScale = Target.localScale;
         
-        Target.Rotate(RotationToAdd);
+        Target.Rotate(QuantityToAdd);
         
         foreach (Transform childTr in Target.GetComponentsInChildren<Transform>())
         {

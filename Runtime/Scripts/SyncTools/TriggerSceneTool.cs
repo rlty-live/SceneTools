@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using UnityEditor;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TriggerSceneTool : SceneTool
 {
-    [Title("TriggerSceneTool")] 
+    [Header("Trigger Data")] 
     public List<ActionSceneTool> ActionToolsToTrigger;
     public bool TriggerOnlyOnce = false;
     public Vector3 TriggerSize = Vector3.one;
@@ -20,5 +17,9 @@ public class TriggerSceneTool : SceneTool
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireCube(transform.position, TriggerSize);
+        foreach (ActionSceneTool tool in ActionToolsToTrigger)
+        {
+            Gizmos.DrawLine(transform.position, tool.Target.position);
+        }
     }
 }

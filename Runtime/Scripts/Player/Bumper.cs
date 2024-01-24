@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Judiva.Metaverse.Interactions
 {
     public class Bumper : LauncherSceneTool
     {
-        [Title("Bumper data")]
+        [Header("Bumper data")]
         public Transform Target;
         public float BumpHeight;
         public float TravelSpeed;
