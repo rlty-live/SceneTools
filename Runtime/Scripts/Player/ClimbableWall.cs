@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-//[RequireComponent(BoxCollider)]
+[RequireComponent(typeof(BoxCollider))]
 public class ClimbableWall : SceneTool
 {
     [ReadOnly]
