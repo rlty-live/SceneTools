@@ -8,5 +8,6 @@ namespace GameSessionManager
         public bool SetupSceneAsGameSession;
         [ShowIf("SetupSceneAsGameSession")]
         public GameSessionType ActiveGameSessionType;
+        public bool WaitForMinimumPlayers;
     }
 }
