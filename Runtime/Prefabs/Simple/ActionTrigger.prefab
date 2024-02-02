@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8928426684103915936}
-  - component: {fileID: -7132001862860762982}
+  - component: {fileID: -6339287247112315447}
   m_Layer: 0
-  m_Name: MoveActionSceneToolPrefab
+  m_Name: ActionTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7132001862860762982
+--- !u!114 &-6339287247112315447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,17 +41,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 926307637061090315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a8d85b0f25b4d888ea40d382a2b7142, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c27a489aaa24d1ab1fd059a68dabf98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   showUtilities: 0
   correctSetup: 0
   debug: 1
   ShowGizmo: 1
+  WiredGizmos: 0
   Id: -1
-  ExecuteAtStart: 1
-  Target: {fileID: 0}
-  MoveToAdd: {x: 0, y: 0, z: 0}
-  Duration: 1
-  EaseFunction: 1
-  IsLoop: 1
+  ActionToolsToTrigger: []
+  FollowTarget: 0
+  TriggerOnlyOnce: 0
+  TriggerSize: {x: 1, y: 1, z: 1}

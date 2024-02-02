@@ -48,9 +48,14 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
+  ShowGizmo: 1
+  WiredGizmos: 0
+  Id: -1
+  DrawTrajectoryOnlyOnSelected: 0
+  LauncherGizmoRadius: 0.5
   Target: {fileID: 428779817597630822}
   BumpHeight: 5
-  BumpDuration: 10
+  TravelSpeed: 0
 --- !u!1 &2669984663711645584
 GameObject:
   m_ObjectHideFlags: 0

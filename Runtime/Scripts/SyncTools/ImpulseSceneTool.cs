@@ -1,12 +1,15 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
+[AddComponentMenu("RLTY/SceneTools/Impulse")]
 public class ImpulseSceneTool : SceneTool
 {
     [Header("Impulse Data")] 
     public Transform Target;
     public float ImpulseMagnitude;
+    public float Damages = 10;
     public Vector3 AxisFilter = Vector3.one;
+    public Vector3 ColliderCenter = Vector3.zero;
 
     public bool BoxCollider;
     [ShowIf(nameof(BoxCollider))] public Vector3 BoxColliderSize = Vector3.zero;
@@ -14,9 +17,9 @@ public class ImpulseSceneTool : SceneTool
     public bool SphereCollider;
     [ShowIf(nameof(SphereCollider))] public float SphereColliderRadius = 0;
 
-    public bool CylinderCollider;
-    [ShowIf(nameof(CylinderCollider))] public float CylinderColliderRadius = 0;
-    [ShowIf(nameof(CylinderCollider))] public float CylinderColliderHeight = 0;
+    public bool CapsuleCollider;
+    [ShowIf(nameof(CapsuleCollider))] public float CapsuleColliderRadius = 0;
+    [ShowIf(nameof(CapsuleCollider))] public float CapsuleColliderHeight = 0;
     
     protected override bool IsDataValid()
     {
@@ -27,15 +30,35 @@ public class ImpulseSceneTool : SceneTool
     {
         Gizmos.color = Color.red;
 
-        if (BoxCollider) Gizmos.DrawCube(Target.position, BoxColliderSize);
-        if (SphereCollider) Gizmos.DrawSphere(Target.position, SphereColliderRadius);
-        if (CylinderCollider)
+        if (BoxCollider)
         {
-            Gizmos.matrix = Matrix4x4.TRS(Target.position, Target.rotation, new Vector3(1, 0.1f, 1));
-            Vector3 heightVector = new Vector3(0, CylinderColliderHeight, 0);
-            Gizmos.DrawSphere(-heightVector, CylinderColliderRadius);
-            Gizmos.DrawSphere(Vector3.zero, CylinderColliderRadius);
-            Gizmos.DrawSphere(heightVector, CylinderColliderRadius);
+            Gizmos.matrix = Matrix4x4.TRS(Target.position, Target.rotation, Vector3.one);
+            DrawCube(ColliderCenter, BoxColliderSize);
+        }
+        else if (SphereCollider)
+        {
+            Gizmos.matrix = Matrix4x4.TRS(Target.position, Target.rotation, Vector3.one);
+            DrawSphere(ColliderCenter, SphereColliderRadius);
+        }
+        else if (CapsuleCollider)
+        {
+            if (CapsuleColliderHeight <= 2 * CapsuleColliderRadius)
+            {
+                Gizmos.matrix = Matrix4x4.TRS(Target.position, Target.rotation, Vector3.one);
+                DrawSphere(ColliderCenter, CapsuleColliderRadius);
+                return;
+            }
+            
+            Vector3 scaleFactor = new Vector3(1, 0.1f, 1);
+            Gizmos.matrix = Matrix4x4.TRS(Target.position, Target.rotation, scaleFactor);
+            DrawSphere(ColliderCenter/ scaleFactor.y, CapsuleColliderRadius);
+            
+            scaleFactor = new Vector3(0.3f, 0.05f, 0.3f);
+            Gizmos.matrix = Matrix4x4.TRS(Target.position, Target.rotation, scaleFactor);
+            Vector3 scaledCenter = Vector3.Scale(ColliderCenter, new Vector3(1/scaleFactor.x, 1/scaleFactor.y, 1/scaleFactor.z));
+            Vector3 heightOffset = Vector3.up * CapsuleColliderHeight / scaleFactor.y / 2;
+            DrawSphere(scaledCenter - heightOffset, CapsuleColliderRadius);
+            DrawSphere(scaledCenter + heightOffset, CapsuleColliderRadius);
         }
     }
 
@@ -47,6 +70,7 @@ public class ImpulseSceneTool : SceneTool
         if (!Target.TryGetComponent(out Collider coll))
         {
             Debug.LogWarning($"This target has no collider on it");
+            BoxCollider = SphereCollider = CapsuleCollider = false;
             return;
         }
 
@@ -59,11 +83,17 @@ public class ImpulseSceneTool : SceneTool
             
             case SphereCollider sphere:
                 SphereCollider = true;
-                Vector3 sphereWorldScale = sphere.transform.lossyScale;
-                float xyMax = Mathf.Max(Mathf.Abs(sphereWorldScale.x), Mathf.Abs(sphereWorldScale.y));
-                float maxScale = Mathf.Max(xyMax, Mathf.Abs(sphereWorldScale.z));
-                float scaledRadius = Mathf.Abs(maxScale * sphere.radius);
+                Vector3 scale = sphere.transform.lossyScale;
+                float scaledRadius = Mathf.Max(scale.x, Mathf.Max(scale.y, scale.z)) * sphere.radius;
                 SphereColliderRadius = scaledRadius;
+                break;
+            
+            case CapsuleCollider capsule:
+                CapsuleCollider = true;
+                scale = capsule.transform.lossyScale;
+                scaledRadius = Mathf.Max(scale.x, scale.z) * capsule.radius;
+                CapsuleColliderRadius = scaledRadius;
+                CapsuleColliderHeight = capsule.height * scale.y;
                 break;
             
             default:
@@ -71,40 +101,45 @@ public class ImpulseSceneTool : SceneTool
                 break;
         }
         
-        CheckDataValidity();
-    }
-    
-    private void OnValidate()
-    {
-        CheckDataValidity();
+        UpdateData();
     }
     
     private bool _boxCollider;
     private bool _sphereCollider;
-    private bool _cylinderCollider;
+    private bool _capsuleCollider;
     
-    private void CheckDataValidity()
+    private void OnValidate()
+    {
+        UpdateData();
+    }
+    
+    private void UpdateData()
     {
         bool resetBox = false;
         bool resetSphere = false;
-        bool resetCylinder = false;
+        bool resetCapsule = false;
         
         if (BoxCollider != _boxCollider)
         {
-            resetSphere = resetCylinder = true;
+            resetSphere = resetCapsule = true;
             _boxCollider = BoxCollider;
         }
 
         if (SphereCollider != _sphereCollider)
         {
-            resetBox = resetCylinder = true;
+            resetBox = resetCapsule = true;
             _sphereCollider = SphereCollider;
         }
 
-        if (CylinderCollider != _cylinderCollider)
+        if (CapsuleCollider != _capsuleCollider)
         {
             resetBox = resetSphere = true;
-            _cylinderCollider = CylinderCollider;
+            _capsuleCollider = CapsuleCollider;
+        }
+
+        if (CapsuleCollider && CapsuleColliderHeight < CapsuleColliderRadius * 2)
+        {
+            CapsuleColliderHeight = CapsuleColliderRadius * 2;
         }
         
         /////
@@ -121,11 +156,11 @@ public class ImpulseSceneTool : SceneTool
             SphereColliderRadius = 0;
         }
 
-        if (resetCylinder)
+        if (resetCapsule)
         {
-            CylinderCollider = _cylinderCollider = false;
-            CylinderColliderRadius = 0;
-            CylinderColliderHeight = 0;
+            CapsuleCollider = _capsuleCollider = false;
+            CapsuleColliderRadius = 0;
+            CapsuleColliderHeight = 0;
         }
     }
     

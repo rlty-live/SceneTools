@@ -8,6 +8,7 @@ public enum ERotateMode
     LocalAxisAdd,
 }
 
+[AddComponentMenu("RLTY/SceneTools/Rotate Action")]
 public class RotateActionSceneTool : TransformActionSceneTool
 {
     [Header("Rotation Data")] 
@@ -29,7 +30,7 @@ public class RotateActionSceneTool : TransformActionSceneTool
         {
             if (childTr.TryGetComponent(out MeshFilter meshFilter))
             {
-                Gizmos.DrawMesh(meshFilter.sharedMesh, childTr.position, childTr.rotation, childTr.lossyScale);
+                DrawMesh(meshFilter.sharedMesh, childTr.position, childTr.rotation, childTr.lossyScale);
             }
         }
         

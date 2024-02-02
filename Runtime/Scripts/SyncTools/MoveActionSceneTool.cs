@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[AddComponentMenu("RLTY/SceneTools/Move Action")]
 public class MoveActionSceneTool : TransformActionSceneTool
 {
     protected override void DrawGizmos()
@@ -18,7 +19,7 @@ public class MoveActionSceneTool : TransformActionSceneTool
         {
             if (childTr.TryGetComponent(out MeshFilter meshFilter))
             {
-                Gizmos.DrawMesh(meshFilter.sharedMesh, childTr.position, childTr.rotation, childTr.lossyScale);
+                DrawMesh(meshFilter.sharedMesh, childTr.position, childTr.rotation, childTr.lossyScale);
             }
         }
         
