@@ -29,7 +29,7 @@ public class RLTYGameobjectMenu : Editor
         DonationBox,
         Credits,
         RotateAction,
-        MoveAction,
+        TranslateAction,
         Impulse,
         ActionTrigger,
         SceneToolReferencer
@@ -114,8 +114,8 @@ public class RLTYGameobjectMenu : Editor
     [MenuItem(toolbarfolderName + "Actions/" + "Rotate")]
     public static void CreateRotateAction() => LoadPrefab(RLTYPrefabType.RotateAction, true);
     
-    [MenuItem(toolbarfolderName + "Actions/" + "Move")]
-    public static void CreateMoveAction() => LoadPrefab(RLTYPrefabType.MoveAction, true);
+    [MenuItem(toolbarfolderName + "Actions/" + "Translate")]
+    public static void CreateMoveAction() => LoadPrefab(RLTYPrefabType.TranslateAction, true);
     
     [MenuItem(toolbarfolderName + "Actions/" + "Trigger")]
     public static void CreateActionTrigger() => LoadPrefab(RLTYPrefabType.ActionTrigger, true);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8928426684103915936}
   - component: {fileID: -7132001862860762982}
   m_Layer: 0
-  m_Name: MoveAction
+  m_Name: TranslateAction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

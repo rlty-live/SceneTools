@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[AddComponentMenu("RLTY/SceneTools/Move Action")]
-public class MoveActionSceneTool : TransformActionSceneTool
+[AddComponentMenu("RLTY/SceneTools/Translate Action")]
+public class TranslateActionSceneTool : TransformActionSceneTool
 {
     protected override void DrawGizmos()
     {

@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [AddComponentMenu("RLTY/SceneTools/Action Trigger")]
-public class TriggerSceneTool : SceneTool
+public class ActionTriggerSceneTool : SceneTool
 {
     [Header("Trigger Data")] 
     public List<ActionSceneTool> ActionToolsToTrigger;

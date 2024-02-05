@@ -67,9 +67,9 @@ public class ImpulseSceneTool : SceneTool
     [Button]
     private void DetectColliderOnTarget()
     {
-        if (!Target.TryGetComponent(out Collider coll))
+        if (Target == null || !Target.TryGetComponent(out Collider coll))
         {
-            Debug.LogWarning($"This target has no collider on it");
+            Debug.LogWarning($"This target is null or has no collider on it");
             BoxCollider = SphereCollider = CapsuleCollider = false;
             return;
         }
