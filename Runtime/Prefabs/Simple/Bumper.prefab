@@ -48,9 +48,9 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
+  Id: 0
   ShowGizmo: 1
   WiredGizmos: 0
-  Id: -1
   DrawTrajectoryOnlyOnSelected: 0
   LauncherGizmoRadius: 0.5
   Target: {fileID: 428779817597630822}

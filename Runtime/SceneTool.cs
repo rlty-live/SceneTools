@@ -4,12 +4,11 @@ using UnityEngine;
 
 public abstract class SceneTool : RLTYMonoBehaviourBase
 {
-    [Header("Tool Data")] 
-    public bool ShowGizmo = true;
-    public bool WiredGizmos = false;
-
-    [ReadOnly] public int Id = -1;
-
+    [Header("Tool Data")]
+    [HideIf("@Id < 0"), ReadOnly] public int Id = 0;
+    [HideIf("@Id < 0")] public bool ShowGizmo = true, WiredGizmos = false; 
+    // -1 is reserved for the SceneToolReferencer, which doesn't need those properties
+    
     protected virtual bool IsDataValid()
     {
         return true;

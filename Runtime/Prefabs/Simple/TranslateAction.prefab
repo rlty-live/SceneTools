@@ -47,11 +47,26 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
+  Id: 0
   ShowGizmo: 1
-  Id: -1
-  ExecuteAtStart: 1
+  WiredGizmos: 0
   Target: {fileID: 0}
-  MoveToAdd: {x: 0, y: 0, z: 0}
+  ExecuteAtStart: 1
+  StartWithRandomDelay: 0
+  DelayRange: {x: 0, y: 0}
+  QuantityToAdd: {x: 0, y: 0, z: 0}
   Duration: 1
-  EaseFunction: 1
+  EaseType: 0
+  EaseInFunction: 0
+  EaseOutFunction: 0
+  EaseInOutFunction: 0
+  CustomCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   IsLoop: 1
+  LoopType: 1
+  ResetOnComplete: 0
+  DelayToPerformReset: 0
