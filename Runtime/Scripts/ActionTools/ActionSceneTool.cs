@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class ActionSceneTool : SceneTool
 {
-    [Header("Action Data")] 
+    [TitleGroup("Action Data")] 
     public Transform Target;
     public bool ExecuteAtStart = false;
     public bool StartWithRandomDelay = false;

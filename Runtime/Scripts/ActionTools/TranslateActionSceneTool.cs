@@ -1,42 +1,42 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine;
 
 [AddComponentMenu("RLTY/SceneTools/Translate Action")]
 public class TranslateActionSceneTool : TransformActionSceneTool
 {
+    [TitleGroup("Translation Data")] 
+    public Vector3 TranslationValue = Vector3.zero;
+    
+    
+    private Vector3 _finalTargetPos;
+    
     protected override void DrawGizmos()
     {
-        if(QuantityToAdd == Vector3.zero) return;
+#if UNITY_EDITOR
         
-        Gizmos.color = Color.yellow;
+        if(TranslationValue == Vector3.zero) return;
 
-        Vector3 initialPosition = Target.position;
-        Quaternion initialRotation = Target.rotation;
-        Vector3 initialScale = Target.localScale;
+        Gizmos.color = Color.yellow;
         
-        Target.Translate(QuantityToAdd, Space.World);
-        
-        foreach (Transform childTr in Target.GetComponentsInChildren<Transform>())
+        if (!EditorApplication.isPlaying || (EditorApplication.isPlaying && _finalPositionMeshes.Count == 0))
         {
-            if (childTr.TryGetComponent(out MeshFilter meshFilter))
+            Target.Translate(TranslationValue, Space.World); 
+            RefreshFinalPositionMeshes();
+            _finalTargetPos = Target.position;
+            Target.Translate(-TranslationValue, Space.World); 
+        }
+        else
+        {
+            foreach (var gizmoMesh in _finalPositionMeshes)
             {
-                DrawMesh(meshFilter.sharedMesh, childTr.position, childTr.rotation, childTr.lossyScale);
+                DrawMesh(gizmoMesh.Mesh, gizmoMesh.Position, gizmoMesh.Rotation, gizmoMesh.LossyScale);
             }
         }
         
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(initialPosition, Target.position);
+        Gizmos.DrawLine(Target.position, _finalTargetPos);
         
-        Target.SetPositionAndRotation(initialPosition, initialRotation);
-        Target.localScale = initialScale;
-    }
-
-#if UNITY_EDITOR
-
-    private void OnValidate()
-    {
-        if (IsLoop) ResetOnComplete = false;
-    }
-
 #endif
-    
+    }
 }

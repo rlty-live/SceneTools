@@ -7,7 +7,7 @@ using UnityEngine;
 [AddComponentMenu("RLTY/SceneTools/SceneToolReferencer")]
 public class SceneToolReferencer : SceneTool
 {
-    [Header("Referencer Data")] 
+    [TitleGroup("Referencer Data")] 
     public List<SceneTool> ToolsList = new List<SceneTool>();
 
 #if UNITY_EDITOR

@@ -4,7 +4,7 @@ using UnityEngine;
 [AddComponentMenu("RLTY/SceneTools/Impulse")]
 public class ImpulseSceneTool : SceneTool
 {
-    [Header("Impulse Data")] 
+    [TitleGroup("Impulse Data")] 
     public Transform Target;
     public float ImpulseMagnitude;
     public float Damages = 10;

@@ -5,7 +5,7 @@ using UnityEngine;
 [AddComponentMenu("RLTY/SceneTools/Action Trigger")]
 public class ActionTriggerSceneTool : SceneTool
 {
-    [Header("Trigger Data")] 
+    [TitleGroup("Trigger Data")] 
     public List<ActionSceneTool> ActionToolsToTrigger;
     public bool OnlyOneTarget => ActionToolsToTrigger != null && ActionToolsToTrigger.Count == 1;
     [ShowIf(nameof(OnlyOneTarget))] public bool FollowTarget = false;
