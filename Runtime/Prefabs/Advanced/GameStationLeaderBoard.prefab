@@ -71,5 +71,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 147042131502495b8cd40f2904e74e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showUtilities: 0
+  correctSetup: 0
+  debug: 1
+  Id: 0
+  ShowGizmo: 0
+  WiredGizmo: 0
+  HideGizmoOnPlayMode: 0
   LeaderboardGameSessionType: 0
-  LeaderboardDataType: 0
+  LeaderboardDataType: 1
