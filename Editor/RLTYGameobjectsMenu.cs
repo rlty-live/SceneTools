@@ -27,7 +27,12 @@ public class RLTYGameobjectMenu : Editor
         PopUp_Area,
         PopUp_Clickbox,
         DonationBox,
-        Credits
+        Credits,
+        RotateAction,
+        TranslateAction,
+        Impulse,
+        ActionTrigger,
+        SceneToolReferencer
     }
 
     public static Object LoadPrefab(RLTYPrefabType type, bool simple)
@@ -105,6 +110,21 @@ public class RLTYGameobjectMenu : Editor
 
     [MenuItem(toolbarfolderName + "Zoomable object")]
     public static void CreateZoomableFrame() => LoadPrefab(RLTYPrefabType.Zoomable, true);
+    
+    [MenuItem(toolbarfolderName + "Actions/" + "Rotate")]
+    public static void CreateRotateAction() => LoadPrefab(RLTYPrefabType.RotateAction, true);
+    
+    [MenuItem(toolbarfolderName + "Actions/" + "Translate")]
+    public static void CreateMoveAction() => LoadPrefab(RLTYPrefabType.TranslateAction, true);
+    
+    [MenuItem(toolbarfolderName + "Actions/" + "Trigger")]
+    public static void CreateActionTrigger() => LoadPrefab(RLTYPrefabType.ActionTrigger, true);
+    
+    [MenuItem(toolbarfolderName + "Actions/" + "Impulse")]
+    public static void CreateImpulse() => LoadPrefab(RLTYPrefabType.Impulse, true);
+    
+    [MenuItem(toolbarfolderName + "SceneToolReferencer")]
+    public static void CreateSceneToolReferencer() => LoadPrefab(RLTYPrefabType.SceneToolReferencer, true);
 
     #endregion
 

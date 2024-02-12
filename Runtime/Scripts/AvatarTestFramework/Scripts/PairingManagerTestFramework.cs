@@ -24,7 +24,7 @@ namespace Judiva.Metaverse.Interactions
             foreach (var jump in jumps)
             {
                 TriggerJumpTestFramework jumpTestFramework = Instantiate(JumpTestPrefab).GetComponent<TriggerJumpTestFramework>();
-                jumpTestFramework.SetTriggerJump(jump.verticalVelocity, jump.orientationOffset, jump.additionalSpeed, jump.transform);
+                jumpTestFramework.SetTriggerJump(jump.VerticalVelocity, jump.OrientationOffset, jump.AdditionalSpeed, jump.transform);
             }
         }
 

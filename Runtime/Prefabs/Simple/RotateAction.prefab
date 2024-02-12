@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &407259315637820896
+--- !u!1 &926307637061090315
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 407259315637820899}
-  - component: {fileID: 407259315637820898}
+  - component: {fileID: 8928426684103915936}
+  - component: {fileID: 4176355645128086303}
   m_Layer: 0
-  m_Name: Jump
+  m_Name: RotateAction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &407259315637820899
+--- !u!4 &8928426684103915936
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 407259315637820896}
+  m_GameObject: {fileID: 926307637061090315}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &407259315637820898
+--- !u!114 &4176355645128086303
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 407259315637820896}
+  m_GameObject: {fileID: 926307637061090315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13b300299daab2945a673c3895f1f8fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 49a2020289664bf084b44a68a134a66b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   showUtilities: 0
@@ -50,8 +50,24 @@ MonoBehaviour:
   Id: 0
   ShowGizmo: 1
   WiredGizmos: 0
-  DrawTrajectoryOnlyOnSelected: 0
-  LauncherGizmoRadius: 0.5
-  VerticalVelocity: 5
-  OrientationOffset: 0
-  AdditionalSpeed: 0
+  Target: {fileID: 0}
+  ExecuteAtStart: 1
+  StartWithRandomDelay: 0
+  DelayRange: {x: 0, y: 0}
+  QuantityToAdd: {x: 0, y: 0, z: 0}
+  Duration: 1
+  EaseType: 0
+  EaseInFunction: 0
+  EaseOutFunction: 0
+  EaseInOutFunction: 0
+  CustomCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  IsLoop: 1
+  LoopType: 1
+  ResetOnComplete: 0
+  DelayToPerformReset: 0
+  RotateMode: 0

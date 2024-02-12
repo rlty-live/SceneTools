@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 407259315637820899}
-  - component: {fileID: -5745683997598868669}
+  - component: {fileID: 7441695719246494292}
   m_Layer: 0
   m_Name: Bumper
   m_TagString: Untagged
@@ -30,10 +30,10 @@ Transform:
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 428779817597630822}
+  - {fileID: 7396504382267307659}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5745683997598868669
+--- !u!114 &7441695719246494292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,10 +48,16 @@ MonoBehaviour:
   showUtilities: 0
   correctSetup: 0
   debug: 1
-  Target: {fileID: 428779817597630822}
-  BumpHeight: 5
-  BumpDuration: 10
---- !u!1 &2669984663711645584
+  Id: 0
+  ShowGizmo: 1
+  WiredGizmo: 0
+  HideGizmoOnPlayMode: 0
+  DrawTrajectoryOnlyOnSelected: 0
+  LauncherGizmoRadius: 0.5
+  Target: {fileID: 7396504382267307659}
+  BumpHeight: 10
+  TravelSpeed: 5
+--- !u!1 &8897760476995305105
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,7 +65,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 428779817597630822}
+  - component: {fileID: 7396504382267307659}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -67,13 +73,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &428779817597630822
+--- !u!4 &7396504382267307659
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2669984663711645584}
+  m_GameObject: {fileID: 8897760476995305105}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
