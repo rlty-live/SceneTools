@@ -21,7 +21,8 @@ public class ActionTriggerSceneTool : SceneTool
     protected override void DrawGizmos()
     {
         Gizmos.color = Color.magenta;
-        DrawCube(transform.position, TriggerSize);
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        DrawCube(Vector3.one, TriggerSize);
         foreach (ActionSceneTool tool in ActionToolsToTrigger)
         {
             if (tool == null) continue;
