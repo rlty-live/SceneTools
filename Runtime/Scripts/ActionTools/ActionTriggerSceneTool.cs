@@ -22,7 +22,9 @@ public class ActionTriggerSceneTool : SceneTool
     {
         Gizmos.color = Color.magenta;
         Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
-        DrawCube(Vector3.one, TriggerSize);
+        DrawCube(Vector3.zero, TriggerSize);
+        
+        Gizmos.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one);
         foreach (ActionSceneTool tool in ActionToolsToTrigger)
         {
             if (tool == null) continue;
