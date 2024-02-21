@@ -72,13 +72,11 @@ public enum ELoopType
 }
 
 [Tooltip("Defines if and how the Target should go back to its initial transform when the transformation is completed and not a loop. \n\n" +
-         "None: nothing is done, the Target stays in place. \n\n" +
          "Rewind: the Target plays the transformation in reverse. \n\n" +
          "Fast: the Target takes the fastest way (straight line for position & smallest angle for rotation)\n\n" +
          "Snap: the Target snaps instantly.")]
 public enum EResetMethod
 {
-    None,
     Rewind,
     Fast,
     Snap,
@@ -90,9 +88,9 @@ public class TransformActionSceneTool : ActionSceneTool
 {
     [TitleGroup("Transformation Base Data")]
     public float Duration = 1f;
-
+    
     public bool IsEased => EaseType != EaseType.None;
-    [InlineButton(nameof(OpenEaseHelper), "   Open Ease Helper   ")]
+    [Space] [InlineButton(nameof(OpenEaseHelper), "   Open Ease Helper   ")]
     public EaseType EaseType = EaseType.None;
     [ShowIf(nameof(EaseType), EaseType.In)] public EaseInFunction EaseInFunction = EaseInFunction.InSine;
     [ShowIf(nameof(EaseType), EaseType.Out)] public EaseOutFunction EaseOutFunction = EaseOutFunction.OutSine;
@@ -100,12 +98,13 @@ public class TransformActionSceneTool : ActionSceneTool
     [ShowIf(nameof(EaseType), EaseType.CustomCurve)] public AnimationCurve CustomCurve = null;
     
     public bool IsLoop => LoopType != ELoopType.None;
-    public ELoopType LoopType = ELoopType.None;
+    [Space] public ELoopType LoopType = ELoopType.None;
+
+    [Space] [HideIf(nameof(IsLoop))] public EResetMethod ResetMethod = EResetMethod.Rewind;
+    [HideIf("@IsLoop || ResetMethod == EResetMethod.Snap")] public float ResetDuration;
     
-    public bool ResetOnComplete => ResetMethod != EResetMethod.None;
-    [HideIf(nameof(IsLoop))] public EResetMethod ResetMethod = EResetMethod.None;
-    [ShowIf(nameof(ResetOnComplete))] public float DelayToPerformReset = 0f;
-    [ShowIf("@ResetOnComplete && ResetMethod != EResetMethod.Snap")] public float ResetDuration;
+    [Space] [HideIf(nameof(IsLoop))] public bool ResetOnComplete;
+    [HideIf("@IsLoop || !ResetOnComplete")] public float DelayToPerformReset = 0f;
     
     private void OpenEaseHelper()
     {
@@ -114,11 +113,6 @@ public class TransformActionSceneTool : ActionSceneTool
     
 #if UNITY_EDITOR
 
-    private void OnValidate()
-    {
-        if (IsLoop) ResetMethod = EResetMethod.None;
-    }
-    
     public struct GizmoMesh
     {
         public Mesh Mesh;
