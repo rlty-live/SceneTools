@@ -64,7 +64,7 @@ public class PointsTrajectoryActionSceneTool : TransformActionSceneTool
     {
         GameObject go = new GameObject
         {
-            name = $"Point ({Points.Count})",
+            name = $"Point ({Points.Count + 1})",
             transform =
             {
                 parent = transform,

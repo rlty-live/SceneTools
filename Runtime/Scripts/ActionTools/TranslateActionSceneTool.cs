@@ -21,10 +21,10 @@ public class TranslateActionSceneTool : TransformActionSceneTool
         
         if (!EditorApplication.isPlaying || (EditorApplication.isPlaying && _finalPositionMeshes.Count == 0))
         {
-            Target.Translate(TranslationValue, Space.World); 
+            Target.localPosition += TranslationValue;
             RefreshFinalPositionMeshes();
             _finalTargetPos = Target.position;
-            Target.Translate(-TranslationValue, Space.World); 
+            Target.localPosition -= TranslationValue;
         }
         else
         {

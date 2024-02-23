@@ -8,7 +8,7 @@ using UnityEngine;
 public class SceneToolReferencer : SceneTool
 {
     [TitleGroup("Referencer Data")] 
-    public List<SceneTool> ToolsList = new List<SceneTool>();
+    [ReadOnly] public List<SceneTool> ToolsList = new List<SceneTool>();
 
 #if UNITY_EDITOR
 
