@@ -34,16 +34,16 @@ public class RotateActionSceneTool : TransformActionSceneTool
         {
             if (RotateMode is ERotateMode.LocalAxisAdd or ERotateMode.WorldAxisAdd)
             {
-                Target.localRotation *= Quaternion.Euler(RotationValue); 
+                Target.localEulerAngles += RotationValue; 
                 RefreshFinalPositionMeshes();
-                Target.localRotation *= Quaternion.Euler(-RotationValue); 
+                Target.localEulerAngles -= RotationValue; 
             }
             else
             {
-                Quaternion initRotation = Target.localRotation;
-                Target.localRotation = Quaternion.Euler(RotationValue); 
+                Vector3 initRotation = Target.localEulerAngles;
+                Target.localEulerAngles = RotationValue; 
                 RefreshFinalPositionMeshes();
-                Target.localRotation = initRotation; 
+                Target.localEulerAngles = initRotation; 
             }
         }
         else

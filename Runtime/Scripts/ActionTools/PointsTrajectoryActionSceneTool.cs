@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using Sirenix.OdinInspector;
-using UnityEditor;
 
 [ExecuteInEditMode]
 [AddComponentMenu("RLTY/SceneTools/Points Trajectory")]
@@ -40,8 +37,13 @@ public class PointsTrajectoryActionSceneTool : TransformActionSceneTool
                 Gizmos.DrawLine(Points[i].position, Points[i+1].position);
         }
         Gizmos.DrawLine(Target.position, Points[0].position);
-        if(LoopType == ELoopType.Restart)
+        
+        if (ResetMethod == EResetMethod.Fast)
+        {
+            Gizmos.color = Color.red;
             Gizmos.DrawLine(Target.position, Points[^1].position);
+        }
+            
     }
 
 #if UNITY_EDITOR
@@ -62,7 +64,7 @@ public class PointsTrajectoryActionSceneTool : TransformActionSceneTool
     {
         GameObject go = new GameObject
         {
-            name = $"Point",
+            name = $"Point ({Points.Count + 1})",
             transform =
             {
                 parent = transform,

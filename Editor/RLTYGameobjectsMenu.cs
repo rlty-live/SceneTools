@@ -32,7 +32,8 @@ public class RLTYGameobjectMenu : Editor
         TranslateAction,
         Impulse,
         ActionTrigger,
-        SceneToolReferencer
+        SceneToolReferencer,
+        PointsTrajectory
     }
 
     public static Object LoadPrefab(RLTYPrefabType type, bool simple)
@@ -125,6 +126,9 @@ public class RLTYGameobjectMenu : Editor
     
     [MenuItem(toolbarfolderName + "SceneToolReferencer")]
     public static void CreateSceneToolReferencer() => LoadPrefab(RLTYPrefabType.SceneToolReferencer, true);
+    
+    [MenuItem(toolbarfolderName + "Actions/" + "PointsTrajectory")]
+    public static void CreatePointsTrajectory() => LoadPrefab(RLTYPrefabType.PointsTrajectory, true);
 
     #endregion
 

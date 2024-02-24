@@ -8,9 +8,14 @@ public class ImpulseSceneTool : SceneTool
     public Transform Target;
     public float ImpulseMagnitude;
     public float Damages = 10;
+    
+    [Tooltip("The impulse is computed from the direction between the player and the target.\n" +
+             "AxisFilter is used to scale the direction's values to have control over the impulse's axis.\n" +
+             "The multiplication is done before the direction is normalized and the magnitude applied.\n" +
+             "For example: to restrain the impulse on only one axis, AxisFilter should be 1 for this axis and 0 for the two other.")]
     public Vector3 AxisFilter = Vector3.one;
-    public Vector3 ColliderCenter = Vector3.zero;
-
+    
+    [Space]
     public bool BoxCollider;
     [ShowIf(nameof(BoxCollider))] public Vector3 BoxColliderSize = Vector3.zero;
     
@@ -20,6 +25,8 @@ public class ImpulseSceneTool : SceneTool
     public bool CapsuleCollider;
     [ShowIf(nameof(CapsuleCollider))] public float CapsuleColliderRadius = 0;
     [ShowIf(nameof(CapsuleCollider))] public float CapsuleColliderHeight = 0;
+    
+    public Vector3 ColliderCenter = Vector3.zero;
     
     protected override bool IsDataValid()
     {
